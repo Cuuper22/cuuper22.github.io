@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuper (Yousef Anas) - AI Engineer</title>
+  <style>
+    :root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --accent: #58a6ff; --accent2: #3fb950; --text: #e6edf3; --muted: #8b949e; --tag-bg: #1f6feb22; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    nav { border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg); z-index: 10; }
+    nav .logo { font-weight: 700; font-size: 1.1rem; }
+    nav .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 1.5rem; }
+    nav ul li a { color: var(--muted); font-size: 0.9rem; }
+    .hero { max-width: 860px; margin: 5rem auto 3rem; padding: 0 2rem; }
+    .hero-tag { display: inline-block; font-size: 0.78rem; background: var(--tag-bg); color: var(--accent); border: 1px solid #1f6feb55; padding: 0.2rem 0.75rem; border-radius: 2rem; margin-bottom: 1.2rem; }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 1rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 640px; margin-bottom: 2rem; }
+    .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .stats { max-width: 860px; margin: 0 auto 4rem; padding: 0 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .num { font-size: 1.8rem; font-weight: 800; color: var(--accent); display: block; }
+    .stat .label { font-size: 0.8rem; color: var(--muted); }
+    section { max-width: 860px; margin: 0 auto 5rem; padding: 0 2rem; }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
+    .section-header h2 { font-size: 1.25rem; font-weight: 700; }
+    .section-header .line { flex: 1; height: 1px; background: var(--border); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: border-color 0.2s; }
+    .card:hover { border-color: var(--accent); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+    .card-title { font-weight: 700; font-size: 1rem; color: var(--accent); }
+    .card-badge { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 2rem; background: #3fb95022; color: var(--accent2); border: 1px solid #3fb95044; white-space: nowrap; }
+    .card p { font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
+    .card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .tag { font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 3px; background: var(--tag-bg); color: var(--muted); border: 1px solid var(--border); }
+    .card-link { margin-top: 0.75rem; font-size: 0.8rem; }
+    .experience-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .exp-item { display: grid; grid-template-columns: 130px 1fr; gap: 1.25rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-date { font-size: 0.78rem; color: var(--muted); padding-top: 0.2rem; }
+    .exp-role { font-weight: 700; font-size: 0.95rem; }
+    .exp-company { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .exp-desc { font-size: 0.85rem; color: var(--muted); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .skill-group h4 { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .skill-group .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .contact-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .contact-bar h3 { font-size: 1.1rem; font-weight: 700; }
+    .contact-bar p { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+    .contact-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--muted); }
+    @media (max-width: 600px) { .projects-grid { grid-template-columns: 1fr; } .exp-item { grid-template-columns: 1fr; gap: 0.25rem; } .contact-bar { flex-direction: column; } }
+  </style>
+</head>
+<body>
+<nav><div class="logo">cu<span>per</span></div><ul><li><a href="#projects">Projects</a></li><li><a href="#experience">Experience</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+<div class="hero">
+  <div class="hero-tag">Open to RLHF contracts + AI Engineering roles</div>
+  <h1>I build AI tools<br/>that <span>actually ship.</span></h1>
+  <p>Arabic-native AI engineer. Former ML/AI instructor at Stanford and Berkeley. Shipped LLMs in production, built a bare-metal OS in a Schwarzenegger joke language, and currently building <strong>BennyCuTools</strong> - SaaS for local service contractors. U.S. work authorized (EAD).</p>
+  <div class="hero-links">
+    <a href="https://github.com/Cuuper22" target="_blank" class="btn btn-primary">GitHub</a>
+    <a href="mailto:cuuper225@gmail.com" class="btn btn-secondary">Get in touch</a>
+    <a href="#projects" class="btn btn-secondary">View work</a>
+  </div>
+</div>
+<div class="stats">
+  <div class="stat"><span class="num">250+</span><span class="label">Students taught ML/AI</span></div>
+  <div class="stat"><span class="num">20+</span><span class="label">Colleges served (Findhope)</span></div>
+  <div class="stat"><span class="num">32</span><span class="label">Repos built</span></div>
+  <div class="stat"><span class="num">4</span><span class="label">Languages (Arabic native)</span></div>
+</div>
+<section id="projects">
+  <div class="section-header"><h2>Projects</h2><div class="line"></div></div>
+  <div class="projects-grid">
+    <div class="card"><div class="card-header"><div class="card-title">ArnoldC-Native + ToaruOS-Arnold</div><div class="card-badge">Open Source</div></div><p>Native-code-generating compiler and bare-metal bootable OS kernel built in ArnoldC (Schwarzenegger quote keywords). Built with Claude Code. Featured by a Google DeepMind researcher.</p><div class="card-tags"><span class="tag">Scala</span><span class="tag">Compiler</span><span class="tag">OS Kernel</span><span class="tag">Systems</span><span class="tag">Apache 2.0</span></div><div class="card-link"><a href="https://github.com/Cuuper22/ArnoldC-Native" target="_blank">github.com/Cuuper22/ArnoldC-Native</a></div></div>
+    <div class="card"><div class="card-header"><div class="card-title">BennyCuTools</div><div class="card-badge">Live Product</div></div><p>SaaS platform for local service contractors - white-labeled CRM, job tracking, lead capture, AI-powered email notifications. 200+ tools. Gemini API, AWS SES, Firebase, Twilio.</p><div class="card-tags"><span class="tag">Gemini API</span><span class="tag">Firebase</span><span class="tag">AWS SES</span><span class="tag">Twilio</span><span class="tag">Cloudflare</span></div><div class="card-link"><a href="https://bennycutools.com" target="_blank">bennycutools.com</a></div></div>
+    <div class="card"><div class="card-header"><div class="card-title">LLM Council Experiment</div><div class="card-badge">Research</div></div><p>Multi-model evaluation framework comparing LLaMA, GPT-4, and BERT across accuracy, coherence, helpfulness, and safety. Mirrors RLHF preference annotation workflows.</p><div class="card-tags"><span class="tag">Python</span><span class="tag">LLM</span><span class="tag">Evaluation</span><span class="tag">RLHF</span></div><div class="card-link"><a href="https://github.com/Cuuper22" target="_blank">github.com/Cuuper22</a></div></div>
+    <div class="card"><div class="card-header"><div class="card-title">saas-starter-kit</div><div class="card-badge">Open Source</div></div><p>Production-ready SaaS boilerplate: Node.js + Stripe + Auth + Email workflows + Admin dashboard. MIT licensed.</p><div class="card-tags"><span class="tag">Node.js</span><span class="tag">Stripe</span><span class="tag">Auth</span><span class="tag">MIT</span></div><div class="card-link"><a href="https://github.com/Cuuper22/saas-starter-kit" target="_blank">github.com/Cuuper22/saas-starter-kit</a></div></div>
+    <div class="card"><div class="card-header"><div class="card-title">Missed Call Text-Back + Review Autoresponder</div><div class="card-badge">Shipped</div></div><p>Two micro-SaaS: automated SMS when contractors miss calls (Twilio + Node + PostgreSQL) and AI-generated Google Review responses.</p><div class="card-tags"><span class="tag">Twilio</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">AI</span></div></div>
+    <div class="card"><div class="card-header"><div class="card-title">Free Telegram Bot Tools</div><div class="card-badge">Live</div></div><p>10 free web tools as Telegram bots - screenshots, scraping, AI, QR codes. No signup, 10 uses/day per user. Serverless.</p><div class="card-tags"><span class="tag">Telegram API</span><span class="tag">Python</span><span class="tag">Serverless</span></div></div>
+  </div>
+</section>
+<section id="experience">
+  <div class="section-header"><h2>Experience</h2><div class="line"></div></div>
+  <div class="experience-list">
+    <div class="exp-item"><div class="exp-date">2025 - Present</div><div><div class="exp-role">Founder and AI Engineer</div><div class="exp-company">BennyCuTools</div><div class="exp-desc">Building AI-powered SaaS for local service businesses. LLM integration, email automation, CRM, lead capture.</div></div></div>
+    <div class="exp-item"><div class="exp-date">Jun 2022 - Aug 2024</div><div><div class="exp-role">Lead Instructor - ML/AI</div><div class="exp-company">iD Tech - UC Berkeley, Stanford, SFSU</div><div class="exp-desc">Mentored 250+ students in ML, neural networks, NLP, and computer vision. Designed curriculum and weekly evaluations. 3 consecutive summers.</div></div></div>
+    <div class="exp-item"><div class="exp-date">Jan 2023 - Apr 2023</div><div><div class="exp-role">Software Engineer - NLP/LLM</div><div class="exp-company">Findhope Mental Health - Hyderabad, India</div><div class="exp-desc">Fine-tuned LLMs for mental health chatbot serving 20+ colleges. Tailored to Hindi, Telugu, Urdu dialects. A/B testing, shipped to production.</div></div></div>
+    <div class="exp-item"><div class="exp-date">Sep 2021 - Apr 2023</div><div><div class="exp-role">Admissions Processor and Research</div><div class="exp-company">Minerva University - SF and Seoul</div><div class="exp-desc">Reviewed 500+ applications from 60+ countries. Data analysis of MENA education systems. AV research with Stanford and Kakao Ventures.</div></div></div>
+  </div>
+</section>
+<section id="skills">
+  <div class="section-header"><h2>Skills</h2><div class="line"></div></div>
+  <div class="skills-grid">
+    <div class="skill-group"><h4>Languages</h4><div class="tags"><span class="tag">Arabic (Native)</span><span class="tag">English (Fluent)</span><span class="tag">French</span><span class="tag">Spanish</span></div></div>
+    <div class="skill-group"><h4>AI / ML</h4><div class="tags"><span class="tag">LLM Fine-tuning</span><span class="tag">NLP</span><span class="tag">PyTorch</span><span class="tag">TensorFlow</span><span class="tag">Prompt Engineering</span><span class="tag">RLHF</span></div></div>
+    <div class="skill-group"><h4>Programming</h4><div class="tags"><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">Scala</span><span class="tag">SQL</span><span class="tag">R</span></div></div>
+    <div class="skill-group"><h4>Infrastructure</h4><div class="tags"><span class="tag">AWS SES</span><span class="tag">Firebase</span><span class="tag">Cloudflare</span><span class="tag">Twilio</span><span class="tag">Git</span><span class="tag">n8n</span></div></div>
+  </div>
+</section>
+<section id="contact">
+  <div class="section-header"><h2>Contact</h2><div class="line"></div></div>
+  <div class="contact-bar">
+    <div><h3>Let's work together</h3><p>Open to RLHF contracts, AI engineering roles, and EdTech curriculum. U.S. work authorized (EAD).</p></div>
+    <div class="contact-links">
+      <a href="mailto:cuuper225@gmail.com" class="btn btn-primary">Email me</a>
+      <a href="https://github.com/Cuuper22" target="_blank" class="btn btn-secondary">GitHub</a>
+      <a href="https://linkedin.com/in/yousefanas" target="_blank" class="btn btn-secondary">LinkedIn</a>
+    </div>
+  </div>
+</section>
+<footer>Built by Cuper (Yousef Anas) - cuuper22.github.io - U.S. Work Authorized</footer>
+</body>
+</html>
