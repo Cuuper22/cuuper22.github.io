@@ -1,124 +1,1057 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cuper (Yousef Anas) - AI Engineer</title>
-  <style>
-    :root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --accent: #58a6ff; --accent2: #3fb950; --text: #e6edf3; --muted: #8b949e; --tag-bg: #1f6feb22; }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    nav { border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg); z-index: 10; }
-    nav .logo { font-weight: 700; font-size: 1.1rem; }
-    nav .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 1.5rem; }
-    nav ul li a { color: var(--muted); font-size: 0.9rem; }
-    .hero { max-width: 860px; margin: 5rem auto 3rem; padding: 0 2rem; }
-    .hero-tag { display: inline-block; font-size: 0.78rem; background: var(--tag-bg); color: var(--accent); border: 1px solid #1f6feb55; padding: 0.2rem 0.75rem; border-radius: 2rem; margin-bottom: 1.2rem; }
-    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 1rem; }
-    .hero h1 span { color: var(--accent); }
-    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 640px; margin-bottom: 2rem; }
-    .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; border-radius: 6px; font-size: 0.9rem; font-weight: 600; transition: opacity 0.15s; }
-    .btn:hover { opacity: 0.85; text-decoration: none; }
-    .btn-primary { background: var(--accent); color: #000; }
-    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-    .stats { max-width: 860px; margin: 0 auto 4rem; padding: 0 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
-    .stat { text-align: center; }
-    .stat .num { font-size: 1.8rem; font-weight: 800; color: var(--accent); display: block; }
-    .stat .label { font-size: 0.8rem; color: var(--muted); }
-    section { max-width: 860px; margin: 0 auto 5rem; padding: 0 2rem; }
-    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
-    .section-header h2 { font-size: 1.25rem; font-weight: 700; }
-    .section-header .line { flex: 1; height: 1px; background: var(--border); }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: border-color 0.2s; }
-    .card:hover { border-color: var(--accent); }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
-    .card-title { font-weight: 700; font-size: 1rem; color: var(--accent); }
-    .card-badge { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 2rem; background: #3fb95022; color: var(--accent2); border: 1px solid #3fb95044; white-space: nowrap; }
-    .card p { font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
-    .card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .tag { font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 3px; background: var(--tag-bg); color: var(--muted); border: 1px solid var(--border); }
-    .card-link { margin-top: 0.75rem; font-size: 0.8rem; }
-    .experience-list { display: flex; flex-direction: column; gap: 1.5rem; }
-    .exp-item { display: grid; grid-template-columns: 130px 1fr; gap: 1.25rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-    .exp-item:last-child { border-bottom: none; }
-    .exp-date { font-size: 0.78rem; color: var(--muted); padding-top: 0.2rem; }
-    .exp-role { font-weight: 700; font-size: 0.95rem; }
-    .exp-company { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; }
-    .exp-desc { font-size: 0.85rem; color: var(--muted); }
-    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
-    .skill-group h4 { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
-    .skill-group .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-    .contact-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .contact-bar h3 { font-size: 1.1rem; font-weight: 700; }
-    .contact-bar p { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
-    .contact-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--muted); }
-    @media (max-width: 600px) { .projects-grid { grid-template-columns: 1fr; } .exp-item { grid-template-columns: 1fr; gap: 0.25rem; } .contact-bar { flex-direction: column; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Yousef Anas - AI Engineer, ML Instructor, Open to RLHF contracts and AI engineering roles">
+    <title>Cúper - AI Engineer</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== CSS Reset ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ==================== Custom Properties ==================== */
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-surface: #111214;
+            --border-color: #1e2028;
+            --text-muted: #8b8fa3;
+            --text-bright: #e4e5eb;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --container-max: 1100px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2.5rem;
+            --spacing-xl: 4rem;
+        }
+
+        /* ==================== Base Styles ==================== */
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Dot grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, #1e2028 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Noise texture overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.8'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ==================== Typography ==================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            color: var(--text-bright);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+
+        a {
+            color: var(--accent-green);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* ==================== Layout Components ==================== */
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 2;
+        }
+
+        section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        /* ==================== Navigation ==================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 11, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: var(--spacing-sm) var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            font-style: italic;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-lg);
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-green);
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-bright);
+            transition: all 0.3s ease;
+        }
+
+        /* ==================== Hero Section ==================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 0.4rem 0.9rem;
+            border-radius: 4px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .hero h1 {
+            margin-bottom: var(--spacing-sm);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.1s forwards;
+        }
+
+        .hero-subtext {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            max-width: 700px;
+            margin-bottom: var(--spacing-lg);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.2s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.3s forwards;
+        }
+
+        /* ==================== Buttons ==================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: #1ea550;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-bright);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        /* ==================== Stats Row ==================== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: var(--spacing-xl);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ==================== Section Headers ==================== */
+        .section-header {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-header h2 {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+        }
+
+        /* ==================== Projects Grid ==================== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .project-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-green);
+        }
+
+        .project-card.featured {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(34, 197, 94, 0.05) 100%);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: var(--spacing-sm);
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            color: var(--text-bright);
+            font-weight: 700;
+        }
+
+        .project-badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .project-description {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.7;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.7rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+            border-radius: 4px;
+        }
+
+        .project-link {
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            font-family: var(--font-mono);
+        }
+
+        /* ==================== Experience Timeline ==================== */
+        .timeline {
+            position: relative;
+            padding-left: var(--spacing-lg);
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--spacing-lg);
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-1 * var(--spacing-lg) - 4px);
+            top: 0.4rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            border: 2px solid var(--bg-primary);
+        }
+
+        .timeline-header {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            color: var(--text-bright);
+            font-weight: 600;
+        }
+
+        .timeline-meta {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .timeline-description {
+            line-height: 1.7;
+        }
+
+        /* ==================== Skills Section ==================== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .skill-category {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .skill-category.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+
+        .skill-category h3 {
+            font-size: 1.125rem;
+            margin-bottom: var(--spacing-sm);
+            color: var(--accent-green);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+        }
+
+        .skill-tag {
+            font-size: 0.875rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent-blue);
+            color: var(--text-bright);
+        }
+
+        /* ==================== Contact Section ==================== */
+        .contact {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact p {
+            font-size: 1.125rem;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* ==================== Footer ==================== */
+        footer {
+            padding: var(--spacing-lg) 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ==================== Animations ==================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==================== Responsive Design ==================== */
+        @media (min-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 11, 0.98);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                padding: var(--spacing-md);
+                gap: var(--spacing-sm);
+                border-bottom: 1px solid var(--border-color);
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.3s ease;
+                pointer-events: none;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --spacing-xl: 2.5rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-<nav><div class="logo">cu<span>per</span></div><ul><li><a href="#projects">Projects</a></li><li><a href="#experience">Experience</a></li><li><a href="#contact">Contact</a></li></ul></nav>
-<div class="hero">
-  <div class="hero-tag">Open to RLHF contracts + AI Engineering roles</div>
-  <h1>I build AI tools<br/>that <span>actually ship.</span></h1>
-  <p>Arabic-native AI engineer. Former ML/AI instructor at Stanford and Berkeley. Shipped LLMs in production, built a bare-metal OS in a Schwarzenegger joke language, and currently building <strong>BennyCuTools</strong> - SaaS for local service contractors. U.S. work authorized (EAD).</p>
-  <div class="hero-links">
-    <a href="https://github.com/Cuuper22" target="_blank" class="btn btn-primary">GitHub</a>
-    <a href="mailto:cuuper225@gmail.com" class="btn btn-secondary">Get in touch</a>
-    <a href="#projects" class="btn btn-secondary">View work</a>
-  </div>
-</div>
-<div class="stats">
-  <div class="stat"><span class="num">250+</span><span class="label">Students taught ML/AI</span></div>
-  <div class="stat"><span class="num">20+</span><span class="label">Colleges served (Findhope)</span></div>
-  <div class="stat"><span class="num">32</span><span class="label">Repos built</span></div>
-  <div class="stat"><span class="num">4</span><span class="label">Languages (Arabic native)</span></div>
-</div>
-<section id="projects">
-  <div class="section-header"><h2>Projects</h2><div class="line"></div></div>
-  <div class="projects-grid">
-    <div class="card"><div class="card-header"><div class="card-title">ArnoldC-Native + ToaruOS-Arnold</div><div class="card-badge">Open Source</div></div><p>Native-code-generating compiler and bare-metal bootable OS kernel built in ArnoldC (Schwarzenegger quote keywords). Built with Claude Code. Featured by a Google DeepMind researcher.</p><div class="card-tags"><span class="tag">Scala</span><span class="tag">Compiler</span><span class="tag">OS Kernel</span><span class="tag">Systems</span><span class="tag">Apache 2.0</span></div><div class="card-link"><a href="https://github.com/Cuuper22/ArnoldC-Native" target="_blank">github.com/Cuuper22/ArnoldC-Native</a></div></div>
-    <div class="card"><div class="card-header"><div class="card-title">BennyCuTools</div><div class="card-badge">Live Product</div></div><p>SaaS platform for local service contractors - white-labeled CRM, job tracking, lead capture, AI-powered email notifications. 200+ tools. Gemini API, AWS SES, Firebase, Twilio.</p><div class="card-tags"><span class="tag">Gemini API</span><span class="tag">Firebase</span><span class="tag">AWS SES</span><span class="tag">Twilio</span><span class="tag">Cloudflare</span></div><div class="card-link"><a href="https://bennycutools.com" target="_blank">bennycutools.com</a></div></div>
-    <div class="card"><div class="card-header"><div class="card-title">LLM Council Experiment</div><div class="card-badge">Research</div></div><p>Multi-model evaluation framework comparing LLaMA, GPT-4, and BERT across accuracy, coherence, helpfulness, and safety. Mirrors RLHF preference annotation workflows.</p><div class="card-tags"><span class="tag">Python</span><span class="tag">LLM</span><span class="tag">Evaluation</span><span class="tag">RLHF</span></div><div class="card-link"><a href="https://github.com/Cuuper22" target="_blank">github.com/Cuuper22</a></div></div>
-    <div class="card"><div class="card-header"><div class="card-title">saas-starter-kit</div><div class="card-badge">Open Source</div></div><p>Production-ready SaaS boilerplate: Node.js + Stripe + Auth + Email workflows + Admin dashboard. MIT licensed.</p><div class="card-tags"><span class="tag">Node.js</span><span class="tag">Stripe</span><span class="tag">Auth</span><span class="tag">MIT</span></div><div class="card-link"><a href="https://github.com/Cuuper22/saas-starter-kit" target="_blank">github.com/Cuuper22/saas-starter-kit</a></div></div>
-    <div class="card"><div class="card-header"><div class="card-title">Missed Call Text-Back + Review Autoresponder</div><div class="card-badge">Shipped</div></div><p>Two micro-SaaS: automated SMS when contractors miss calls (Twilio + Node + PostgreSQL) and AI-generated Google Review responses.</p><div class="card-tags"><span class="tag">Twilio</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">AI</span></div></div>
-    <div class="card"><div class="card-header"><div class="card-title">Free Telegram Bot Tools</div><div class="card-badge">Live</div></div><p>10 free web tools as Telegram bots - screenshots, scraping, AI, QR codes. No signup, 10 uses/day per user. Serverless.</p><div class="card-tags"><span class="tag">Telegram API</span><span class="tag">Python</span><span class="tag">Serverless</span></div></div>
-  </div>
-</section>
-<section id="experience">
-  <div class="section-header"><h2>Experience</h2><div class="line"></div></div>
-  <div class="experience-list">
-    <div class="exp-item"><div class="exp-date">2025 - Present</div><div><div class="exp-role">Founder and AI Engineer</div><div class="exp-company">BennyCuTools</div><div class="exp-desc">Building AI-powered SaaS for local service businesses. LLM integration, email automation, CRM, lead capture.</div></div></div>
-    <div class="exp-item"><div class="exp-date">Jun 2022 - Aug 2024</div><div><div class="exp-role">Lead Instructor - ML/AI</div><div class="exp-company">iD Tech - UC Berkeley, Stanford, SFSU</div><div class="exp-desc">Mentored 250+ students in ML, neural networks, NLP, and computer vision. Designed curriculum and weekly evaluations. 3 consecutive summers.</div></div></div>
-    <div class="exp-item"><div class="exp-date">Jan 2023 - Apr 2023</div><div><div class="exp-role">Software Engineer - NLP/LLM</div><div class="exp-company">Findhope Mental Health - Hyderabad, India</div><div class="exp-desc">Fine-tuned LLMs for mental health chatbot serving 20+ colleges. Tailored to Hindi, Telugu, Urdu dialects. A/B testing, shipped to production.</div></div></div>
-    <div class="exp-item"><div class="exp-date">Sep 2021 - Apr 2023</div><div><div class="exp-role">Admissions Processor and Research</div><div class="exp-company">Minerva University - SF and Seoul</div><div class="exp-desc">Reviewed 500+ applications from 60+ countries. Data analysis of MENA education systems. AV research with Stanford and Kakao Ventures.</div></div></div>
-  </div>
-</section>
-<section id="skills">
-  <div class="section-header"><h2>Skills</h2><div class="line"></div></div>
-  <div class="skills-grid">
-    <div class="skill-group"><h4>Languages</h4><div class="tags"><span class="tag">Arabic (Native)</span><span class="tag">English (Fluent)</span><span class="tag">French</span><span class="tag">Spanish</span></div></div>
-    <div class="skill-group"><h4>AI / ML</h4><div class="tags"><span class="tag">LLM Fine-tuning</span><span class="tag">NLP</span><span class="tag">PyTorch</span><span class="tag">TensorFlow</span><span class="tag">Prompt Engineering</span><span class="tag">RLHF</span></div></div>
-    <div class="skill-group"><h4>Programming</h4><div class="tags"><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">Scala</span><span class="tag">SQL</span><span class="tag">R</span></div></div>
-    <div class="skill-group"><h4>Infrastructure</h4><div class="tags"><span class="tag">AWS SES</span><span class="tag">Firebase</span><span class="tag">Cloudflare</span><span class="tag">Twilio</span><span class="tag">Git</span><span class="tag">n8n</span></div></div>
-  </div>
-</section>
-<section id="contact">
-  <div class="section-header"><h2>Contact</h2><div class="line"></div></div>
-  <div class="contact-bar">
-    <div><h3>Let's work together</h3><p>Open to RLHF contracts, AI engineering roles, and EdTech curriculum. U.S. work authorized (EAD).</p></div>
-    <div class="contact-links">
-      <a href="mailto:cuuper225@gmail.com" class="btn btn-primary">Email me</a>
-      <a href="https://github.com/Cuuper22" target="_blank" class="btn btn-secondary">GitHub</a>
-      <a href="https://www.linkedin.com/in/yousef-anas-a6241b199/" target="_blank" class="btn btn-secondary">LinkedIn</a>
-    </div>
-  </div>
-</section>
-<footer>Built by Cuper (Yousef Anas) - cuuper22.github.io - U.S. Work Authorized</footer>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">cúper</div>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-tag">Open to AI engineering roles + RLHF contracts</div>
+            <h1>I build things that work.</h1>
+            <p class="hero-subtext">
+                AI engineer. Former ML instructor at Stanford & Berkeley. I've fine-tuned LLMs for production,
+                built a bare-metal OS in a joke language, and I'm rebuilding after some rough years.
+                U.S. work authorized (EAD).
+            </p>
+            <div class="hero-buttons">
+                <a href="https://github.com/Cuuper22" class="btn btn-primary" target="_blank" rel="noopener">GitHub</a>
+                <a href="mailto:cuuper225@gmail.com" class="btn btn-secondary">Email</a>
+                <a href="https://linkedin.com/in/yousefanas" class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-value">250+</span>
+                    <span class="stat-label">students taught</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">20+</span>
+                    <span class="stat-label">colleges served</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">9</span>
+                    <span class="stat-label">public repos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">languages spoken</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2>Projects</h2>
+                <p class="section-subtitle">Building in public</p>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Featured Project -->
+                <div class="project-card featured">
+                    <div class="project-header">
+                        <h3 class="project-title">ArnoldC-Native + ToaruOS-Arnold</h3>
+                        <span class="project-badge">Open Source</span>
+                    </div>
+                    <p class="project-description">
+                        Native-code compiler (Scala) and bare-metal OS kernel for ArnoldC — all keywords are
+                        Schwarzenegger quotes. 22,000 lines of ArnoldC, boots to a desktop with games and networking.
+                        Noticed by a Google DeepMind researcher.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Scala</span>
+                        <span class="tag">x86 Assembly</span>
+                        <span class="tag">Compiler</span>
+                        <span class="tag">OS Kernel</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/ArnoldC-Native" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/ArnoldC-Native</a> •
+                    <a href="https://github.com/Cuuper22/ToaruOS-Arnold" class="project-link" target="_blank" rel="noopener">ToaruOS-Arnold</a>
+                </div>
+
+                <!-- Erdos -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Erdos</h3>
+                        <span class="project-badge">Active</span>
+                    </div>
+                    <p class="project-description">
+                        Automated mathematical proof mining. LLM agents solve formalized conjectures in Lean 4
+                        using a Prover/Critic loop with theorem integrity hashing. Desktop GUI via Tauri.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Rust</span>
+                        <span class="tag">Tauri</span>
+                        <span class="tag">Lean 4</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/Erdos" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Erdos</a>
+                </div>
+
+                <!-- AI Tax CPA -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">ai-tax-cpa-agent</h3>
+                        <span class="project-badge">Deployed</span>
+                    </div>
+                    <p class="project-description">
+                        AI tax accountant — handles Form 1040/1120/1065 prep, audit defense, and document analysis.
+                        FastAPI backend, Next.js frontend, Claude for reasoning, ElevenLabs for voice.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">FastAPI</span>
+                        <span class="tag">Next.js</span>
+                        <span class="tag">Claude API</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/ai-tax-cpa-agent" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/ai-tax-cpa-agent</a>
+                </div>
+
+                <!-- Bee -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Bee</h3>
+                        <span class="project-badge">Complete</span>
+                    </div>
+                    <p class="project-description">
+                        Cross-platform spelling bee game. React Native with Expo, Express backend, MySQL via Drizzle ORM.
+                        tRPC for type-safe API calls.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">React Native</span>
+                        <span class="tag">Expo</span>
+                        <span class="tag">MySQL</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/Bee" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Bee</a>
+                </div>
+
+                <!-- HealthOS -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">HealthOS</h3>
+                        <span class="project-badge">In Progress</span>
+                    </div>
+                    <p class="project-description">
+                        Personal health intelligence platform — genomic data, medical records, lab results, wearable metrics.
+                        Privacy-first, locally hosted. Actively building.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">FastAPI</span>
+                        <span class="tag">React</span>
+                        <span class="tag">SQLite</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/HealthOS" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/HealthOS</a>
+                </div>
+
+                <!-- Osint_app -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">Osint_app</h3>
+                        <span class="project-badge">WIP</span>
+                    </div>
+                    <p class="project-description">
+                        OSINT investigation toolkit (WIP). Currently ships claude-sfx — a zero-dependency Python library
+                        for CLI sound effects.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">CLI</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/Osint_app" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Osint_app</a>
+                </div>
+
+                <!-- SaaS Starter Kit -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">saas-starter-kit</h3>
+                        <span class="project-badge">Open Source</span>
+                    </div>
+                    <p class="project-description">
+                        SaaS boilerplate: Node.js, Stripe payments, authentication, email workflows, admin dashboard.
+                        MIT licensed.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Node.js</span>
+                        <span class="tag">Stripe</span>
+                        <span class="tag">Express</span>
+                        <span class="tag">MIT</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/saas-starter-kit" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/saas-starter-kit</a>
+                </div>
+
+                <!-- BennyCuTools -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">BennyCuTools</h3>
+                        <span class="project-badge">Live Product</span>
+                    </div>
+                    <p class="project-description">
+                        SaaS platform for local service contractors — CRM, lead capture, AI email notifications.
+                        Integrated Gemini API, AWS SES, Firebase, Twilio.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Google Gemini</span>
+                        <span class="tag">Firebase</span>
+                        <span class="tag">AWS SES</span>
+                        <span class="tag">Twilio</span>
+                    </div>
+                    <a href="https://bennycutools.com" class="project-link" target="_blank" rel="noopener">bennycutools.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="container">
+            <div class="section-header">
+                <h2>Experience</h2>
+                <p class="section-subtitle">Professional timeline</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">Freelance Software Engineer</h3>
+                        <p class="timeline-meta">Jan 2025 – Present</p>
+                    </div>
+                    <p class="timeline-description">
+                        Building software independently. Key projects: BennyCuTools (SaaS for contractors),
+                        JobHunter (automated job pipeline on GCP), OSINT toolkit, AI tax agent.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">Lead Instructor — ML/AI</h3>
+                        <p class="timeline-meta">iD Tech | Jun 2022 – Aug 2024</p>
+                    </div>
+                    <p class="timeline-description">
+                        Taught 250+ students at UC Berkeley, Stanford, and SFSU. Neural networks, NLP, computer vision.
+                        3 consecutive summers.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">Software Engineer — NLP/LLM</h3>
+                        <p class="timeline-meta">Findhope Mental Health | Jan 2023 – Apr 2023</p>
+                    </div>
+                    <p class="timeline-description">
+                        Fine-tuned LLMs for mental health chatbot across 20+ Indian colleges. Hindi, Telugu, Urdu.
+                        Shipped to production in 3 months.
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title">Admissions & Research</h3>
+                        <p class="timeline-meta">Minerva University | Sep 2021 – Apr 2023</p>
+                    </div>
+                    <p class="timeline-description">
+                        Reviewed 500+ applications from 60+ countries. AV research with Stanford & Kakao Ventures (Seoul).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2>Skills</h2>
+                <p class="section-subtitle">Technical toolkit</p>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>AI/ML</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">LLM Fine-tuning</span>
+                        <span class="skill-tag">NLP</span>
+                        <span class="skill-tag">PyTorch</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">RLHF</span>
+                        <span class="skill-tag">Prompt Engineering</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Programming</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Scala</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">R</span>
+                        <span class="skill-tag">C++</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Infrastructure</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">GCP</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Cloudflare</span>
+                        <span class="skill-tag">Twilio</span>
+                        <span class="skill-tag">Git</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Arabic (Native)</span>
+                        <span class="skill-tag">English (Fluent)</span>
+                        <span class="skill-tag">French</span>
+                        <span class="skill-tag">Spanish</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2>Let's work together</h2>
+                <p>
+                    Open to work. AI engineering, RLHF contracts, EdTech curriculum. U.S. work authorized.
+                </p>
+                <div class="hero-buttons" style="justify-content: center;">
+                    <a href="mailto:cuuper225@gmail.com" class="btn btn-primary">Email</a>
+                    <a href="https://github.com/Cuuper22" class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://linkedin.com/in/yousefanas" class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Built by Cúper — cuuper22.github.io</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ==================== Mobile Menu Toggle ====================
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ==================== Smooth Scrolling ====================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ==================== Intersection Observer for Scroll Animations ====================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Stagger animation for multiple items
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        document.querySelectorAll('.project-card, .timeline-item, .skill-category').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ==================== Active Nav Link on Scroll ====================
+        const sections = document.querySelectorAll('section[id]');
+
+        const highlightNav = () => {
+            const scrollY = window.pageYOffset;
+
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100;
+                const sectionId = section.getAttribute('id');
+                const navLink = document.querySelector(`.nav-links a[href="#${sectionId}"]`);
+
+                if (navLink && scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.style.color = 'var(--text-muted)';
+                    });
+                    navLink.style.color = 'var(--accent-green)';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', highlightNav);
+
+        // ==================== Performance: Reduce motion for users who prefer it ====================
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        if (prefersReducedMotion.matches) {
+            document.querySelectorAll('*').forEach(el => {
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+            });
+        }
+    </script>
 </body>
 </html>
