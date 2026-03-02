@@ -1,0 +1,282 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  emoji: string;
+  tech: string[];
+  repo?: string;
+  site?: string;
+  oneLiner: string;
+  slug: string;
+}
+
+const { title, emoji, tech, repo, site, oneLiner, slug } = Astro.props;
+
+const iconMap: Record<string, string> = {
+  'toaruos-arnold': 'px-proj-shades',
+  'erdos': 'px-proj-graph',
+  'anti-slop-design': 'px-proj-palette',
+  'polymarket-bot': 'px-proj-chart',
+  'jobhunter': 'px-proj-target',
+  'ai-tax-cpa-agent': 'px-proj-coin',
+  'bennycutools': 'px-proj-wrench',
+  'healthos': 'px-proj-medic',
+  'bee': 'px-proj-bee',
+  'saas-starter-kit': 'px-proj-rocket',
+  'claude-sfx': 'px-proj-speaker',
+};
+const iconClass = iconMap[slug] || 'px-folder';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <ViewTransitions />
+  <title>{title} - Cuper</title>
+  <meta name="description" content={oneLiner} />
+  <meta property="og:title" content={`${title} - Cuper`} />
+  <meta property="og:description" content={oneLiner} />
+  <meta property="og:image" content={`/og/${slug}.png`} />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style is:global>
+    @import '../styles/global.css';
+
+    body {
+      padding-bottom: 48px;
+    }
+
+    .project-page-window {
+      max-width: 760px;
+      margin: 20px auto;
+      background: var(--window-chrome);
+      border: 2px outset var(--button-face);
+      box-shadow: 2px 2px 0 black;
+    }
+
+    .project-title-bar {
+      background: linear-gradient(90deg, var(--title-bar), var(--title-bar-end));
+      color: var(--text-light);
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--inset-dark);
+    }
+
+    .project-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 12px;
+      padding: 2px 8px;
+      background: var(--button-face);
+      border: 2px outset var(--button-face);
+      border-radius: 0;
+      cursor: pointer;
+      color: var(--text-dark);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .back-btn:hover {
+      background: oklch(0.88 0.005 250);
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .back-btn:active { border-style: inset; }
+
+    .project-title-text {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .project-title-emoji { font-size: 18px; }
+
+    .project-body {
+      padding: 20px 24px;
+      background: var(--window-body);
+      border: 2px inset var(--window-chrome);
+      margin: 4px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .project-body h2 {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: var(--title-bar);
+    }
+
+    .project-body p {
+      margin-bottom: 14px;
+    }
+
+    .project-body code {
+      background: oklch(0.92 0.005 250);
+      padding: 1px 5px;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .project-body strong {
+      font-weight: 600;
+    }
+
+    .project-body em {
+      font-style: italic;
+    }
+
+    .project-body a {
+      color: var(--link-color);
+    }
+
+    .project-body a:hover {
+      color: var(--link-hover);
+    }
+
+    .project-body img {
+      max-width: 100%;
+      height: auto;
+      border: 2px inset var(--window-chrome);
+      margin: 12px 0;
+      display: block;
+    }
+
+    .project-body pre {
+      background: #1a1a1a;
+      color: oklch(0.7 0.2 130);
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 16px;
+      overflow-x: auto;
+      border: 2px inset var(--window-chrome);
+      margin: 12px 0;
+    }
+
+    .project-body h2 + p img:first-child {
+      margin-top: 0;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid oklch(0.85 0 0);
+    }
+
+    .project-meta .tech-pills {
+      margin-top: 0;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Taskbar (simplified for project pages) */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: var(--taskbar-bg);
+      border-top: 2px solid var(--inset-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      z-index: 1000;
+      box-shadow: 0 -2px 0 var(--inset-dark);
+    }
+
+    .taskbar-clock {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 14px;
+      padding: 6px 12px;
+      background: var(--window-chrome);
+      border: 2px inset var(--button-face);
+      color: var(--text-dark);
+    }
+
+    @media (max-width: 768px) {
+      .project-page-window {
+        margin: 10px;
+      }
+
+      .project-body {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="project-page-window" transition:animate="slide">
+    <div class="project-title-bar">
+      <div class="project-title-left">
+        <a href="/" class="back-btn">&larr; Desktop</a>
+        <div class="project-title-text">
+          <span class="project-title-emoji"><span class={`px-icon ${iconClass}`} style="width:18px;height:18px;"></span></span>
+          {title}
+        </div>
+      </div>
+    </div>
+    <div class="project-body">
+      <div class="project-meta">
+        <div class="tech-pills">
+          {tech.map(t => <span class="tech-pill">{t}</span>)}
+        </div>
+        <div class="project-links">
+          {repo && <a href={repo} target="_blank" rel="noopener noreferrer" class="retro-btn">View on GitHub</a>}
+          {site && <a href={site} target="_blank" rel="noopener noreferrer" class="retro-btn">Visit Site</a>}
+        </div>
+      </div>
+
+      <slot />
+    </div>
+  </div>
+
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <a href="/" class="retro-btn" style="font-size: 14px;"><span class="px-icon px-start"></span> Back to Desktop</a>
+    <div class="taskbar-clock" id="clock">12:00 PM</div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      const now = new Date();
+      const h = now.getHours() % 12 || 12;
+      const m = now.getMinutes().toString().padStart(2, '0');
+      el.textContent = `${h}:${m} ${now.getHours() >= 12 ? 'PM' : 'AM'}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

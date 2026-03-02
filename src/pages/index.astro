@@ -1,0 +1,243 @@
+---
+import Desktop from '../layouts/Desktop.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const highlights = allProjects.filter(p => p.data.tier === 'highlight');
+const supporting = allProjects.filter(p => p.data.tier === 'supporting');
+const brief = allProjects.filter(p => p.data.tier === 'brief');
+
+const iconMap: Record<string, string> = {
+  'toaruos-arnold': 'px-proj-shades',
+  'erdos': 'px-proj-graph',
+  'anti-slop-design': 'px-proj-palette',
+  'polymarket-bot': 'px-proj-chart',
+  'jobhunter': 'px-proj-target',
+  'ai-tax-cpa-agent': 'px-proj-coin',
+  'bennycutools': 'px-proj-wrench',
+  'healthos': 'px-proj-medic',
+  'bee': 'px-proj-bee',
+  'saas-starter-kit': 'px-proj-rocket',
+  'claude-sfx': 'px-proj-speaker',
+};
+---
+
+<Desktop title="Cuper - Portfolio OS" description="I build things to understand how they work.">
+  <div class="desktop">
+    <!-- Desktop Icons -->
+    <div class="desktop-icons">
+      <div class="desktop-icon" tabindex="0" data-window="about">
+        <div class="icon-image"><span class="px-icon px-doc" style="width:32px;height:32px;"></span></div>
+        <div class="icon-label">About.txt</div>
+      </div>
+      <div class="desktop-icon" tabindex="0" data-window="projects">
+        <div class="icon-image"><span class="px-icon px-folder" style="width:32px;height:32px;"></span></div>
+        <div class="icon-label">Projects</div>
+      </div>
+      <div class="desktop-icon" tabindex="0" data-window="arc">
+        <div class="icon-image"><span class="px-icon px-clip" style="width:32px;height:32px;"></span></div>
+        <div class="icon-label">Arc.txt</div>
+      </div>
+      <div class="desktop-icon" tabindex="0" data-window="contact">
+        <div class="icon-image"><span class="px-icon px-mail" style="width:32px;height:32px;"></span></div>
+        <div class="icon-label">Contact</div>
+      </div>
+    </div>
+
+    <!-- CúperOS Logo -->
+    <div class="desktop-logo">
+      <span class="logo-text">CúperOS</span>
+      <span class="logo-version">V22.5</span>
+    </div>
+
+    <!-- Pixel Art Decorations -->
+    <div class="desktop-deco deco-terminal" style="top:25%;left:72%;" title="bare metal">
+      <svg width="28" height="22" viewBox="0 0 28 22" shape-rendering="crispEdges"><rect width="28" height="22" fill="#000" stroke="#808080"/><path d="M4 6l4 4-4 4" stroke="#0f0" stroke-width="2" fill="none"/><line x1="10" y1="14" x2="18" y2="14" stroke="#0f0" stroke-width="2"/></svg>
+    </div>
+    <div class="desktop-deco deco-sigma" style="top:55%;left:82%;" title="Erdos">
+      <svg width="24" height="28" viewBox="0 0 24 28" shape-rendering="crispEdges"><path d="M20 2H4l8 12L4 26h16" stroke="#FFD800" stroke-width="3" fill="none"/></svg>
+    </div>
+    <div class="desktop-deco deco-sunglasses" style="top:35%;left:55%;" title="I'll be back">
+      <svg width="36" height="16" viewBox="0 0 36 16" shape-rendering="crispEdges"><rect x="0" y="4" width="14" height="8" rx="0" fill="#1a1a1a" stroke="#333"/><rect x="22" y="4" width="14" height="8" rx="0" fill="#1a1a1a" stroke="#333"/><line x1="14" y1="8" x2="22" y2="8" stroke="#333" stroke-width="2"/><line x1="0" y1="6" x2="-3" y2="4" stroke="#333" stroke-width="2"/><line x1="36" y1="6" x2="39" y2="4" stroke="#333" stroke-width="2"/></svg>
+    </div>
+    <div class="desktop-deco deco-ankh" style="top:68%;left:65%;" title="Coptic">
+      <svg width="20" height="28" viewBox="0 0 20 28" shape-rendering="crispEdges"><circle cx="10" cy="6" r="5" stroke="#C09050" stroke-width="2" fill="none"/><line x1="10" y1="11" x2="10" y2="26" stroke="#C09050" stroke-width="3"/><line x1="4" y1="18" x2="16" y2="18" stroke="#C09050" stroke-width="3"/></svg>
+    </div>
+    <div class="desktop-deco deco-hex" style="top:15%;left:88%;" title="0x">
+      <span>0xFF</span>
+    </div>
+
+    <!-- About Window -->
+    <div class="window" id="about" style="top: 60px; left: 120px; width: 560px;">
+      <div class="title-bar">
+        <div class="title-text"><span class="title-icon"><span class="px-icon px-doc"></span></span> About.txt</div>
+        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
+      </div>
+      <div class="window-content">
+        <h2>I build things to understand how they work.</h2>
+
+        <p>I build things to understand how they work. Not "I'm passionate about building things". I mean I will mass at a problem until I understand it at the level where there's nothing between me and the machine. I started with an operating system where every keyword is an Arnold Schwarzenegger quote and ended up catching AI agents cheating at mathematics. There's a logic to the progression if you squint. Mostly I just kept pulling on threads until something interesting fell out.</p>
+
+        <p>A friend looked at my GitHub and said "bro, why aren't you posting this." I didn't have a good answer. So here it is. <span class="arabic-easter-egg" title="هانت - almost there, we're close">So yeah.</span></p>
+
+        <h3>Background</h3>
+
+        <p>I'm Yousef, but everyone calls me Cuper. Egyptian, Coptic Christian, currently in Orange County figuring out how to get back to the Bay.</p>
+
+        <p>Ranked 5th nationally in Egypt in high school. That got me into Minerva University. No campus, classes in 7 countries. San Francisco, Seoul, Taipei, Hyderabad. I studied CS and physics, got 76 credits, and then life did what life does. No degree. It's a long story involving an asylum application, a mental health crisis, and the kind of bureaucratic cascade where SEVIS gets terminated four days before your leave of absence gets approved. I'm not going to sugarcoat it and I'm not going to make it a sob story either. <span class="arabic-easter-egg" title="هانت - almost there, we're close">Almost there.</span></p>
+
+        <p>Taught ML/AI to 250+ students at iD Tech across 20+ college campuses. Berkeley, Stanford, SFSU, and a bunch of others. Three consecutive summers. The thing about teaching neural networks to 18-year-olds is that you can't hide behind jargon. If you don't understand backprop at the intuition level, a room full of teenagers will let you know. That job taught me to explain things, which is a different skill than understanding things.</p>
+
+        <p>Before that, I fine-tuned LLMs for a mental health chatbot at Findhope. deployed across 20+ Indian colleges in Hindi, Telugu, and Urdu. Shipped to production in 3 months. That was the first time I realized LLMs could do something useful beyond generating blog posts. Also the first time I cleaned a dataset that made me want to cry, but that's NLP in low-resource languages for you.</p>
+
+        <p>I don't have a degree. I have a lot of projects in various states of completion and a few that actually work. I'm improving the ratio.</p>
+      </div>
+    </div>
+
+    <!-- Projects Window -->
+    <div class="window" id="projects" style="top: 80px; left: 640px; width: 620px;">
+      <div class="title-bar">
+        <div class="title-text"><span class="title-icon"><span class="px-icon px-folder"></span></span> Projects</div>
+        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
+      </div>
+      <div class="window-content">
+        <div class="tier-label">The Highlights</div>
+        <div class="project-grid project-grid-highlights">
+          {highlights.map(p => (
+            <a href={`/projects/${p.data.slug}`} class="project-item highlight">
+              <div class="project-icon"><span class={`px-icon ${iconMap[p.data.slug] || 'px-folder'}`} style="width:40px;height:40px;"></span></div>
+              <div class="project-name">{p.data.title}</div>
+              <div class="project-oneliner">{p.data.oneLiner}</div>
+            </a>
+          ))}
+        </div>
+
+        <div class="tier-label">The Supporting Cast</div>
+        <div class="project-grid project-grid-supporting">
+          {supporting.map(p => (
+            <a href={`/projects/${p.data.slug}`} class="project-item">
+              <div class="project-icon"><span class={`px-icon ${iconMap[p.data.slug] || 'px-folder'}`} style="width:32px;height:32px;"></span></div>
+              <div class="project-name">{p.data.title}</div>
+            </a>
+          ))}
+        </div>
+
+        <div class="tier-label">Brief Mentions</div>
+        <div class="project-grid project-grid-brief">
+          {brief.map(p => (
+            <a href={`/projects/${p.data.slug}`} class="project-item">
+              <div class="project-icon"><span class={`px-icon ${iconMap[p.data.slug] || 'px-folder'}`} style="width:32px;height:32px;"></span></div>
+              <div class="project-name">{p.data.title}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Arc Window -->
+    <div class="window" id="arc" style="top: 140px; left: 180px; width: 520px;">
+      <div class="title-bar">
+        <div class="title-text"><span class="title-icon"><span class="px-icon px-clip"></span></span> Arc.txt</div>
+        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
+      </div>
+      <div class="window-content">
+        <h2>The Arc</h2>
+
+        <p>Bare metal (ToaruOS) &rarr; Compilers (ArnoldC-Native) &rarr; Formal reasoning (Erdos) &rarr; AI agents (polymarket_bot, jobhunter, ai-tax-cpa) &rarr; Developer tools (anti-slop-design, saas-starter-kit) &rarr; Failed startup (BennyCuTools) &rarr; Whatever's next.</p>
+
+        <p>I started at the bottom of the stack because I wanted to understand what a computer actually does at the hardware level. Then I needed a compiler for the OS, so I built that. Then I got into AI. started with theorem proving because I wanted to see if LLMs could do real math. They can, but they cheat. Then I started building tools because I kept needing tools that didn't exist. Then I tried to sell one and learned that building is the easy part.</p>
+
+        <p>It sounds strategic when I write it out. It wasn't. I just kept getting curious about the next thing and refusing to stop until I understood it. ADHD is a runtime error that occasionally produces features. <span class="arabic-easter-egg" title="على الله - it's in God's hands">It is what it is.</span></p>
+      </div>
+    </div>
+
+    <!-- Contact Window -->
+    <div class="window" id="contact" style="top: 200px; left: 240px; width: 420px;">
+      <div class="title-bar">
+        <div class="title-text"><span class="title-icon"><span class="px-icon px-mail"></span></span> Contact</div>
+        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
+      </div>
+      <div class="window-content">
+        <div class="contact-links">
+          <a href="mailto:cuuper225@gmail.com" class="contact-link">
+            <span class="contact-icon"><span class="px-icon px-mail" style="width:20px;height:20px;"></span></span>
+            <span>cuuper225@gmail.com</span>
+          </a>
+          <a href="https://github.com/Cuuper22" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <span class="contact-icon"><span class="px-icon px-code" style="width:20px;height:20px;"></span></span>
+            <span>github.com/Cuuper22</span>
+          </a>
+          <a href="https://linkedin.com/in/yousefanas" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <span class="contact-icon"><span class="px-icon px-briefcase" style="width:20px;height:20px;"></span></span>
+            <span>linkedin.com/in/yousefanas</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal Window (Konami code easter egg) -->
+    <div class="window terminal-window" id="terminal" style="top: 100px; left: 200px; width: 520px;">
+      <div class="title-bar">
+        <div class="title-text"><span class="title-icon"><span class="px-icon px-term"></span></span> Terminal.exe</div>
+        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
+      </div>
+      <div class="window-content">
+        <div id="terminal-output" class="terminal-output">Portfolio OS [Version 1.0.0]
+(c) 2026 Cuper. All rights reserved.
+
+Type 'help' for available commands.</div>
+        <div class="terminal-input-line">
+          <span class="terminal-prompt">cuper@portfolio:~$</span>
+          <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start Menu -->
+  <div class="start-menu">
+    <div class="start-menu-header">Portfolio OS</div>
+    <div class="start-menu-items">
+      <button class="start-menu-item" data-window="about"><span class="px-icon px-doc"></span> About.txt</button>
+      <button class="start-menu-item" data-window="projects"><span class="px-icon px-folder"></span> Projects</button>
+      <button class="start-menu-item" data-window="arc"><span class="px-icon px-clip"></span> Arc.txt</button>
+      <button class="start-menu-item" data-window="contact"><span class="px-icon px-mail"></span> Contact</button>
+      <div class="start-menu-divider"></div>
+      <a href="/projects/toaruos-arnold" class="start-menu-item"><span class="px-icon px-proj-shades"></span> ToaruOS-Arnold</a>
+      <a href="/projects/erdos" class="start-menu-item"><span class="px-icon px-proj-graph"></span> Erdos</a>
+      <a href="/projects/anti-slop-design" class="start-menu-item"><span class="px-icon px-proj-palette"></span> anti-slop-design</a>
+      <a href="/projects/polymarket-bot" class="start-menu-item"><span class="px-icon px-proj-chart"></span> polymarket_bot</a>
+      <a href="/projects/jobhunter" class="start-menu-item"><span class="px-icon px-proj-target"></span> jobhunter</a>
+      <a href="/projects/ai-tax-cpa-agent" class="start-menu-item"><span class="px-icon px-proj-coin"></span> ai-tax-cpa-agent</a>
+      <a href="/projects/bennycutools" class="start-menu-item"><span class="px-icon px-proj-wrench"></span> BennyCuTools</a>
+    </div>
+  </div>
+
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <div class="taskbar-left">
+      <button class="start-button"><span class="px-icon px-start"></span><span>Start</span></button>
+      <div class="taskbar-windows"></div>
+    </div>
+    <div class="taskbar-clock" id="clock">12:00 PM</div>
+  </div>
+
+  <!-- Command Palette -->
+  <div class="cmd-palette-overlay">
+    <div class="cmd-palette">
+      <div class="title-bar">
+        <div class="title-text"><span class="title-icon"><span class="px-icon px-search"></span></span> Command Palette</div>
+      </div>
+      <input type="text" id="cmd-input" class="cmd-palette-input" placeholder="Search projects, sections..." autocomplete="off" spellcheck="false" />
+      <div class="cmd-palette-results"></div>
+    </div>
+  </div>
+
+  <!-- Screensaver -->
+  <div class="screensaver">
+    <div class="screensaver-text">I'LL BE BACK</div>
+  </div>
+
+  <!-- Kbd hint -->
+  <div class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>K</kbd> to search</div>
+</Desktop>

@@ -1,0 +1,100 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BSOD - Portfolio OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0000AA;
+      color: white;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .bsod {
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .bsod-title {
+      background: #AAAAAA;
+      color: #0000AA;
+      display: inline-block;
+      padding: 2px 8px;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .bsod-text {
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .bsod-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: white;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bsod-cursor { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bsod">
+    <div class="bsod-title">PORTFOLIO_OS</div>
+    <div class="bsod-text">
+A fatal exception 0x404 has occurred at 0028:C0011E36.
+
+The page you requested does not exist or has been
+terminated by the system administrator.
+
+*  Press any key to return to the Desktop.
+*  Press Ctrl+K to search for what you're looking for.
+
+Press any key to continue <span class="bsod-cursor"></span></div>
+  </div>
+
+  <script>
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        window.location.href = '/?cmd=open';
+      } else {
+        window.location.href = '/';
+      }
+    });
+
+    document.addEventListener('click', () => {
+      window.location.href = '/';
+    });
+
+    document.addEventListener('touchstart', () => {
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>

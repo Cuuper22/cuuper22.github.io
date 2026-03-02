@@ -1,0 +1,845 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title = "Cuper - Portfolio OS", description = "I build things to understand how they work.", ogImage = "/og/index.png" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <ViewTransitions />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style is:global>
+    @import '../styles/global.css';
+
+    html, body { height: 100%; overflow: hidden; }
+
+    .desktop {
+      position: relative;
+      height: calc(100vh - 48px);
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .desktop-icons {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      z-index: 1;
+    }
+
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      width: 80px;
+      padding: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .desktop-icon:hover,
+    .desktop-icon:focus {
+      background: oklch(0.50 0.15 260 / 0.3);
+      border: 1px dotted var(--text-light);
+      outline: none;
+    }
+
+    .icon-image {
+      width: 48px;
+      height: 48px;
+      background: var(--window-chrome);
+      border: 2px outset var(--button-face);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-label {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 12px;
+      color: var(--text-light);
+      text-align: center;
+      text-shadow: 1px 1px 0 var(--text-dark);
+      word-wrap: break-word;
+      width: 100%;
+    }
+
+    .window {
+      position: absolute;
+      display: none;
+      min-width: 300px;
+      max-width: 90vw;
+    }
+
+    .window.active { display: block; }
+
+    .window .window-content {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .title-bar { cursor: move; }
+
+    /* Taskbar */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: var(--taskbar-bg);
+      border-top: 2px solid var(--inset-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      z-index: 1000;
+      box-shadow: 0 -2px 0 var(--inset-dark);
+    }
+
+    .taskbar-left {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .start-button {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 6px 16px;
+      background: var(--button-face);
+      border: 2px outset var(--button-face);
+      border-radius: 0;
+      cursor: pointer;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .start-button:hover { background: oklch(0.88 0.005 250); }
+    .start-button:active { border-style: inset; }
+
+    .taskbar-windows {
+      display: flex;
+      gap: 2px;
+      flex: 1;
+      margin-left: 4px;
+      overflow: hidden;
+    }
+
+    .taskbar-window-btn {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 12px;
+      padding: 4px 12px;
+      background: var(--button-face);
+      border: 2px outset var(--button-face);
+      border-radius: 0;
+      cursor: pointer;
+      color: var(--text-dark);
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .taskbar-window-btn:hover { background: oklch(0.88 0.005 250); }
+    .taskbar-window-btn.active {
+      border-style: inset;
+      background: oklch(0.90 0.005 250);
+    }
+
+    .taskbar-clock {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 14px;
+      padding: 6px 12px;
+      background: var(--window-chrome);
+      border: 2px inset var(--button-face);
+      color: var(--text-dark);
+    }
+
+    /* Start menu */
+    .start-menu {
+      position: fixed;
+      bottom: 48px;
+      left: 0;
+      width: 240px;
+      background: var(--window-chrome);
+      border: 2px outset var(--button-face);
+      box-shadow: 2px -2px 0 black;
+      z-index: 1001;
+      display: none;
+    }
+
+    .start-menu.open { display: block; }
+
+    .start-menu-header {
+      background: linear-gradient(180deg, var(--title-bar), var(--title-bar-end));
+      padding: 8px 10px;
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-light);
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .start-menu-items {
+      margin-left: 28px;
+      padding: 4px 0;
+    }
+
+    .start-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'Pixelify Sans', monospace;
+      color: var(--text-dark);
+      text-decoration: none;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .start-menu-item:hover {
+      background: var(--title-bar);
+      color: var(--text-light);
+    }
+
+    .start-menu-divider {
+      height: 1px;
+      background: var(--inset-dark);
+      margin: 4px 12px;
+    }
+
+    /* Command Palette */
+    .cmd-palette-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 20vh;
+    }
+
+    .cmd-palette-overlay.open { display: flex; }
+
+    .cmd-palette {
+      width: 480px;
+      max-width: 90vw;
+      background: var(--window-chrome);
+      border: 2px outset var(--button-face);
+      box-shadow: 4px 4px 0 black;
+    }
+
+    .cmd-palette .title-bar { cursor: default; }
+
+    .cmd-palette-input {
+      padding: 10px 12px;
+      border: 2px inset var(--window-chrome);
+      background: white;
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 14px;
+      outline: none;
+      margin: 4px;
+      width: calc(100% - 8px);
+    }
+
+    .cmd-palette-results {
+      max-height: 300px;
+      overflow-y: auto;
+      margin: 0 4px 4px;
+      border: 2px inset var(--window-chrome);
+      background: white;
+    }
+
+    .cmd-palette-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      border-bottom: 1px solid oklch(0.90 0 0);
+    }
+
+    .cmd-palette-item:hover,
+    .cmd-palette-item.selected {
+      background: var(--title-bar);
+      color: var(--text-light);
+    }
+
+    .cmd-palette-item .item-emoji { font-size: 16px; width: 24px; text-align: center; }
+    .cmd-palette-item .item-label { flex: 1; }
+    .cmd-palette-item .item-meta { font-size: 11px; opacity: 0.6; }
+
+    /* Screensaver */
+    .screensaver {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 3000;
+      display: none;
+      overflow: hidden;
+    }
+
+    .screensaver.active { display: block; }
+
+    .screensaver-text {
+      position: absolute;
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 36px;
+      font-weight: 700;
+      white-space: nowrap;
+      color: oklch(0.70 0.20 130);
+    }
+
+    /* Terminal */
+    .terminal-window .window-content {
+      background: black;
+      color: oklch(0.70 0.20 130);
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .terminal-output { white-space: pre-wrap; word-break: break-word; }
+
+    .terminal-input-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .terminal-prompt {
+      color: oklch(0.65 0.20 260);
+      white-space: nowrap;
+    }
+
+    .terminal-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: oklch(0.70 0.20 130);
+      font-family: inherit;
+      font-size: inherit;
+      outline: none;
+      caret-color: oklch(0.70 0.20 130);
+    }
+
+    /* Project grid */
+    .project-grid { display: grid; gap: 12px; margin-top: 8px; }
+    .project-grid-highlights { grid-template-columns: repeat(3, 1fr); }
+    .project-grid-supporting { grid-template-columns: repeat(4, 1fr); }
+    .project-grid-brief { grid-template-columns: repeat(4, 1fr); }
+
+    .tier-label {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 13px;
+      color: oklch(0.50 0 0);
+      margin-top: 16px;
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid oklch(0.85 0 0);
+    }
+
+    .project-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 8px;
+      background: var(--window-chrome);
+      border: 2px outset var(--button-face);
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .project-item:hover { background: oklch(0.88 0.005 250); text-decoration: none; }
+    .project-item:active { border-style: inset; }
+    .project-item.highlight { padding: 16px 12px; }
+    .project-icon { font-size: 32px; }
+    .project-item.highlight .project-icon { font-size: 40px; }
+    .project-name { font-family: 'Pixelify Sans', monospace; font-size: 12px; font-weight: 600; }
+    .project-oneliner { font-size: 11px; color: oklch(0.45 0 0); line-height: 1.3; }
+
+    /* Contact links */
+    .contact-links { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--button-face);
+      border: 2px outset var(--button-face);
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 14px;
+    }
+
+    .contact-link:hover { background: oklch(0.88 0.005 250); text-decoration: none; color: var(--text-dark); }
+    .contact-link:active { border-style: inset; }
+    .contact-icon { font-size: 20px; }
+
+    .kbd-hint {
+      position: fixed;
+      bottom: 56px;
+      right: 12px;
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 11px;
+      color: var(--text-light);
+      opacity: 0.5;
+      z-index: 2;
+    }
+
+    kbd {
+      background: oklch(0.30 0 0);
+      padding: 1px 5px;
+      border: 1px solid oklch(0.45 0 0);
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 11px;
+    }
+
+    /* CúperOS Logo */
+    .desktop-logo {
+      position: absolute;
+      right: 40px;
+      bottom: 70px;
+      user-select: none;
+      pointer-events: none;
+      z-index: 0;
+      text-align: right;
+    }
+
+    .logo-text {
+      display: block;
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 56px;
+      font-weight: 700;
+      color: oklch(0.52 0.12 195);
+      opacity: 0.35;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 0 oklch(0.35 0.08 195);
+    }
+
+    .logo-version {
+      display: block;
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 18px;
+      font-weight: 400;
+      color: oklch(0.55 0.10 195);
+      opacity: 0.4;
+      margin-top: -4px;
+    }
+
+    /* Pixel Art Decorations */
+    .desktop-deco {
+      position: absolute;
+      opacity: 0.25;
+      user-select: none;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .deco-hex {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 20px;
+      color: oklch(0.60 0.15 130);
+      opacity: 0.3;
+    }
+
+    @media (max-width: 768px) {
+      html, body { height: auto; overflow: auto; }
+      .desktop { height: auto; min-height: calc(100vh - 48px); padding: 10px; padding-bottom: 60px; overflow: visible; }
+
+      .desktop-icons {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+        justify-content: center;
+      }
+
+      .desktop-icon { width: 70px; }
+      .icon-image { width: 44px; height: 44px; }
+
+      .window {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 12px;
+        transform: none !important;
+      }
+
+      .window .window-content { max-height: none; }
+      .title-bar { cursor: default; }
+
+      .project-grid-highlights,
+      .project-grid-supporting,
+      .project-grid-brief { grid-template-columns: repeat(2, 1fr); }
+
+      .taskbar-windows { display: none; }
+      .start-menu { width: 200px; }
+      .cmd-palette { width: 95vw; }
+      .kbd-hint { display: none; }
+      .desktop-logo { display: none; }
+      .desktop-deco { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <slot />
+
+  <script>
+    // Clock
+    function updateClock() {
+      const el = document.getElementById('clock');
+      if (!el) return;
+      const now = new Date();
+      const h = now.getHours() % 12 || 12;
+      const m = now.getMinutes().toString().padStart(2, '0');
+      el.textContent = `${h}:${m} ${now.getHours() >= 12 ? 'PM' : 'AM'}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Window management
+    let highestZ = 100;
+    const windows = document.querySelectorAll('.window');
+    const desktopIcons = document.querySelectorAll('.desktop-icon');
+
+    function bringToFront(win: Element) {
+      highestZ++;
+      (win as HTMLElement).style.zIndex = String(highestZ);
+      windows.forEach(w => w.classList.remove('focused'));
+      win.classList.add('focused');
+      updateTaskbar();
+    }
+
+    function openWindow(id: string) {
+      const win = document.getElementById(id);
+      if (!win) return;
+      win.classList.add('active');
+      bringToFront(win);
+      closeStartMenu();
+    }
+
+    function closeWindow(win: Element) {
+      win.classList.remove('active');
+      updateTaskbar();
+    }
+
+    desktopIcons.forEach(icon => {
+      icon.addEventListener('click', () => {
+        const wid = (icon as HTMLElement).dataset.window;
+        if (wid) openWindow(wid);
+      });
+      icon.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          (icon as HTMLElement).click();
+        }
+      });
+    });
+
+    document.querySelectorAll('.close-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const win = (btn as HTMLElement).closest('.window');
+        if (win) closeWindow(win);
+      });
+    });
+
+    windows.forEach(win => {
+      win.addEventListener('mousedown', () => bringToFront(win));
+    });
+
+    // Drag (desktop only)
+    if (window.innerWidth > 768) {
+      windows.forEach(win => {
+        const tb = win.querySelector('.title-bar');
+        if (!tb) return;
+        let dragging = false, sX = 0, sY = 0, oX = 0, oY = 0;
+
+        tb.addEventListener('mousedown', (e: Event) => {
+          const me = e as MouseEvent;
+          if ((me.target as HTMLElement).closest('.window-btn')) return;
+          const t = (win as HTMLElement).style.transform;
+          if (t) { const m = t.match(/translate\((.+?)px,\s*(.+?)px\)/); if (m) { oX = parseFloat(m[1]); oY = parseFloat(m[2]); } }
+          sX = me.clientX - oX; sY = me.clientY - oY;
+          dragging = true;
+          bringToFront(win);
+        });
+
+        document.addEventListener('mousemove', (e: MouseEvent) => {
+          if (!dragging) return;
+          e.preventDefault();
+          oX = e.clientX - sX; oY = e.clientY - sY;
+          (win as HTMLElement).style.transform = `translate(${oX}px, ${oY}px)`;
+        });
+
+        document.addEventListener('mouseup', () => { dragging = false; });
+      });
+    }
+
+    // Taskbar
+    function updateTaskbar() {
+      const container = document.querySelector('.taskbar-windows');
+      if (!container) return;
+      while (container.firstChild) container.removeChild(container.firstChild);
+      windows.forEach(win => {
+        if (!win.classList.contains('active')) return;
+        const titleEl = win.querySelector('.title-text');
+        if (!titleEl) return;
+        const btn = document.createElement('button');
+        btn.className = 'taskbar-window-btn' + (win.classList.contains('focused') ? ' active' : '');
+        btn.textContent = titleEl.textContent?.trim() || '';
+        btn.addEventListener('click', () => bringToFront(win));
+        container.appendChild(btn);
+      });
+    }
+
+    // Start menu
+    const startBtn = document.querySelector('.start-button');
+    const startMenu = document.querySelector('.start-menu');
+
+    function closeStartMenu() { startMenu?.classList.remove('open'); }
+
+    startBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      startMenu?.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (startMenu?.classList.contains('open') && !(e.target as HTMLElement).closest('.start-menu') && !(e.target as HTMLElement).closest('.start-button')) closeStartMenu();
+    });
+
+    document.querySelectorAll('.start-menu-item[data-window]').forEach(item => {
+      item.addEventListener('click', () => {
+        const id = (item as HTMLElement).dataset.window;
+        if (id) openWindow(id);
+      });
+    });
+
+    // Command Palette
+    const cmdOverlay = document.querySelector('.cmd-palette-overlay') as HTMLElement;
+    const cmdInput = document.getElementById('cmd-input') as HTMLInputElement;
+    const cmdResults = document.querySelector('.cmd-palette-results') as HTMLElement;
+
+    interface CmdItem { icon: string; iconType: 'class' | 'emoji'; label: string; meta: string; action: () => void; }
+
+    const cmdItems: CmdItem[] = [
+      { icon: 'px-doc', iconType: 'class', label: 'About', meta: 'Window', action: () => openWindow('about') },
+      { icon: 'px-folder', iconType: 'class', label: 'Projects', meta: 'Window', action: () => openWindow('projects') },
+      { icon: 'px-clip', iconType: 'class', label: 'The Arc', meta: 'Window', action: () => openWindow('arc') },
+      { icon: 'px-mail', iconType: 'class', label: 'Contact', meta: 'Window', action: () => openWindow('contact') },
+      { icon: 'px-proj-shades', iconType: 'class', label: 'ToaruOS-Arnold', meta: 'Project', action: () => location.href = '/projects/toaruos-arnold' },
+      { icon: 'px-proj-graph', iconType: 'class', label: 'Erdos', meta: 'Project', action: () => location.href = '/projects/erdos' },
+      { icon: 'px-proj-palette', iconType: 'class', label: 'anti-slop-design', meta: 'Project', action: () => location.href = '/projects/anti-slop-design' },
+      { icon: 'px-proj-chart', iconType: 'class', label: 'polymarket_bot', meta: 'Project', action: () => location.href = '/projects/polymarket-bot' },
+      { icon: 'px-proj-target', iconType: 'class', label: 'jobhunter', meta: 'Project', action: () => location.href = '/projects/jobhunter' },
+      { icon: 'px-proj-coin', iconType: 'class', label: 'ai-tax-cpa-agent', meta: 'Project', action: () => location.href = '/projects/ai-tax-cpa-agent' },
+      { icon: 'px-proj-wrench', iconType: 'class', label: 'BennyCuTools', meta: 'Project', action: () => location.href = '/projects/bennycutools' },
+      { icon: 'px-proj-medic', iconType: 'class', label: 'HealthOS', meta: 'Project', action: () => location.href = '/projects/healthos' },
+      { icon: 'px-proj-bee', iconType: 'class', label: 'Bee', meta: 'Project', action: () => location.href = '/projects/bee' },
+      { icon: 'px-proj-rocket', iconType: 'class', label: 'saas-starter-kit', meta: 'Project', action: () => location.href = '/projects/saas-starter-kit' },
+      { icon: 'px-proj-speaker', iconType: 'class', label: 'claude-sfx', meta: 'Project', action: () => location.href = '/projects/claude-sfx' },
+    ];
+
+    let cmdSelIdx = 0;
+    let filteredItems: CmdItem[] = [];
+
+    function openCmdPalette() {
+      cmdOverlay?.classList.add('open');
+      if (cmdInput) { cmdInput.value = ''; cmdInput.focus(); }
+      renderCmdResults('');
+      closeStartMenu();
+    }
+
+    function closeCmdPalette() { cmdOverlay?.classList.remove('open'); }
+
+    function renderCmdResults(query: string) {
+      if (!cmdResults) return;
+      const q = query.toLowerCase();
+      filteredItems = q ? cmdItems.filter(i => i.label.toLowerCase().includes(q) || i.meta.toLowerCase().includes(q)) : [...cmdItems];
+      cmdSelIdx = 0;
+      while (cmdResults.firstChild) cmdResults.removeChild(cmdResults.firstChild);
+      filteredItems.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'cmd-palette-item' + (i === 0 ? ' selected' : '');
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'item-emoji';
+        if (item.iconType === 'class') {
+          const inner = document.createElement('span');
+          inner.className = 'px-icon ' + item.icon;
+          iconSpan.appendChild(inner);
+        } else {
+          iconSpan.textContent = item.icon;
+        }
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'item-label';
+        labelSpan.textContent = item.label;
+        const metaSpan = document.createElement('span');
+        metaSpan.className = 'item-meta';
+        metaSpan.textContent = item.meta;
+        div.appendChild(iconSpan);
+        div.appendChild(labelSpan);
+        div.appendChild(metaSpan);
+        div.addEventListener('click', () => { item.action(); closeCmdPalette(); });
+        cmdResults.appendChild(div);
+      });
+    }
+
+    cmdInput?.addEventListener('input', () => renderCmdResults(cmdInput.value));
+
+    cmdInput?.addEventListener('keydown', (e) => {
+      const items = cmdResults?.querySelectorAll('.cmd-palette-item');
+      if (!items?.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[cmdSelIdx]?.classList.remove('selected');
+        cmdSelIdx = (cmdSelIdx + 1) % items.length;
+        items[cmdSelIdx]?.classList.add('selected');
+        items[cmdSelIdx]?.scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items[cmdSelIdx]?.classList.remove('selected');
+        cmdSelIdx = (cmdSelIdx - 1 + items.length) % items.length;
+        items[cmdSelIdx]?.classList.add('selected');
+        items[cmdSelIdx]?.scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (filteredItems[cmdSelIdx]) { filteredItems[cmdSelIdx].action(); closeCmdPalette(); }
+      } else if (e.key === 'Escape') { closeCmdPalette(); }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        cmdOverlay?.classList.contains('open') ? closeCmdPalette() : openCmdPalette();
+      }
+      if (e.key === 'Escape' && cmdOverlay?.classList.contains('open')) closeCmdPalette();
+    });
+
+    cmdOverlay?.addEventListener('click', (e) => { if (e.target === cmdOverlay) closeCmdPalette(); });
+
+    // Screensaver (2 min idle)
+    let idleTimer: ReturnType<typeof setTimeout>;
+    const screensaver = document.querySelector('.screensaver') as HTMLElement;
+    const ssText = document.querySelector('.screensaver-text') as HTMLElement;
+    const ssColors = ['oklch(0.70 0.20 130)', 'oklch(0.70 0.20 30)', 'oklch(0.70 0.20 260)', 'oklch(0.65 0.20 330)', 'oklch(0.75 0.15 60)', 'oklch(0.60 0.20 195)'];
+    let ssX = 50, ssY = 50, ssDx = 2, ssDy = 1.5, ssCI = 0, ssAnim = 0;
+
+    function startScreensaver() {
+      if (!screensaver || !ssText) return;
+      screensaver.classList.add('active');
+      ssX = 50; ssY = 50;
+      function animate() {
+        ssX += ssDx; ssY += ssDy;
+        const w = window.innerWidth - ssText.offsetWidth - 20;
+        const h = window.innerHeight - ssText.offsetHeight - 20;
+        if (ssX <= 0 || ssX >= w) { ssDx *= -1; ssCI = (ssCI + 1) % ssColors.length; ssText.style.color = ssColors[ssCI]; }
+        if (ssY <= 0 || ssY >= h) { ssDy *= -1; ssCI = (ssCI + 1) % ssColors.length; ssText.style.color = ssColors[ssCI]; }
+        ssText.style.left = ssX + 'px';
+        ssText.style.top = ssY + 'px';
+        ssAnim = requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function stopScreensaver() { screensaver?.classList.remove('active'); cancelAnimationFrame(ssAnim); }
+
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      if (screensaver?.classList.contains('active')) stopScreensaver();
+      idleTimer = setTimeout(startScreensaver, 120000);
+    }
+
+    ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(e => document.addEventListener(e, resetIdleTimer));
+    resetIdleTimer();
+
+    // Konami Code (Terminal)
+    const konamiSeq = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let kIdx = 0;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === konamiSeq[kIdx]) {
+        kIdx++;
+        if (kIdx === konamiSeq.length) { kIdx = 0; openWindow('terminal'); (document.getElementById('terminal-input') as HTMLInputElement)?.focus(); }
+      } else { kIdx = 0; }
+    });
+
+    // Terminal commands
+    const termOut = document.getElementById('terminal-output');
+    const termIn = document.getElementById('terminal-input') as HTMLInputElement;
+
+    const termCmds: Record<string, string> = {
+      'help': 'Available commands: help, whoami, ls, cat about.txt, sudo rm -rf /, exit',
+      'whoami': 'cuper',
+      'ls': '📄 About.txt  📁 Projects/  📋 Arc.txt  📧 Contact\n🎭 toaruos-arnold  🔗 erdos  🎨 anti-slop-design\n📊 polymarket_bot  🤖 jobhunter  💰 ai-tax-cpa\n🔧 bennycutools  🏥 healthos  🐝 bee  🚀 saas-starter-kit  🔊 claude-sfx',
+      'cat about.txt': 'Yousef (Cuper). Egyptian. CS + physics at Minerva, 76 credits, no degree.\nTaught ML/AI to 250+ students at iD Tech across 20+ campuses.\nFine-tuned multilingual LLMs at Findhope. Ranked 5th in Egypt. Still building.',
+      'sudo rm -rf /': 'Nice try.',
+    };
+
+    termIn?.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const cmd = termIn.value.trim();
+      termIn.value = '';
+      if (!termOut) return;
+      termOut.textContent += `\ncuper@portfolio:~$ ${cmd}`;
+      if (cmd === 'exit') { closeWindow(document.getElementById('terminal')!); return; }
+      const resp = termCmds[cmd];
+      termOut.textContent += resp ? `\n${resp}` : (cmd ? `\nCommand not found. Type 'help' for available commands.` : '');
+      const content = termOut.closest('.window-content');
+      if (content) content.scrollTop = content.scrollHeight;
+    });
+
+    // Auto-open About
+    window.addEventListener('load', () => openWindow('about'));
+  </script>
+</body>
+</html>
