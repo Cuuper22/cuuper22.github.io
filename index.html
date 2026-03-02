@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Yousef Anas - AI Engineer, ML Instructor, Open to RLHF contracts and AI engineering roles">
-    <title>Cúper - AI Engineer</title>
+    <meta name="description" content="Cúper (Yousef Anas) — building things to understand how they work. From bare-metal operating systems to multi-agent theorem provers.">
+    <title>Cúper</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -626,36 +626,17 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <div class="hero-tag">Open to AI engineering roles + RLHF contracts</div>
-            <h1>I build things that work.</h1>
+            <h1>I build things to understand how they work.</h1>
             <p class="hero-subtext">
-                AI engineer. Former ML instructor at Stanford & Berkeley. I've fine-tuned LLMs for production,
-                built a bare-metal OS in a joke language, and I'm rebuilding after some rough years.
-                U.S. work authorized (EAD).
+                I started with an operating system — the kind where every keyword is an Arnold Schwarzenegger quote — and ended up proving theorems about AI agents. There's a logic to the progression if you squint, but mostly I just kept pulling on threads.
+            </p>
+            <p class="hero-subtext" style="animation-delay: 0.25s;">
+                A friend told me I should put this somewhere. So here it is.
             </p>
             <div class="hero-buttons">
                 <a href="https://github.com/Cuuper22" class="btn btn-primary" target="_blank" rel="noopener">GitHub</a>
                 <a href="mailto:cuuper225@gmail.com" class="btn btn-secondary">Email</a>
                 <a href="https://linkedin.com/in/yousefanas" class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
-            </div>
-
-            <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-value">250+</span>
-                    <span class="stat-label">students taught</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">20+</span>
-                    <span class="stat-label">colleges served</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">9</span>
-                    <span class="stat-label">public repos</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">4</span>
-                    <span class="stat-label">languages spoken</span>
-                </div>
             </div>
         </div>
     </section>
@@ -664,60 +645,91 @@
     <section id="projects">
         <div class="container">
             <div class="section-header">
-                <h2>Projects</h2>
-                <p class="section-subtitle">Building in public</p>
+                <h2>What I've been working on</h2>
             </div>
 
             <div class="projects-grid">
-                <!-- Featured Project -->
+                <!-- Featured: ToaruOS-Arnold + ArnoldC-Native -->
                 <div class="project-card featured">
                     <div class="project-header">
-                        <h3 class="project-title">ArnoldC-Native + ToaruOS-Arnold</h3>
-                        <span class="project-badge">Open Source</span>
+                        <h3 class="project-title">ToaruOS-Arnold + ArnoldC-Native</h3>
                     </div>
                     <p class="project-description">
-                        Native-code compiler (Scala) and bare-metal OS kernel for ArnoldC — all keywords are
-                        Schwarzenegger quotes. 22,000 lines of ArnoldC, boots to a desktop with games and networking.
-                        Noticed by a Google DeepMind researcher.
+                        22,000 lines of bare-metal x86 — a full desktop operating system with a GUI, networking, filesystem, and games. Every keyword is an Arnold Schwarzenegger quote. GET TO THE CHOPPER is a function call. I'LL BE BACK is a loop. It boots from a 213KB binary.
+                    </p>
+                    <p class="project-description">
+                        The OS needed a real compiler. ArnoldC was a joke language that compiled to JVM bytecode — useless for bare metal. So I forked it and added native x86 codegen, kernel packages, and 40 new keywords for systems programming. It's a joke language and a real compiler at the same time.
                     </p>
                     <div class="project-tags">
-                        <span class="tag">Scala</span>
+                        <span class="tag">ArnoldC</span>
                         <span class="tag">x86 Assembly</span>
-                        <span class="tag">Compiler</span>
+                        <span class="tag">Scala</span>
                         <span class="tag">OS Kernel</span>
+                        <span class="tag">Compiler</span>
                     </div>
-                    <a href="https://github.com/Cuuper22/ArnoldC-Native" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/ArnoldC-Native</a> •
-                    <a href="https://github.com/Cuuper22/ToaruOS-Arnold" class="project-link" target="_blank" rel="noopener">ToaruOS-Arnold</a>
+                    <a href="https://github.com/Cuuper22/ToaruOS-Arnold" class="project-link" target="_blank" rel="noopener">ToaruOS-Arnold</a> ·
+                    <a href="https://github.com/Cuuper22/ArnoldC-Native" class="project-link" target="_blank" rel="noopener">ArnoldC-Native</a>
                 </div>
 
                 <!-- Erdos -->
-                <div class="project-card">
+                <div class="project-card featured">
                     <div class="project-header">
                         <h3 class="project-title">Erdos</h3>
-                        <span class="project-badge">Active</span>
                     </div>
                     <p class="project-description">
-                        Automated mathematical proof mining. LLM agents solve formalized conjectures in Lean 4
-                        using a Prover/Critic loop with theorem integrity hashing. Desktop GUI via Tauri.
+                        I wanted to see if LLMs could prove real math. Not "solve this equation" — actual formal proofs that compile in Lean 4, a proof assistant that won't let you lie about mathematics.
+                    </p>
+                    <p class="project-description">
+                        Erdos runs a Prover/Critic loop: one agent proposes a strategy, another tears it apart, and they iterate until something compiles. The interesting part wasn't getting proofs — it was that the agents kept cheating. They'd subtly redefine what they were trying to prove, shifting the theorem statement to make the proof easier. I had to add SHA-256 integrity locks on the theorem statements to stop them. That's an alignment problem. A small one, but real.
                     </p>
                     <div class="project-tags">
                         <span class="tag">Python</span>
+                        <span class="tag">Lean 4</span>
                         <span class="tag">Rust</span>
                         <span class="tag">Tauri</span>
-                        <span class="tag">Lean 4</span>
                     </div>
                     <a href="https://github.com/Cuuper22/Erdos" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Erdos</a>
                 </div>
 
-                <!-- AI Tax CPA -->
+                <!-- anti-slop-design -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">anti-slop-design</h3>
+                    </div>
+                    <p class="project-description">
+                        Every AI coding tool generates the same website. Inter font, purple gradient, centered hero, three feature cards. I got tired of it. 67 files across 8 domains — fintech, healthcare, government — that replace generic AI aesthetics with design that actually fits the context. 178 validation checks. It built the 20 versions of this site.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">Design Systems</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/anti-slop-design" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/anti-slop-design</a>
+                </div>
+
+                <!-- polymarket_bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">polymarket_bot</h3>
+                    </div>
+                    <p class="project-description">
+                        Prediction market trading bot. Regime detection, Kelly criterion sizing, Monte Carlo validation. 16,000 lines of Python. The backtesting shows strong returns — on simulation data. Emphasis on <em>simulation</em>. I'm honest about what's tested and what isn't.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Monte Carlo</span>
+                        <span class="tag">Kelly Criterion</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/polymarket_bot" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/polymarket_bot</a>
+                </div>
+
+                <!-- ai-tax-cpa-agent -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">ai-tax-cpa-agent</h3>
-                        <span class="project-badge">Deployed</span>
                     </div>
                     <p class="project-description">
-                        AI tax accountant — handles Form 1040/1120/1065 prep, audit defense, and document analysis.
-                        FastAPI backend, Next.js frontend, Claude for reasoning, ElevenLabs for voice.
+                        Tax engine that uses real IRS 2024 brackets with Decimal precision — because floating-point rounding errors in tax math are literally illegal. Claude handles document analysis. FastAPI backend, Next.js frontend. Not your accountant, though.
                     </p>
                     <div class="project-tags">
                         <span class="tag">Python</span>
@@ -728,34 +740,29 @@
                     <a href="https://github.com/Cuuper22/ai-tax-cpa-agent" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/ai-tax-cpa-agent</a>
                 </div>
 
-                <!-- Bee -->
+                <!-- jobhunter -->
                 <div class="project-card">
                     <div class="project-header">
-                        <h3 class="project-title">Bee</h3>
-                        <span class="project-badge">Complete</span>
+                        <h3 class="project-title">jobhunter</h3>
                     </div>
                     <p class="project-description">
-                        Cross-platform spelling bee game. React Native with Expo, Express backend, MySQL via Drizzle ORM.
-                        tRPC for type-safe API calls.
+                        AI agent that scrapes job postings, scores fit, and drafts applications. Two rules: it won't submit anything without your approval, and it won't lie on your behalf. The second rule was harder to enforce than the first.
                     </p>
                     <div class="project-tags">
-                        <span class="tag">TypeScript</span>
-                        <span class="tag">React Native</span>
-                        <span class="tag">Expo</span>
-                        <span class="tag">MySQL</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">GCP</span>
+                        <span class="tag">Claude API</span>
                     </div>
-                    <a href="https://github.com/Cuuper22/Bee" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Bee</a>
+                    <a href="https://github.com/Cuuper22/jobhunter" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/jobhunter</a>
                 </div>
 
                 <!-- HealthOS -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">HealthOS</h3>
-                        <span class="project-badge">In Progress</span>
                     </div>
                     <p class="project-description">
-                        Personal health intelligence platform — genomic data, medical records, lab results, wearable metrics.
-                        Privacy-first, locally hosted. Actively building.
+                        Personal health platform with a plugin architecture — medical records, labs, and medications as independent modules that share a common API through a BaseModule interface. Privacy-first, locally hosted.
                     </p>
                     <div class="project-tags">
                         <span class="tag">Python</span>
@@ -766,38 +773,35 @@
                     <a href="https://github.com/Cuuper22/HealthOS" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/HealthOS</a>
                 </div>
 
-                <!-- Osint_app -->
+                <!-- Bee -->
                 <div class="project-card">
                     <div class="project-header">
-                        <h3 class="project-title">Osint_app</h3>
-                        <span class="project-badge">WIP</span>
+                        <h3 class="project-title">Bee</h3>
                     </div>
                     <p class="project-description">
-                        OSINT investigation toolkit (WIP). Currently ships claude-sfx — a zero-dependency Python library
-                        for CLI sound effects.
+                        Spelling bee word game. Hexagonal grid, 370K-word dictionary, 5 hint types, 80 tests. React Native with Expo. Sometimes you just want to build something fun.
                     </p>
                     <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">CLI</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">React Native</span>
+                        <span class="tag">Expo</span>
                     </div>
-                    <a href="https://github.com/Cuuper22/Osint_app" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Osint_app</a>
+                    <a href="https://github.com/Cuuper22/Bee" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/Bee</a>
                 </div>
 
-                <!-- SaaS Starter Kit -->
+                <!-- saas-starter-kit -->
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">saas-starter-kit</h3>
-                        <span class="project-badge">Open Source</span>
                     </div>
                     <p class="project-description">
-                        SaaS boilerplate: Node.js, Stripe payments, authentication, email workflows, admin dashboard.
-                        MIT licensed.
+                        SaaS boilerplate. Express.js, SQLite, Stripe. One env var to production. The first 48 hours of every SaaS are the same, so I made them disappear. MIT licensed.
                     </p>
                     <div class="project-tags">
                         <span class="tag">Node.js</span>
-                        <span class="tag">Stripe</span>
                         <span class="tag">Express</span>
-                        <span class="tag">MIT</span>
+                        <span class="tag">Stripe</span>
+                        <span class="tag">SQLite</span>
                     </div>
                     <a href="https://github.com/Cuuper22/saas-starter-kit" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/saas-starter-kit</a>
                 </div>
@@ -806,19 +810,33 @@
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">BennyCuTools</h3>
-                        <span class="project-badge">Live Product</span>
                     </div>
                     <p class="project-description">
-                        SaaS platform for local service contractors — CRM, lead capture, AI email notifications.
-                        Integrated Gemini API, AWS SES, Firebase, Twilio.
+                        SaaS platform for local service contractors — CRM, job tracking, AI email notifications. Gemini API, AWS SES, Firebase, Twilio. A live product with real users.
                     </p>
                     <div class="project-tags">
-                        <span class="tag">Google Gemini</span>
                         <span class="tag">Firebase</span>
+                        <span class="tag">Gemini</span>
                         <span class="tag">AWS SES</span>
                         <span class="tag">Twilio</span>
                     </div>
                     <a href="https://bennycutools.com" class="project-link" target="_blank" rel="noopener">bennycutools.com</a>
+                </div>
+
+                <!-- claude-sfx -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title">claude-sfx</h3>
+                    </div>
+                    <p class="project-description">
+                        Sound effects for the terminal. Every sound generated from sine waves. Zero dependencies. Terminals are too quiet.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Audio</span>
+                        <span class="tag">CLI</span>
+                    </div>
+                    <a href="https://github.com/Cuuper22/claude-sfx" class="project-link" target="_blank" rel="noopener">github.com/Cuuper22/claude-sfx</a>
                 </div>
             </div>
         </div>
@@ -828,19 +846,17 @@
     <section id="experience">
         <div class="container">
             <div class="section-header">
-                <h2>Experience</h2>
-                <p class="section-subtitle">Professional timeline</p>
+                <h2>Background</h2>
             </div>
 
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-header">
-                        <h3 class="timeline-title">Freelance Software Engineer</h3>
+                        <h3 class="timeline-title">Building independently</h3>
                         <p class="timeline-meta">Jan 2025 – Present</p>
                     </div>
                     <p class="timeline-description">
-                        Building software independently. Key projects: BennyCuTools (SaaS for contractors),
-                        JobHunter (automated job pipeline on GCP), OSINT toolkit, AI tax agent.
+                        Most of the projects above. BennyCuTools, Erdos, the trading bot, the tax engine, the design system. A lot of unfinished projects and a few finished ones.
                     </p>
                 </div>
 
@@ -850,8 +866,7 @@
                         <p class="timeline-meta">iD Tech | Jun 2022 – Aug 2024</p>
                     </div>
                     <p class="timeline-description">
-                        Taught 250+ students at UC Berkeley, Stanford, and SFSU. Neural networks, NLP, computer vision.
-                        3 consecutive summers.
+                        Taught 250+ students across UC Berkeley, Stanford, and SFSU campuses. Neural networks, NLP, computer vision. 3 consecutive summers, 20+ colleges total.
                     </p>
                 </div>
 
@@ -861,78 +876,18 @@
                         <p class="timeline-meta">Findhope Mental Health | Jan 2023 – Apr 2023</p>
                     </div>
                     <p class="timeline-description">
-                        Fine-tuned LLMs for mental health chatbot across 20+ Indian colleges. Hindi, Telugu, Urdu.
-                        Shipped to production in 3 months.
+                        Fine-tuned LLMs for a mental health chatbot deployed across 20+ Indian colleges. Hindi, Telugu, Urdu. Shipped to production in 3 months.
                     </p>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-header">
-                        <h3 class="timeline-title">Admissions & Research</h3>
+                        <h3 class="timeline-title">CS + Physics</h3>
                         <p class="timeline-meta">Minerva University | Sep 2021 – Apr 2023</p>
                     </div>
                     <p class="timeline-description">
-                        Reviewed 500+ applications from 60+ countries. AV research with Stanford & Kakao Ventures (Seoul).
+                        76 credits, no degree. Classes in 7 countries. Reviewed 500+ admissions applications from 60+ countries. Ranked 5th nationally in Egypt in high school, which meant something there.
                     </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills">
-        <div class="container">
-            <div class="section-header">
-                <h2>Skills</h2>
-                <p class="section-subtitle">Technical toolkit</p>
-            </div>
-
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>AI/ML</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">LLM Fine-tuning</span>
-                        <span class="skill-tag">NLP</span>
-                        <span class="skill-tag">PyTorch</span>
-                        <span class="skill-tag">TensorFlow</span>
-                        <span class="skill-tag">RLHF</span>
-                        <span class="skill-tag">Prompt Engineering</span>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Programming</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">TypeScript</span>
-                        <span class="skill-tag">Scala</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">R</span>
-                        <span class="skill-tag">C++</span>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Infrastructure</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">GCP</span>
-                        <span class="skill-tag">AWS</span>
-                        <span class="skill-tag">Firebase</span>
-                        <span class="skill-tag">Docker</span>
-                        <span class="skill-tag">Cloudflare</span>
-                        <span class="skill-tag">Twilio</span>
-                        <span class="skill-tag">Git</span>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Languages</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Arabic (Native)</span>
-                        <span class="skill-tag">English (Fluent)</span>
-                        <span class="skill-tag">French</span>
-                        <span class="skill-tag">Spanish</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -942,10 +897,7 @@
     <section id="contact" class="contact">
         <div class="container">
             <div class="contact-content">
-                <h2>Let's work together</h2>
-                <p>
-                    Open to work. AI engineering, RLHF contracts, EdTech curriculum. U.S. work authorized.
-                </p>
+                <p>I'll add more here when there's more to add.</p>
                 <div class="hero-buttons" style="justify-content: center;">
                     <a href="mailto:cuuper225@gmail.com" class="btn btn-primary">Email</a>
                     <a href="https://github.com/Cuuper22" class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
