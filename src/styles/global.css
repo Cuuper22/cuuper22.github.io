@@ -4,7 +4,7 @@
 /* Motion: minimal (OS feels snappy) */
 /* Shadows: pixel-perfect 2px offsets */
 
-/* Fonts loaded via <link> in layouts — not @import (blocks rendering) */
+/* Fonts loaded via <link> in layouts, not @import (blocks rendering) */
 
 * {
   margin: 0;
