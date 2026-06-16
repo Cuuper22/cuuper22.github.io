@@ -1,5 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import { iconFor } from '../lib/projects';
 
 interface Props {
   title: string;
@@ -13,20 +14,7 @@ interface Props {
 
 const { title, emoji, tech, repo, site, oneLiner, slug } = Astro.props;
 
-const iconMap: Record<string, string> = {
-  'toaruos-arnold': 'px-proj-shades',
-  'erdos': 'px-proj-graph',
-  'anti-slop-design': 'px-proj-palette',
-  'polymarket-bot': 'px-proj-chart',
-  'jobhunter': 'px-proj-target',
-  'ai-tax-cpa-agent': 'px-proj-coin',
-  'bennycutools': 'px-proj-wrench',
-  'healthos': 'px-proj-medic',
-  'bee': 'px-proj-bee',
-  'saas-starter-kit': 'px-proj-rocket',
-  'claude-sfx': 'px-proj-speaker',
-};
-const iconClass = iconMap[slug] || 'px-folder';
+const iconClass = iconFor(slug);
 ---
 
 <!DOCTYPE html>

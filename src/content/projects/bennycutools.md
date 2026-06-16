@@ -4,7 +4,6 @@ slug: "bennycutools"
 emoji: "🔧"
 tier: "supporting"
 tech: ["Firebase", "Google Gemini", "AWS SES", "Twilio"]
-site: "https://bennycutools.com"
 oneLiner: "SaaS for local service contractors. 400 cold emails. Zero conversions. The lessons aren't dead."
 ---
 

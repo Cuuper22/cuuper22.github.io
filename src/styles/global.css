@@ -93,6 +93,11 @@ a:hover {
   border-bottom: 2px solid var(--inset-dark);
 }
 
+/* Unfocused windows get a grayed title bar (Win95 active/inactive convention) */
+.window:not(.focused) > .title-bar {
+  background: linear-gradient(90deg, oklch(0.58 0.012 250), oklch(0.64 0.012 250));
+}
+
 .title-text {
   font-family: 'Pixelify Sans', monospace;
   font-size: 14px;
@@ -323,6 +328,46 @@ h1, h2, h3 {
 
 .px-proj-speaker {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 6h3l3-3v10l-3-3H2V6z' fill='%23808080' stroke='%23404040'/%3E%3Cpath d='M10 5c1.5 1.5 1.5 4.5 0 6' stroke='%23000' fill='none' stroke-width='1.5'/%3E%3Cpath d='M12 3c2.5 2.5 2.5 7.5 0 10' stroke='%23000' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+/* gpu_stack: stacked layers */
+.px-proj-stack {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='2' y='3' width='12' height='3' fill='%234444FF' stroke='%23000060'/%3E%3Crect x='2' y='7' width='12' height='3' fill='%2300A0A0' stroke='%23006060'/%3E%3Crect x='2' y='11' width='12' height='3' fill='%2300A000' stroke='%23006000'/%3E%3C/svg%3E");
+}
+
+/* PhysicsLab: atom */
+.px-proj-atom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cellipse cx='8' cy='8' rx='7' ry='3' fill='none' stroke='%23000080' stroke-width='1'/%3E%3Cellipse cx='8' cy='8' rx='3' ry='7' fill='none' stroke='%23000080' stroke-width='1'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23FF0000'/%3E%3C/svg%3E");
+}
+
+/* CurbRun: map pin */
+.px-proj-pin {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1C5 1 3 3 3 6c0 3 5 9 5 9s5-6 5-9c0-3-2-5-5-5z' fill='%23CC0000' stroke='%23800000'/%3E%3Ccircle cx='8' cy='6' r='2' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+/* codex-canmore: medium board */
+.px-proj-board {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='1' y='2' width='14' height='12' fill='%23fff' stroke='%23000'/%3E%3Crect x='1' y='2' width='14' height='3' fill='%235a2d82'/%3E%3Crect x='3' y='7' width='4' height='5' fill='%2300A0A0'/%3E%3Crect x='9' y='7' width='4' height='5' fill='%23FFD800'/%3E%3C/svg%3E");
+}
+
+/* Waypoint: compass */
+.px-proj-compass {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='%23fff' stroke='%23000'/%3E%3Cpath d='M8 3l2 5-2 5-2-5z' fill='%23CC0000' stroke='%23800000'/%3E%3C/svg%3E");
+}
+
+/* agent-rate-forecast: gauge */
+.px-proj-gauge {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 12a6 6 0 0 1 12 0' fill='none' stroke='%23000080' stroke-width='2'/%3E%3Cline x1='8' y1='12' x2='12' y2='8' stroke='%23CC0000' stroke-width='1.5'/%3E%3Ccircle cx='8' cy='12' r='1.5' fill='%23000'/%3E%3C/svg%3E");
+}
+
+/* Pact: padlock */
+.px-proj-lock {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5 8V6a3 3 0 0 1 6 0v2' fill='none' stroke='%23808080' stroke-width='1.5'/%3E%3Crect x='3' y='8' width='10' height='6' fill='%23FFD800' stroke='%23996600'/%3E%3Crect x='7' y='10' width='2' height='2' fill='%23996600'/%3E%3C/svg%3E");
+}
+
+/* IVC: clay tablet */
+.px-proj-tablet {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='2' y='2' width='12' height='12' fill='%23C09050' stroke='%23805000'/%3E%3Cpath d='M4 5h8M4 8h6M4 11h4' stroke='%235a3000' stroke-width='1' fill='none'/%3E%3Crect x='10' y='9' width='2' height='4' fill='%235a3000'/%3E%3C/svg%3E");
 }
 
 /* === Reduced Motion === */

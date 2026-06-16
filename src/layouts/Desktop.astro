@@ -369,7 +369,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
 
     /* Project grid */
     .project-grid { display: grid; gap: 12px; margin-top: 8px; }
-    .project-grid-highlights { grid-template-columns: repeat(3, 1fr); }
+    .project-grid-highlights { grid-template-columns: repeat(2, 1fr); }
     .project-grid-supporting { grid-template-columns: repeat(4, 1fr); }
     .project-grid-brief { grid-template-columns: repeat(4, 1fr); }
 
@@ -677,18 +677,27 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       { icon: 'px-folder', iconType: 'class', label: 'Projects', meta: 'Window', action: () => openWindow('projects') },
       { icon: 'px-clip', iconType: 'class', label: 'The Arc', meta: 'Window', action: () => openWindow('arc') },
       { icon: 'px-mail', iconType: 'class', label: 'Contact', meta: 'Window', action: () => openWindow('contact') },
-      { icon: 'px-proj-shades', iconType: 'class', label: 'ToaruOS-Arnold', meta: 'Project', action: () => location.href = '/projects/toaruos-arnold' },
-      { icon: 'px-proj-graph', iconType: 'class', label: 'Erdos', meta: 'Project', action: () => location.href = '/projects/erdos' },
-      { icon: 'px-proj-palette', iconType: 'class', label: 'anti-slop-design', meta: 'Project', action: () => location.href = '/projects/anti-slop-design' },
-      { icon: 'px-proj-chart', iconType: 'class', label: 'polymarket_bot', meta: 'Project', action: () => location.href = '/projects/polymarket-bot' },
-      { icon: 'px-proj-target', iconType: 'class', label: 'jobhunter', meta: 'Project', action: () => location.href = '/projects/jobhunter' },
-      { icon: 'px-proj-coin', iconType: 'class', label: 'ai-tax-cpa-agent', meta: 'Project', action: () => location.href = '/projects/ai-tax-cpa-agent' },
-      { icon: 'px-proj-wrench', iconType: 'class', label: 'BennyCuTools', meta: 'Project', action: () => location.href = '/projects/bennycutools' },
-      { icon: 'px-proj-medic', iconType: 'class', label: 'HealthOS', meta: 'Project', action: () => location.href = '/projects/healthos' },
-      { icon: 'px-proj-bee', iconType: 'class', label: 'Bee', meta: 'Project', action: () => location.href = '/projects/bee' },
-      { icon: 'px-proj-rocket', iconType: 'class', label: 'saas-starter-kit', meta: 'Project', action: () => location.href = '/projects/saas-starter-kit' },
-      { icon: 'px-proj-speaker', iconType: 'class', label: 'claude-sfx', meta: 'Project', action: () => location.href = '/projects/claude-sfx' },
     ];
+
+    // Project entries come from the JSON data island emitted by index.astro,
+    // so the palette (and the terminal `ls`) track src/content/projects automatically.
+    let projectCmdItems: CmdItem[] = [];
+    try {
+      const dataEl = document.getElementById('cmd-data');
+      if (dataEl?.textContent) {
+        const projects = JSON.parse(dataEl.textContent) as Array<{ slug: string; title: string; icon: string }>;
+        projectCmdItems = projects.map(p => ({
+          icon: p.icon,
+          iconType: 'class' as const,
+          label: p.title,
+          meta: 'Project',
+          action: () => { location.href = `/projects/${p.slug}`; },
+        }));
+        cmdItems.push(...projectCmdItems);
+      }
+    } catch (err) {
+      console.error('Failed to parse project data island', err);
+    }
 
     let cmdSelIdx = 0;
     let filteredItems: CmdItem[] = [];
@@ -820,7 +829,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
     const termCmds: Record<string, string> = {
       'help': 'Available commands: help, whoami, ls, cat about.txt, sudo rm -rf /, exit',
       'whoami': 'cuper',
-      'ls': '📄 About.txt  📁 Projects/  📋 Arc.txt  📧 Contact\n🎭 toaruos-arnold  🔗 erdos  🎨 anti-slop-design\n📊 polymarket_bot  🤖 jobhunter  💰 ai-tax-cpa\n🔧 bennycutools  🏥 healthos  🐝 bee  🚀 saas-starter-kit  🔊 claude-sfx',
+      'ls': '📄 About.txt  📁 Projects/  📋 Arc.txt  📧 Contact\n' + projectCmdItems.map(p => p.label).join('  '),
       'cat about.txt': 'Yousef (Cuper). Egyptian. Studied CS + physics at Minerva.\nTaught ML/AI to 250+ students at iD Tech across 20+ campuses.\nFine-tuned multilingual LLMs at Findhope. Ranked 5th in Egypt. Still building.',
       'sudo rm -rf /': 'Nice try.',
     };

@@ -1,25 +1,19 @@
 ---
 import Desktop from '../layouts/Desktop.astro';
 import { getCollection } from 'astro:content';
+import { iconFor, byOrder } from '../lib/projects';
 
-const allProjects = await getCollection('projects');
+const allProjects = (await getCollection('projects')).sort(byOrder);
 const highlights = allProjects.filter(p => p.data.tier === 'highlight');
 const supporting = allProjects.filter(p => p.data.tier === 'supporting');
 const brief = allProjects.filter(p => p.data.tier === 'brief');
 
-const iconMap: Record<string, string> = {
-  'toaruos-arnold': 'px-proj-shades',
-  'erdos': 'px-proj-graph',
-  'anti-slop-design': 'px-proj-palette',
-  'polymarket-bot': 'px-proj-chart',
-  'jobhunter': 'px-proj-target',
-  'ai-tax-cpa-agent': 'px-proj-coin',
-  'bennycutools': 'px-proj-wrench',
-  'healthos': 'px-proj-medic',
-  'bee': 'px-proj-bee',
-  'saas-starter-kit': 'px-proj-rocket',
-  'claude-sfx': 'px-proj-speaker',
-};
+// Start menu lists the marquee + supporting cast, generated from the collection.
+const startMenuProjects = [...highlights, ...supporting];
+
+// Data island consumed by the Desktop layout script (command palette + terminal ls).
+const cmdData = allProjects.map(p => ({ slug: p.data.slug, title: p.data.title, icon: iconFor(p.data.slug) }));
+const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
 ---
 
 <Desktop title="Cuper - Portfolio OS" description="I build things to understand how they work.">
@@ -105,7 +99,7 @@ const iconMap: Record<string, string> = {
         <div class="project-grid project-grid-highlights">
           {highlights.map(p => (
             <a href={`/projects/${p.data.slug}`} class="project-item highlight">
-              <div class="project-icon"><span class={`px-icon ${iconMap[p.data.slug] || 'px-folder'}`} style="width:40px;height:40px;"></span></div>
+              <div class="project-icon"><span class={`px-icon ${iconFor(p.data.slug)}`} style="width:40px;height:40px;"></span></div>
               <div class="project-name">{p.data.title}</div>
               <div class="project-oneliner">{p.data.oneLiner}</div>
             </a>
@@ -116,7 +110,7 @@ const iconMap: Record<string, string> = {
         <div class="project-grid project-grid-supporting">
           {supporting.map(p => (
             <a href={`/projects/${p.data.slug}`} class="project-item">
-              <div class="project-icon"><span class={`px-icon ${iconMap[p.data.slug] || 'px-folder'}`} style="width:32px;height:32px;"></span></div>
+              <div class="project-icon"><span class={`px-icon ${iconFor(p.data.slug)}`} style="width:32px;height:32px;"></span></div>
               <div class="project-name">{p.data.title}</div>
             </a>
           ))}
@@ -126,7 +120,7 @@ const iconMap: Record<string, string> = {
         <div class="project-grid project-grid-brief">
           {brief.map(p => (
             <a href={`/projects/${p.data.slug}`} class="project-item">
-              <div class="project-icon"><span class={`px-icon ${iconMap[p.data.slug] || 'px-folder'}`} style="width:32px;height:32px;"></span></div>
+              <div class="project-icon"><span class={`px-icon ${iconFor(p.data.slug)}`} style="width:32px;height:32px;"></span></div>
               <div class="project-name">{p.data.title}</div>
             </a>
           ))}
@@ -143,7 +137,7 @@ const iconMap: Record<string, string> = {
       <div class="window-content">
         <h2>The Arc</h2>
 
-        <p>Bare metal (ToaruOS) &rarr; Compilers (ArnoldC-Native) &rarr; Formal reasoning (Erdos) &rarr; AI agents (polymarket_bot, jobhunter, ai-tax-cpa) &rarr; Developer tools (anti-slop-design, saas-starter-kit) &rarr; Failed startup (BennyCuTools) &rarr; Whatever's next.</p>
+        <p>Bare metal (ToaruOS) &rarr; Compilers (ArnoldC-Native) &rarr; Formal reasoning (Erdos) &rarr; Systems physics (gpu_stack, PhysicsLab) &rarr; AI agents (jobhunter, ai-tax-cpa) &rarr; Developer tools (anti-slop-design, codex-canmore) &rarr; Failed startup (BennyCuTools) &rarr; Whatever's next.</p>
 
         <p>I started at the bottom of the stack because I wanted to understand what a computer actually does at the hardware level. Then I needed a compiler for the OS, so I built that. Then I got into AI. started with theorem proving because I wanted to see if LLMs could do real math. They can, but they cheat. Then I started building tools because I kept needing tools that didn't exist. Then I tried to sell one and learned that building is the easy part.</p>
 
@@ -203,13 +197,9 @@ Type 'help' for available commands.</div>
       <button class="start-menu-item" data-window="arc"><span class="px-icon px-clip"></span> Arc.txt</button>
       <button class="start-menu-item" data-window="contact"><span class="px-icon px-mail"></span> Contact</button>
       <div class="start-menu-divider"></div>
-      <a href="/projects/toaruos-arnold" class="start-menu-item"><span class="px-icon px-proj-shades"></span> ToaruOS-Arnold</a>
-      <a href="/projects/erdos" class="start-menu-item"><span class="px-icon px-proj-graph"></span> Erdos</a>
-      <a href="/projects/anti-slop-design" class="start-menu-item"><span class="px-icon px-proj-palette"></span> anti-slop-design</a>
-      <a href="/projects/polymarket-bot" class="start-menu-item"><span class="px-icon px-proj-chart"></span> polymarket_bot</a>
-      <a href="/projects/jobhunter" class="start-menu-item"><span class="px-icon px-proj-target"></span> jobhunter</a>
-      <a href="/projects/ai-tax-cpa-agent" class="start-menu-item"><span class="px-icon px-proj-coin"></span> ai-tax-cpa-agent</a>
-      <a href="/projects/bennycutools" class="start-menu-item"><span class="px-icon px-proj-wrench"></span> BennyCuTools</a>
+      {startMenuProjects.map(p => (
+        <a href={`/projects/${p.data.slug}`} class="start-menu-item"><span class={`px-icon ${iconFor(p.data.slug)}`}></span> {p.data.title}</a>
+      ))}
     </div>
   </div>
 
@@ -240,4 +230,7 @@ Type 'help' for available commands.</div>
 
   <!-- Kbd hint -->
   <div class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>K</kbd> to search</div>
+
+  <!-- Project data island: consumed by the Desktop layout script (command palette + terminal ls) -->
+  <script type="application/json" id="cmd-data" is:inline set:html={cmdDataJson}></script>
 </Desktop>
