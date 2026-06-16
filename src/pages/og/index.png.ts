@@ -149,7 +149,7 @@ export const GET: APIRoute = async () => {
                 fontSize: '16px',
                 fontFamily: '"Pixelify Sans"',
               },
-              children: 'cuuper22.github.io',
+              children: 'cuuper22.pages.dev',
             },
           },
         ],
