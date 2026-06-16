@@ -1,6 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-
 interface Props {
   title?: string;
   description?: string;
@@ -8,21 +6,28 @@ interface Props {
 }
 
 const { title = "Cuper - Portfolio OS", description = "I build things to understand how they work.", ogImage = "/og/index.png" } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <ViewTransitions />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  <meta name="theme-color" content="#2c7a72" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImage} />
+  <meta property="og:image" content={ogImageURL} />
+  <meta property="og:url" content={canonicalURL} />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,7 +39,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
 
     .desktop {
       position: relative;
-      height: calc(100vh - 48px);
+      height: calc(100dvh - 48px);
       padding: 20px;
       overflow: hidden;
     }
@@ -117,7 +122,9 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       align-items: center;
       justify-content: space-between;
       padding: 0 8px;
-      z-index: 1000;
+      padding-bottom: env(safe-area-inset-bottom);
+      box-sizing: content-box;
+      z-index: var(--z-taskbar);
       box-shadow: 0 -2px 0 var(--inset-dark);
     }
 
@@ -310,7 +317,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
 
     .cmd-palette-item .item-emoji { font-size: 16px; width: 24px; text-align: center; }
     .cmd-palette-item .item-label { flex: 1; }
-    .cmd-palette-item .item-meta { font-size: 11px; opacity: 0.6; }
+    .cmd-palette-item .item-meta { font-size: 11px; opacity: 0.85; }
 
     /* Screensaver */
     .screensaver {
@@ -376,11 +383,11 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
     .tier-label {
       font-family: 'Pixelify Sans', monospace;
       font-size: 13px;
-      color: oklch(0.50 0 0);
-      margin-top: 16px;
-      margin-bottom: 4px;
+      color: oklch(0.42 0 0);
+      margin-top: 20px;
+      margin-bottom: 6px;
       padding-bottom: 4px;
-      border-bottom: 1px solid oklch(0.85 0 0);
+      border-bottom: 1px solid oklch(0.82 0 0);
     }
 
     .project-item {
@@ -403,7 +410,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
     .project-icon { font-size: 32px; }
     .project-item.highlight .project-icon { font-size: 40px; }
     .project-name { font-family: 'Pixelify Sans', monospace; font-size: 12px; font-weight: 600; }
-    .project-oneliner { font-size: 11px; color: oklch(0.45 0 0); line-height: 1.3; }
+    .project-oneliner { font-size: 11px; color: oklch(0.38 0 0); line-height: 1.35; }
 
     /* Contact links */
     .contact-links { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
@@ -424,6 +431,22 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
     .contact-link:active { border-style: inset; }
     .contact-icon { font-size: 20px; }
 
+    .skip-link {
+      position: fixed;
+      top: -120px;
+      left: 8px;
+      z-index: 5000;
+      background: var(--window-chrome);
+      border: 2px outset var(--button-face);
+      color: var(--text-dark);
+      font-family: 'Pixelify Sans', monospace;
+      font-size: 13px;
+      padding: 10px 16px;
+      text-decoration: none;
+      transition: top var(--dur-fast) var(--ease-out);
+    }
+    .skip-link:focus { top: 8px; }
+
     .kbd-hint {
       position: fixed;
       bottom: 56px;
@@ -431,7 +454,8 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       font-family: 'Pixelify Sans', monospace;
       font-size: 11px;
       color: var(--text-light);
-      opacity: 0.5;
+      opacity: 0.92;
+      text-shadow: 1px 1px 0 oklch(0.25 0.05 195);
       z-index: 2;
     }
 
@@ -491,6 +515,73 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       opacity: 0.3;
     }
 
+    /* === Motion: snappy retro-OS animations === */
+    @keyframes window-open {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .window.active { animation: window-open var(--dur-med) var(--ease-out); }
+
+    @keyframes menu-slide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .start-menu.open { animation: menu-slide var(--dur-med) var(--ease-out); }
+
+    @keyframes palette-in {
+      from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .cmd-palette-overlay.open .cmd-palette { animation: palette-in var(--dur-med) var(--ease-out); }
+
+    @keyframes item-in {
+      from { opacity: 0; transform: translateX(-6px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .cmd-palette-item { animation: item-in var(--dur-fast) var(--ease-out) both; animation-delay: calc(var(--i, 0) * 16ms); }
+
+    /* Hover motion only where a real pointer exists (no sticky hover on touch) */
+    @media (hover: hover) {
+      .project-item { transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+      .project-item:hover { transform: translateY(-1px); }
+      .desktop-icon { transition: background var(--dur-fast) var(--ease-out); }
+      .contact-link { transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+      .contact-link:hover { transform: translateX(2px); }
+      .start-menu-item, .taskbar-window-btn, .start-button { transition: background var(--dur-fast) var(--ease-out); }
+    }
+    .project-item:active { transform: translate(1px, 1px); }
+
+    /* === Boot splash (CSS-only, auto-dismisses, skipped for reduced-motion) === */
+    .boot-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 4000;
+      background-color: var(--desktop-bg);
+      background-image: radial-gradient(circle, var(--desktop-dot) 1px, transparent 1px);
+      background-size: 4px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      pointer-events: none;
+      animation: boot-out 0.4s var(--ease-out) 0.9s forwards;
+    }
+    .boot-logo {
+      font-family: 'Pixelify Sans', monospace;
+      font-size: clamp(32px, 8vw, 52px);
+      font-weight: 700;
+      color: var(--text-light);
+      letter-spacing: 2px;
+      text-shadow: 3px 3px 0 oklch(0.30 0.08 195);
+    }
+    .boot-sub { font-family: 'Pixelify Sans', monospace; font-size: 13px; color: var(--text-light); opacity: 0.85; }
+    .boot-bar { width: min(220px, 60vw); height: 16px; border: 2px solid var(--text-light); padding: 2px; }
+    .boot-bar::after { content: ''; display: block; height: 100%; background: var(--text-light); width: 0; animation: boot-fill 0.9s steps(14) forwards; }
+    @keyframes boot-fill { to { width: 100%; } }
+    @keyframes boot-out { to { opacity: 0; visibility: hidden; } }
+    @media (prefers-reduced-motion: reduce) { .boot-splash { display: none; } }
+
     @media (max-width: 768px) {
       html, body { height: auto; overflow: auto; }
       .desktop { height: auto; min-height: calc(100vh - 48px); padding: 10px; padding-bottom: 60px; overflow: visible; }
@@ -524,7 +615,10 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
 
       .taskbar-windows { display: none; }
       .start-menu { width: 200px; }
+      .cmd-palette-overlay { padding-top: 8vh; }
       .cmd-palette { width: 95vw; }
+      /* >=16px text inputs prevent iOS Safari zoom-on-focus */
+      .cmd-palette-input, .terminal-input { font-size: 16px; }
       .kbd-hint { display: none; }
       .desktop-logo { display: none; }
       .desktop-deco { display: none; }
@@ -535,6 +629,10 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
   <slot />
 
   <script>
+    // Boot splash: CSS fades it out; this guarantees removal even if the
+    // animation never fires, so the overlay can never get stuck over the site.
+    setTimeout(() => { document.querySelector('.boot-splash')?.remove(); }, 1600);
+
     // Clock
     function updateClock() {
       const el = document.getElementById('clock');
@@ -566,6 +664,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       win.classList.add('active');
       bringToFront(win);
       closeStartMenu();
+      (win as HTMLElement).focus({ preventScroll: true });
     }
 
     function closeWindow(win: Element) {
@@ -720,6 +819,7 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       filteredItems.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'cmd-palette-item' + (i === 0 ? ' selected' : '');
+        div.style.setProperty('--i', String(i));
         const iconSpan = document.createElement('span');
         iconSpan.className = 'item-emoji';
         if (item.iconType === 'class') {
@@ -786,15 +886,23 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
     function startScreensaver() {
       if (!screensaver || !ssText) return;
       screensaver.classList.add('active');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // No DVD bounce for reduced motion: show the line centered and still
+        ssText.style.left = '50%';
+        ssText.style.top = '50%';
+        ssText.style.transform = 'translate(-50%, -50%)';
+        return;
+      }
       ssX = 50; ssY = 50;
+      ssText.style.left = '0';
+      ssText.style.top = '0';
       function animate() {
         ssX += ssDx; ssY += ssDy;
         const w = window.innerWidth - ssText.offsetWidth - 20;
         const h = window.innerHeight - ssText.offsetHeight - 20;
         if (ssX <= 0 || ssX >= w) { ssDx *= -1; ssCI = (ssCI + 1) % ssColors.length; ssText.style.color = ssColors[ssCI]; }
         if (ssY <= 0 || ssY >= h) { ssDy *= -1; ssCI = (ssCI + 1) % ssColors.length; ssText.style.color = ssColors[ssCI]; }
-        ssText.style.left = ssX + 'px';
-        ssText.style.top = ssY + 'px';
+        ssText.style.transform = 'translate(' + ssX + 'px, ' + ssY + 'px)';
         ssAnim = requestAnimationFrame(animate);
       }
       animate();
@@ -827,11 +935,14 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
     const termIn = document.getElementById('terminal-input') as HTMLInputElement;
 
     const termCmds: Record<string, string> = {
-      'help': 'Available commands: help, whoami, ls, cat about.txt, sudo rm -rf /, exit',
-      'whoami': 'cuper',
+      'help': 'available commands: help, whoami, uname, arnold, neofetch, ls, cat about.txt, sudo rm -rf /, exit',
+      'whoami': 'cuper (Yousef Anas). egyptian, coptic christian. builds operating systems, theorem provers, and the occasional android app. no degree, a lot of projects, slowly improving the ratio that actually work.',
+      'uname': 'CúperOS 22.5 x86_64. every keyword is an arnold schwarzenegger quote. boots from a 213KB binary. runs snake.',
+      'arnold': 'GET TO THE CHOPPER is a function call. I\'LL BE BACK is a loop. HASTA LA VISTA BABY terminates a process. EVERYBODY CHILL disables interrupts. it makes more sense than it should.',
+      'neofetch': 'OS:       CúperOS 22.5\nKernel:   ArnoldC-Native\nShell:    cuper@portfolio\nUptime:   a few weird years\nProjects: 17 and counting\nMotto:    build it until the hard boundary shows up',
       'ls': '📄 About.txt  📁 Projects/  📋 Arc.txt  📧 Contact\n' + projectCmdItems.map(p => p.label).join('  '),
-      'cat about.txt': 'Yousef (Cuper). Egyptian. Studied CS + physics at Minerva.\nTaught ML/AI to 250+ students at iD Tech across 20+ campuses.\nFine-tuned multilingual LLMs at Findhope. Ranked 5th in Egypt. Still building.',
-      'sudo rm -rf /': 'Nice try.',
+      'cat about.txt': 'Yousef (Cuper). egyptian, coptic. studied CS + physics at Minerva.\ntaught ML/AI to 250+ students at iD Tech. fine-tuned multilingual LLMs at Findhope.\nranked 5th in egypt once. still building.',
+      'sudo rm -rf /': 'I\'LL BE BACK. (nice try.)',
     };
 
     termIn?.addEventListener('keydown', (e) => {
@@ -847,8 +958,11 @@ const { title = "Cuper - Portfolio OS", description = "I build things to underst
       if (content) content.scrollTop = content.scrollHeight;
     });
 
-    // Auto-open About
-    window.addEventListener('load', () => openWindow('about'));
+    // Auto-open About; honor ?cmd=open handoff from the 404 page
+    window.addEventListener('load', () => {
+      openWindow('about');
+      if (new URLSearchParams(location.search).get('cmd') === 'open') openCmdPalette();
+    });
   </script>
 </body>
 </html>

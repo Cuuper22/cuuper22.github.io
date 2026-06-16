@@ -1,5 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
 import { iconFor } from '../lib/projects';
 
 interface Props {
@@ -15,21 +14,28 @@ interface Props {
 const { title, emoji, tech, repo, site, oneLiner, slug } = Astro.props;
 
 const iconClass = iconFor(slug);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(`/og/${slug}.png`, Astro.site);
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <ViewTransitions />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>{title} - Cuper</title>
   <meta name="description" content={oneLiner} />
+  <link rel="canonical" href={canonicalURL} />
+  <meta name="theme-color" content="#2c7a72" />
   <meta property="og:title" content={`${title} - Cuper`} />
   <meta property="og:description" content={oneLiner} />
-  <meta property="og:image" content={`/og/${slug}.png`} />
+  <meta property="og:image" content={ogImageURL} />
+  <meta property="og:url" content={canonicalURL} />
   <meta property="og:type" content="article" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} - Cuper`} />
+  <meta name="twitter:description" content={oneLiner} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,11 +48,19 @@ const iconClass = iconFor(slug);
     }
 
     .project-page-window {
-      max-width: 760px;
+      max-width: 700px;
       margin: 20px auto;
       background: var(--window-chrome);
       border: 2px outset var(--button-face);
       box-shadow: 2px 2px 0 black;
+      animation: page-window-in var(--dur-slow, 300ms) var(--ease-out, ease-out);
+    }
+    @keyframes page-window-in {
+      from { opacity: 0; transform: translateY(10px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @media (pointer: coarse) {
+      .back-btn { min-height: 40px; padding: 8px 12px; }
     }
 
     .project-title-bar {
@@ -223,7 +237,7 @@ const iconClass = iconFor(slug);
   </style>
 </head>
 <body>
-  <div class="project-page-window" transition:animate="slide">
+  <div class="project-page-window">
     <div class="project-title-bar">
       <div class="project-title-left">
         <a href="/" class="back-btn">&larr; Desktop</a>

@@ -48,6 +48,49 @@
   --pill-bg: oklch(0.90 0.01 250);
   --pill-border: oklch(0.75 0.005 250);
   --pill-text: oklch(0.30 0.005 250);
+
+  /* Button family (note: --button-face === --window-chrome by design; the
+     beveled outset/inset chrome depends on faces and chrome sharing a base) */
+  --button-face-hover: oklch(0.88 0.005 250);
+  --button-face-active: oklch(0.90 0.005 250);
+
+  /* Inactive (unfocused) window title bar, darkened so white text keeps >=3:1 */
+  --title-bar-inactive: oklch(0.50 0.02 260);
+  --title-bar-inactive-end: oklch(0.55 0.02 260);
+
+  /* Focus ring (Win95 dotted focus, but visible on both light chrome and dark desktop) */
+  --focus-ring: oklch(0.30 0.18 265);
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Motion: snappy retro-OS easing (no bounce) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 110ms;
+  --dur-med: 200ms;
+  --dur-slow: 300ms;
+
+  /* Semantic z-index scale */
+  --z-deco: 0;
+  --z-window: 100;
+  --z-taskbar: 1000;
+  --z-startmenu: 1001;
+  --z-overlay: 2000;
+  --z-screensaver: 3000;
+}
+
+/* Fonts: Pixelify Sans = chrome/headings/labels, IBM Plex Sans = running prose,
+   IBM Plex Mono = terminal. Prose containers opt into the readable body face. */
+.window-content,
+.project-body {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
 }
 
 html {
@@ -75,6 +118,21 @@ a:hover {
   color: var(--link-hover);
 }
 
+/* === Keyboard focus (visible, on-theme) === */
+:focus-visible {
+  outline: 2px dotted var(--focus-ring);
+  outline-offset: 1px;
+}
+/* On dark surfaces a light dotted ring reads better than the dark one */
+.title-bar :focus-visible,
+.terminal-window :focus-visible,
+.desktop-icon:focus-visible {
+  outline-color: var(--text-light);
+}
+.desktop-icon:focus-visible {
+  outline-offset: -2px;
+}
+
 /* === Window System === */
 .window {
   background: var(--window-chrome);
@@ -91,11 +149,13 @@ a:hover {
   justify-content: space-between;
   user-select: none;
   border-bottom: 2px solid var(--inset-dark);
+  transition: background var(--dur-med) var(--ease-out);
 }
 
-/* Unfocused windows get a grayed title bar (Win95 active/inactive convention) */
+/* Unfocused windows get a grayed title bar (Win95 active/inactive convention).
+   Darkened so the white title text keeps >=3:1 contrast. */
 .window:not(.focused) > .title-bar {
-  background: linear-gradient(90deg, oklch(0.58 0.012 250), oklch(0.64 0.012 250));
+  background: linear-gradient(90deg, var(--title-bar-inactive), var(--title-bar-inactive-end));
 }
 
 .title-text {
@@ -134,11 +194,26 @@ a:hover {
 }
 
 .window-btn:hover {
-  background: oklch(0.88 0.005 250);
+  background: var(--button-face-hover);
 }
 
 .window-btn:active {
   border-style: inset;
+  transform: translate(1px, 1px);
+}
+
+/* Extend the close-button hit area to 44px on touch without changing its look */
+@media (pointer: coarse) {
+  .window-btn { position: relative; }
+  .window-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .window-content {
@@ -223,16 +298,18 @@ h1, h2, h3 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  transition: background var(--dur-fast) var(--ease-out);
 }
 
 .retro-btn:hover {
-  background: oklch(0.88 0.005 250);
+  background: var(--button-face-hover);
   text-decoration: none;
   color: var(--text-dark);
 }
 
 .retro-btn:active {
   border-style: inset;
+  transform: translate(1px, 1px);
 }
 
 /* === Pixel Icons (Win95-style flat SVG) === */
@@ -370,6 +447,12 @@ h1, h2, h3 {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='2' y='2' width='12' height='12' fill='%23C09050' stroke='%23805000'/%3E%3Cpath d='M4 5h8M4 8h6M4 11h4' stroke='%235a3000' stroke-width='1' fill='none'/%3E%3Crect x='10' y='9' width='2' height='4' fill='%235a3000'/%3E%3C/svg%3E");
 }
 
+/* Comfortable reading size for prose on small screens (>=16px avoids iOS zoom) */
+@media (max-width: 768px) {
+  .window-content,
+  .project-body { font-size: 16px; }
+}
+
 /* === Reduced Motion === */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -378,5 +461,6 @@ h1, h2, h3 {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

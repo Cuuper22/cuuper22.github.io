@@ -17,52 +17,61 @@ const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
 ---
 
 <Desktop title="Cuper - Portfolio OS" description="I build things to understand how they work.">
+  <a href="#about" class="skip-link">Skip to content</a>
+
+  <!-- Boot splash (CSS-only, auto-dismisses, hidden for reduced-motion) -->
+  <div class="boot-splash" aria-hidden="true">
+    <span class="boot-logo">CúperOS</span>
+    <span class="boot-sub">Starting Portfolio OS v22.5 ...</span>
+    <div class="boot-bar"></div>
+  </div>
+
   <div class="desktop">
     <!-- Desktop Icons -->
     <div class="desktop-icons">
-      <div class="desktop-icon" tabindex="0" data-window="about">
-        <div class="icon-image"><span class="px-icon px-doc" style="width:32px;height:32px;"></span></div>
+      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open About" data-window="about">
+        <div class="icon-image"><span class="px-icon px-doc" style="width:32px;height:32px;" aria-hidden="true"></span></div>
         <div class="icon-label">About.txt</div>
       </div>
-      <div class="desktop-icon" tabindex="0" data-window="projects">
-        <div class="icon-image"><span class="px-icon px-folder" style="width:32px;height:32px;"></span></div>
+      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open Projects" data-window="projects">
+        <div class="icon-image"><span class="px-icon px-folder" style="width:32px;height:32px;" aria-hidden="true"></span></div>
         <div class="icon-label">Projects</div>
       </div>
-      <div class="desktop-icon" tabindex="0" data-window="arc">
-        <div class="icon-image"><span class="px-icon px-clip" style="width:32px;height:32px;"></span></div>
+      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open the Arc" data-window="arc">
+        <div class="icon-image"><span class="px-icon px-clip" style="width:32px;height:32px;" aria-hidden="true"></span></div>
         <div class="icon-label">Arc.txt</div>
       </div>
-      <div class="desktop-icon" tabindex="0" data-window="contact">
-        <div class="icon-image"><span class="px-icon px-mail" style="width:32px;height:32px;"></span></div>
+      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open Contact" data-window="contact">
+        <div class="icon-image"><span class="px-icon px-mail" style="width:32px;height:32px;" aria-hidden="true"></span></div>
         <div class="icon-label">Contact</div>
       </div>
     </div>
 
     <!-- CúperOS Logo -->
-    <div class="desktop-logo">
+    <div class="desktop-logo" aria-hidden="true">
       <span class="logo-text">CúperOS</span>
       <span class="logo-version">V22.5</span>
     </div>
 
     <!-- Pixel Art Decorations -->
-    <div class="desktop-deco deco-terminal" style="top:25%;left:72%;" title="bare metal">
+    <div class="desktop-deco deco-terminal" style="top:25%;left:72%;" title="bare metal" aria-hidden="true">
       <svg width="28" height="22" viewBox="0 0 28 22" shape-rendering="crispEdges"><rect width="28" height="22" fill="#000" stroke="#808080"/><path d="M4 6l4 4-4 4" stroke="#0f0" stroke-width="2" fill="none"/><line x1="10" y1="14" x2="18" y2="14" stroke="#0f0" stroke-width="2"/></svg>
     </div>
-    <div class="desktop-deco deco-sigma" style="top:55%;left:82%;" title="Erdos">
+    <div class="desktop-deco deco-sigma" style="top:55%;left:82%;" title="Erdos" aria-hidden="true">
       <svg width="24" height="28" viewBox="0 0 24 28" shape-rendering="crispEdges"><path d="M20 2H4l8 12L4 26h16" stroke="#FFD800" stroke-width="3" fill="none"/></svg>
     </div>
-    <div class="desktop-deco deco-sunglasses" style="top:35%;left:55%;" title="I'll be back">
+    <div class="desktop-deco deco-sunglasses" style="top:35%;left:55%;" title="I'll be back" aria-hidden="true">
       <svg width="36" height="16" viewBox="0 0 36 16" shape-rendering="crispEdges"><rect x="0" y="4" width="14" height="8" rx="0" fill="#1a1a1a" stroke="#333"/><rect x="22" y="4" width="14" height="8" rx="0" fill="#1a1a1a" stroke="#333"/><line x1="14" y1="8" x2="22" y2="8" stroke="#333" stroke-width="2"/><line x1="0" y1="6" x2="-3" y2="4" stroke="#333" stroke-width="2"/><line x1="36" y1="6" x2="39" y2="4" stroke="#333" stroke-width="2"/></svg>
     </div>
-    <div class="desktop-deco deco-ankh" style="top:68%;left:65%;" title="Coptic">
+    <div class="desktop-deco deco-ankh" style="top:68%;left:65%;" title="Coptic" aria-hidden="true">
       <svg width="20" height="28" viewBox="0 0 20 28" shape-rendering="crispEdges"><circle cx="10" cy="6" r="5" stroke="#C09050" stroke-width="2" fill="none"/><line x1="10" y1="11" x2="10" y2="26" stroke="#C09050" stroke-width="3"/><line x1="4" y1="18" x2="16" y2="18" stroke="#C09050" stroke-width="3"/></svg>
     </div>
-    <div class="desktop-deco deco-hex" style="top:15%;left:88%;" title="0x">
+    <div class="desktop-deco deco-hex" style="top:15%;left:88%;" title="0x" aria-hidden="true">
       <span>0xFF</span>
     </div>
 
     <!-- About Window -->
-    <div class="window" id="about" style="top: 60px; left: 120px; width: 560px;">
+    <div class="window" id="about" role="dialog" aria-label="About.txt" tabindex="-1" style="top: 60px; left: 120px; width: 560px;">
       <div class="title-bar">
         <div class="title-text"><span class="title-icon"><span class="px-icon px-doc"></span></span> About.txt</div>
         <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
@@ -89,7 +98,7 @@ const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
     </div>
 
     <!-- Projects Window -->
-    <div class="window" id="projects" style="top: 80px; left: 640px; width: 620px;">
+    <div class="window" id="projects" role="dialog" aria-label="Projects" tabindex="-1" style="top: 80px; left: 640px; width: 620px;">
       <div class="title-bar">
         <div class="title-text"><span class="title-icon"><span class="px-icon px-folder"></span></span> Projects</div>
         <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
@@ -129,7 +138,7 @@ const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
     </div>
 
     <!-- Arc Window -->
-    <div class="window" id="arc" style="top: 140px; left: 180px; width: 520px;">
+    <div class="window" id="arc" role="dialog" aria-label="Arc.txt" tabindex="-1" style="top: 140px; left: 180px; width: 520px;">
       <div class="title-bar">
         <div class="title-text"><span class="title-icon"><span class="px-icon px-clip"></span></span> Arc.txt</div>
         <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
@@ -146,7 +155,7 @@ const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
     </div>
 
     <!-- Contact Window -->
-    <div class="window" id="contact" style="top: 200px; left: 240px; width: 420px;">
+    <div class="window" id="contact" role="dialog" aria-label="Contact" tabindex="-1" style="top: 200px; left: 240px; width: 420px;">
       <div class="title-bar">
         <div class="title-text"><span class="title-icon"><span class="px-icon px-mail"></span></span> Contact</div>
         <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
@@ -170,7 +179,7 @@ const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
     </div>
 
     <!-- Terminal Window (Konami code easter egg) -->
-    <div class="window terminal-window" id="terminal" style="top: 100px; left: 200px; width: 520px;">
+    <div class="window terminal-window" id="terminal" role="dialog" aria-label="Terminal" tabindex="-1" style="top: 100px; left: 200px; width: 520px;">
       <div class="title-bar">
         <div class="title-text"><span class="title-icon"><span class="px-icon px-term"></span></span> Terminal.exe</div>
         <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
@@ -224,7 +233,7 @@ Type 'help' for available commands.</div>
   </div>
 
   <!-- Screensaver -->
-  <div class="screensaver">
+  <div class="screensaver" aria-hidden="true">
     <div class="screensaver-text">I'LL BE BACK</div>
   </div>
 
