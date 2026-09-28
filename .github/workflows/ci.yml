@@ -16,11 +16,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # Production deploys go to Cloudflare Pages (cuuper22.pages.dev) once these
-      # repository secrets exist. Until then CI builds and type-checks only, and
-      # deploys run with `npm run deploy` from a machine logged in to wrangler.
-      HAS_CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,11 +26,50 @@ jobs:
 
       - run: npm ci
       - run: npm run check
+      - run: npx tsc -p functions/tsconfig.json
       - run: npm run build
 
-      - name: Deploy to Cloudflare Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && env.HAS_CF_TOKEN == 'true'
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: dist/
+
+  # Mirror of the site at cuuper22.github.io (canonical host is cuuper22.pages.dev).
+  github-pages:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Production on Cloudflare Pages, including the telemetry Functions + D1 binding.
+  # Runs once CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets exist;
+  # until then, deploy with `npm run deploy` from a machine logged in to wrangler.
+  cloudflare:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      HAS_CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.HAS_CF_TOKEN == 'true'
+      - uses: actions/setup-node@v4
+        if: env.HAS_CF_TOKEN == 'true'
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - if: env.HAS_CF_TOKEN == 'true'
+        run: npm ci && npm run build
+      - if: env.HAS_CF_TOKEN == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx wrangler@4 pages deploy dist --project-name cuuper22 --branch main
+        run: npx wrangler@4 pages deploy --branch main

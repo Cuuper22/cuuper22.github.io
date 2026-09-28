@@ -60,3 +60,26 @@ export async function renderOg({ title, kicker, body, icon, tags = [], icons = [
   const svg = await satori(tree as any, { width: 1200, height: 630, fonts: FONTS });
   return new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
 }
+
+/** Wide banner for the GitHub profile README (1280x360). */
+export async function renderBanner(icons: IconName[]): Promise<Uint8Array> {
+  const tree = h('div', { width: '100%', height: '100%', position: 'relative', background: 'linear-gradient(180deg, #02040a 0%, #060b18 60%, #07182a 100%)', padding: '0 64px', alignItems: 'center', justifyContent: 'space-between' },
+    { type: 'img', props: { src: gridFloorSrc(1280, 128), width: 1280, height: 128, style: { position: 'absolute', left: 0, bottom: 0 } } },
+    h('div', { position: 'absolute', left: 0, right: 0, top: 231, height: 2, background: `linear-gradient(90deg, transparent, ${ACC}, transparent)`, opacity: 0.55 }),
+    h('div', { flexDirection: 'column', gap: 14, marginTop: -40 },
+      h('div', { fontFamily: 'Departure', fontSize: 16, letterSpacing: 6, color: '#76819f' }, 'CÚPEROS · BUILD 22.5'),
+      h('div', { fontFamily: 'Departure', fontSize: 77, color: '#e7ecfb', lineHeight: 1 }, 'Cúper Anas'),
+      h('div', { fontFamily: 'Geist', fontSize: 24, color: '#b1bbd8' }, 'Systems that have to answer to reality.')),
+    h('div', { gap: 18, marginTop: -40, padding: 18, background: '#141a29', ...BEVEL, boxShadow: '0 0 0 1px rgba(94,242,255,0.35), 0 0 40px rgba(94,242,255,0.15)' },
+      ...icons.map(i => img(i, 64))),
+  );
+  const svg = await satori(tree as any, { width: 1280, height: 360, fonts: FONTS });
+  return new Resvg(svg, { fitTo: { mode: 'width', value: 1280 } }).render().asPng();
+}
+
+function gridFloorSrc(w: number, hgt: number) {
+  let lines = '';
+  for (let i = -26; i <= 26; i++) lines += `<line x1="${w / 2 + i * 14}" y1="0" x2="${w / 2 + i * 150}" y2="${hgt}" />`;
+  for (let k = 1; k < 7; k++) { const y = Math.pow(k / 6, 2.1) * hgt; lines += `<line x1="0" y1="${y}" x2="${w}" y2="${y}" />`; }
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${hgt}"><g stroke="${ACC}" stroke-opacity="0.28" stroke-width="1.4">${lines}</g></svg>`)}`;
+}

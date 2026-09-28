@@ -103,5 +103,5 @@ export function initMonitor(titles: Map<string, string>) {
   tray?.addEventListener('click', () => wm.open(WIN));
   if (!telemetryOn) root.dataset.state = 'offline';
   // The first poll waits a moment so the visitor's own beacon is counted
-  setTimeout(poll, telemetryOn ? 1500 : 0);
+  setTimeout(poll, telemetryOn ? 3000 : 0);
 }

@@ -74,6 +74,7 @@ import Window from '../Window.astro';
   .bars :global(.bt) { height: 8px; background: #05080f; box-shadow: var(--bevel-thin-in); padding: 2px; }
   .bars :global(.bt i) { display: block; height: 100%; background: linear-gradient(90deg, var(--c-title-b), var(--c-acc)); box-shadow: 0 0 6px rgba(94, 242, 255, 0.4); }
   .bars :global(.n) { text-align: right; color: var(--c-ink); font-variant-numeric: tabular-nums; }
+  .bars :global(li:has(.none)) { display: block; }
   .bars :global(.none) { display: block; color: var(--c-ink-faint); }
 
   .mon-foot { display: flex; flex-direction: column; gap: 6px; margin-top: auto; padding-top: 10px; box-shadow: inset 0 1px var(--c-rule); }

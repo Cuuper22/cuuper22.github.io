@@ -8,8 +8,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "deploy": "astro build && npx wrangler@4 pages deploy dist --project-name cuuper22 --branch main",
-    "deploy:preview": "astro build && npx wrangler@4 pages deploy dist --project-name cuuper22 --branch preview"
+    "deploy": "astro build && npx wrangler@4 pages deploy --branch main",
+    "deploy:preview": "astro build && npx wrangler@4 pages deploy --branch preview"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

@@ -13,7 +13,9 @@ Live: [cuuper22.pages.dev](https://cuuper22.pages.dev)
 - Astro 7, fully static, no UI framework. Client code is plain TypeScript, and each project demo is code-split and only loads when its window opens.
 - Markdown content collection in `src/content/projects` (schema in `src/content.config.ts`).
 - Pixel icons are 16×16 ASCII grids in the VGA palette (`src/lib/icons.ts`), rendered to SVG at build time (`src/lib/pixel.ts`).
-- Fonts are self-hosted through Fontsource: Pixelify Sans (chrome), IBM Plex Sans (reading), VT323 (DOS).
+- Two type families, both self-hosted: Departure Mono (the machine: chrome, headings, terminal, data) and Geist (long-form reading).
+- The wallpaper is a single WebGL2 fragment shader (`src/scripts/wallpaper.ts`) with a CSS fallback.
+- UI sounds are synthesized with WebAudio; the startup chime, system voice, and CRT power-off in `public/sfx/` were generated with ElevenLabs.
 - Open Graph cards are generated at build time with Satori and resvg from local fonts (`src/lib/og.ts`).
 - ToaruOS-Arnold runs in [v86](https://github.com/copy/v86) from `public/toaru/`.
 
@@ -33,7 +35,13 @@ npm run deploy          # production: cuuper22.pages.dev (needs `wrangler login`
 npm run deploy:preview  # preview.cuuper22.pages.dev
 ```
 
-CI (`.github/workflows/ci.yml`) type-checks and builds every push. It also deploys `main` to Cloudflare Pages once the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets exist.
+CI (`.github/workflows/ci.yml`) type-checks and builds every push, publishes `main` to the [cuuper22.github.io](https://cuuper22.github.io) mirror, and deploys to Cloudflare Pages once the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets exist.
+
+## Telemetry
+
+Visits are counted by two Cloudflare Pages Functions backed by D1 (`functions/api/`, schema in `migrations/`). The design is deliberately minimal: no cookies, no IP addresses, no user agents stored. A random id lives only as long as the browser tab; location is Cloudflare's country code; bots, Global Privacy Control, and Do Not Track are skipped. Public aggregates are served (edge-cached) at `/api/stats` and shown in the System Monitor window. Raw events are pruned after 180 days.
+
+Query it yourself: `npx wrangler d1 execute cuperos --remote --command "SELECT day, COUNT(*) FROM sessions GROUP BY day"`.
 
 ## How to inspect
 
