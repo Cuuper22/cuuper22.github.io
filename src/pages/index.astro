@@ -8,6 +8,7 @@ import StartMenu from '../components/StartMenu.astro';
 import Welcome from '../components/windows/Welcome.astro';
 import Explorer from '../components/windows/Explorer.astro';
 import Dos from '../components/windows/Dos.astro';
+import Monitor from '../components/windows/Monitor.astro';
 import ProjectWindow from '../components/windows/ProjectWindow.astro';
 import { pixelSvg } from '../lib/pixel';
 import { getProjects, byTier, winId, fakeSize } from '../lib/projects';
@@ -32,10 +33,12 @@ const osData = JSON.stringify({
   <a class="sr-only" href="/read/">Skip the desktop: read everything on one page</a>
 
   <main class="desktop" id="desktop" aria-label="Desktop">
+    <canvas class="wallpaper" id="wallpaper" aria-hidden="true"></canvas>
+    <div class="grid-floor" aria-hidden="true"></div>
     <div class="wallmark" aria-hidden="true">
-      <b>CúperOS</b>
-      <span>VERSION 22.5</span>
-      <small>Just start typing to open the MS-DOS Prompt</small>
+      <b>Cúper<i>OS</i></b>
+      <span>BUILD 22.5 · RETRO×FUTURE</span>
+      <small>Just start typing <kbd>›_</kbd> to open the MS-DOS Prompt</small>
     </div>
 
     <nav class="desk-icons" aria-label="Desktop icons">
@@ -45,12 +48,14 @@ const osData = JSON.stringify({
       <DesktopIcon label="MS-DOS Prompt" icon="dos" open="dos" hint="Or just start typing" />
       <DesktopIcon label="Contact" icon="mail" open="contact" />
       <DesktopIcon label="Arc.txt" icon="doc" open="arc" />
+      <DesktopIcon label="System Monitor" icon="monitor" open="monitor" hint="Who else is here, live" />
       <DesktopIcon label="Recycle Bin" icon="recycle" open="recycle" />
     </nav>
 
     <Welcome />
     <Explorer projects={projects} />
     <Dos />
+    <Monitor />
 
     <Window id="about" title="About.txt - Notepad" icon="doc" w={600} h={560} x={110} y={30}>
       <article class="prose">
@@ -135,6 +140,7 @@ const osData = JSON.stringify({
     {projects.map((p, i) => <ProjectWindow project={p} index={i} />)}
   </main>
 
+  <div class="scanlines" aria-hidden="true"></div>
   <StartMenu headline={headline} />
   <Taskbar />
 
@@ -149,39 +155,45 @@ const osData = JSON.stringify({
 </Base>
 
 <style>
-  .arc-steps { list-style: none; padding: 0; margin: 1em 0 1.4em; counter-reset: arc; }
-  .arc-steps li { position: relative; padding: 3px 0 3px 30px; counter-increment: arc; }
+  .arc-steps { list-style: none; padding: 0; margin: 1.2em 0 1.6em; counter-reset: arc; }
+  .arc-steps li { position: relative; padding: 4px 0 4px 34px; counter-increment: arc; color: var(--c-ink-soft); }
   .arc-steps li::before {
-    content: counter(arc);
+    content: counter(arc, decimal-leading-zero);
     position: absolute;
     left: 0;
-    top: 4px;
-    width: 20px;
+    top: 5px;
+    width: 24px;
     height: 20px;
     display: grid;
     place-items: center;
-    font: 700 11px/1 var(--f-ui);
+    font: 400 var(--t-11)/1 var(--f-sys);
+    color: var(--c-acc);
     background: var(--c-face);
     box-shadow: var(--bevel-thin-out);
   }
-  .arc-steps li:last-child::before { content: '?'; }
-  .arc-steps b { font-weight: 600; margin-right: 6px; }
+  .arc-steps li:not(:last-child)::after { content: ''; position: absolute; left: 12px; top: 25px; bottom: -5px; width: 1px; background: var(--c-rule); }
+  .arc-steps li:last-child::before { content: '??'; color: var(--c-amber); }
+  .arc-steps b { font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--c-ink); margin-right: 8px; }
 
-  .contact { display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 12px 14px 10px; font-family: var(--f-ui); }
-  .contact-lede { font: 400 13.5px/1.45 var(--f-read); }
-  .contact-list { list-style: none; padding: 8px 10px; margin: 0; background: #fff; box-shadow: var(--bevel-sunken); display: flex; flex-direction: column; gap: 8px; }
-  .contact-list li { display: flex; align-items: center; gap: 8px; font: 400 14px/1.3 var(--f-read); }
+  .contact { display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 14px 14px 10px; }
+  .contact-lede { font: 400 var(--t-13)/1.5 var(--f-read); color: var(--c-ink-soft); }
+  .contact-list { list-style: none; padding: 10px 12px; margin: 0; background: var(--c-paper); box-shadow: var(--bevel-sunken); display: flex; flex-direction: column; gap: 10px; }
+  .contact-list li { display: flex; align-items: center; gap: 10px; font: 400 var(--t-13)/1.3 var(--f-sys); }
   .contact-list li a { flex: 1; }
   .contact-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: auto; }
 
-  .recycle { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 20px; font: 400 13.5px/1.5 var(--f-read); color: var(--c-ink-soft); }
+  .recycle { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; font: 400 var(--t-13)/1.55 var(--f-read); color: var(--c-ink-soft); }
   .recycle p { max-width: 36ch; }
-  .recycle b { color: var(--c-black); font-weight: 600; }
+  .recycle b { font: 400 var(--t-13)/1 var(--f-sys); color: var(--c-ink); }
 
-  .shutdown { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; padding: 16px 16px 10px; height: 100%; font: 400 13px/1.4 var(--f-ui); }
-  .shutdown fieldset { border: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-  .shutdown legend { margin-bottom: 8px; }
-  .shutdown label { display: flex; align-items: center; gap: 6px; }
-  .shutdown input { accent-color: var(--c-navy); }
+  .shutdown { display: grid; grid-template-columns: auto 1fr; gap: 12px 16px; padding: 18px 18px 12px; height: 100%; font: 400 var(--t-13)/1.4 var(--f-sys); }
+  .shutdown fieldset { border: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .shutdown legend { margin-bottom: 10px; color: var(--c-ink); }
+  .shutdown label { display: flex; align-items: center; gap: 8px; color: var(--c-ink-soft); }
+  .shutdown input { accent-color: var(--c-acc); }
   .shutdown-actions { grid-column: 1 / -1; display: flex; justify-content: center; gap: 8px; align-self: end; }
+
+  .wallpaper { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: 0; transition: opacity 900ms ease; pointer-events: none; }
+  .wallpaper.is-live { opacity: 1; }
+  .wallpaper.is-live ~ .grid-floor { display: none; }
 </style>

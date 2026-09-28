@@ -60,33 +60,34 @@ const keywords: [string, string][] = [
 </div>
 
 <style>
-  .arnoldc { padding: 14px; background: var(--c-face); border-bottom: 1px solid #a9a9a9; font-family: var(--f-ui); }
-  .ac-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .ac-pane { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .ac-cap { font-size: 12px; color: #202020; }
-  .ac-cap em { font-style: normal; color: #5a5a5a; }
+  .arnoldc { padding: 16px; background: var(--c-paper-2); box-shadow: inset 0 -1px var(--c-rule); }
+  .ac-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ac-pane { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .ac-cap { font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--c-ink-mute); }
+  .ac-cap em { font-style: normal; color: var(--c-amber); }
   .ac-src, .ac-asm, .ac-out {
-    font: 400 12.5px/1.45 var(--f-mono);
+    font: 400 var(--t-11)/1.6 var(--f-sys);
     box-shadow: var(--bevel-sunken);
     border: 0;
-    padding: 8px 10px;
+    padding: 10px 12px;
     margin: 0;
-    height: 232px;
+    height: 236px;
     overflow: auto;
     white-space: pre;
     tab-size: 4;
   }
-  .ac-src { background: #fff; color: #000; resize: none; text-transform: uppercase; }
-  .ac-asm { background: #000080; color: #fff; }
-  .ac-asm :global(.c) { color: #7fdcff; }
-  .ac-asm :global(.l) { color: #ffff55; }
-  .ac-asm :global(.e) { color: #ff8080; }
-  .ac-run { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
-  .ac-out { height: auto; min-height: 56px; max-height: 110px; background: #0a0a0a; color: #c0c0c0; font-family: var(--f-dos); font-size: 18px; line-height: 1.1; }
-  .ac-keys { margin-top: 10px; font-size: 13px; }
-  .ac-keys summary { cursor: pointer; padding: 2px 0; }
-  .ac-keys table { margin-top: 6px; border-collapse: collapse; width: 100%; background: #fff; box-shadow: var(--bevel-sunken); }
-  .ac-keys td { padding: 3px 10px; font: 400 12.5px/1.4 var(--f-read); border-bottom: 1px solid #ececec; }
-  .ac-keys td code { font: 400 12px/1.4 var(--f-mono); }
+  .ac-src { background: #070a13; color: var(--c-ink); resize: none; text-transform: uppercase; caret-color: var(--c-acc); }
+  .ac-asm { background: #050c1f; color: #cfd8f5; }
+  .ac-asm :global(.c) { color: #5f7bb0; }
+  .ac-asm :global(.l) { color: var(--c-acc); }
+  .ac-asm :global(.e) { color: var(--c-bad); }
+  .ac-run { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .ac-out { height: auto; min-height: 58px; max-height: 110px; background: #03060c; color: var(--c-ok); font-size: var(--t-13); text-shadow: 0 0 8px rgba(95, 245, 166, 0.45); }
+  .ac-keys { margin-top: 12px; }
+  .ac-keys summary { cursor: pointer; padding: 2px 0; font: 400 var(--t-11)/1.4 var(--f-sys); color: var(--c-ink-soft); letter-spacing: var(--track-caps); text-transform: uppercase; }
+  .ac-keys summary:hover { color: var(--c-acc); }
+  .ac-keys table { margin-top: 8px; border-collapse: collapse; width: 100%; background: var(--c-paper); box-shadow: var(--bevel-sunken); }
+  .ac-keys td { padding: 5px 12px; font: 400 var(--t-13)/1.4 var(--f-read); color: var(--c-ink-soft); box-shadow: inset 0 -1px var(--c-rule); }
+  .ac-keys td code { font: 400 var(--t-11)/1.4 var(--f-sys); color: var(--c-amber); }
   @media (max-width: 720px) { .ac-panes { grid-template-columns: 1fr; } .ac-src, .ac-asm { height: 190px; } }
 </style>

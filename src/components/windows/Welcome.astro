@@ -15,14 +15,14 @@ const tips = [
 <Window id="welcome" title="Welcome" icon="help" kind="dialog" w={540} h={372} x="center" y="center">
   <div class="welcome">
     <div class="wl-main">
-      <h2 class="wl-title">Welcome to <span>Cúper</span><b>OS</b></h2>
+      <h2 class="wl-title">Welcome to Cúper<b>OS</b></h2>
       <p class="wl-intro">
         I'm Cúper. I build systems that have to answer to reality: an operating system in a joke language, a theorem prover that caught its own AI cheating, a model of the GPU stack that goes all the way down to quarks.
       </p>
       <div class="wl-tip sunken">
         <div class="wl-tip-head">
           <Fragment set:html={pixelSvg('help', 32)} />
-          <strong>Did you know...</strong>
+          <strong>Did you know</strong>
         </div>
         <p class="wl-tip-text" id="tip-text" aria-live="polite" set:html={tips[0]} />
       </div>
@@ -48,25 +48,25 @@ const tips = [
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto;
-    gap: 10px 14px;
+    gap: 12px 14px;
     height: 100%;
-    padding: 10px 10px 8px 12px;
-    font-family: var(--f-ui);
+    padding: 12px 12px 10px 14px;
   }
   .wl-main { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-  .wl-title { font: 400 25px/1 var(--f-ui); color: var(--c-black); letter-spacing: -0.2px; }
-  .wl-title span { font-weight: 700; }
-  .wl-title b { font-weight: 700; color: var(--c-navy); }
-  .wl-intro { font: 400 13.5px/1.5 var(--f-read); color: var(--c-ink); text-wrap: pretty; }
-  .wl-tip { flex: 1; padding: 10px 12px; background: #ffffe1; min-height: 116px; }
-  .wl-tip-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 14px; }
-  .wl-tip-text { font: 400 13.5px/1.5 var(--f-read); color: var(--c-ink); }
-  .wl-tip-text :global(kbd), .wl-tip-text :global(code) { font: 400 12px/1 var(--f-mono); padding: 1px 4px; background: #fff; box-shadow: var(--bevel-thin-in); }
-  .wl-actions { display: flex; flex-direction: column; gap: 6px; width: 124px; }
+  .wl-title { font: 400 var(--t-22)/1.1 var(--f-sys); color: var(--c-ink); }
+  .wl-title b { font-weight: 400; color: var(--c-acc); text-shadow: 0 0 18px rgba(94, 242, 255, 0.45); }
+  .wl-intro { font: 400 var(--t-13)/1.55 var(--f-read); color: var(--c-ink-soft); text-wrap: pretty; }
+  .wl-tip { flex: 1; padding: 10px 12px; background: var(--c-paper); min-height: 116px; box-shadow: var(--bevel-sunken), inset 3px 0 0 -1px var(--c-amber); }
+  .wl-tip-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--c-amber); }
+  .wl-tip-head strong { font-weight: 400; }
+  .wl-tip-text { font: 400 var(--t-13)/1.55 var(--f-read); color: var(--c-ink); }
+  .wl-tip-text :global(b) { font-weight: 600; }
+  .wl-tip-text :global(kbd), .wl-tip-text :global(code) { font: 400 var(--t-11)/1 var(--f-sys); padding: 2px 5px; color: var(--c-acc); background: rgba(94, 242, 255, 0.08); box-shadow: inset 0 0 0 1px rgba(94, 242, 255, 0.2); }
+  .wl-actions { display: flex; flex-direction: column; gap: 6px; width: 132px; }
   .wl-actions .btn { width: 100%; }
   .wl-spacer { flex: 1; }
-  .wl-check { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; font-size: 12.5px; user-select: none; }
-  .wl-check input { width: 13px; height: 13px; accent-color: var(--c-navy); }
+  .wl-check { grid-column: 1 / -1; display: flex; align-items: center; gap: 7px; font: 400 var(--t-11)/1 var(--f-sys); color: var(--c-ink-soft); user-select: none; }
+  .wl-check input { width: 13px; height: 13px; accent-color: var(--c-acc); }
   @media (max-width: 720px) {
     .welcome { grid-template-columns: 1fr; grid-template-rows: auto auto auto; align-content: start; height: auto; }
     .wl-tip { min-height: 0; }

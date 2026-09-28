@@ -299,7 +299,10 @@ class WindowManager extends EventTarget {
     ghost.className = 'zoom-ghost';
     document.body.append(ghost);
     const frame = (r: DOMRect) => ({ left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+    Object.assign(ghost.style, frame(to));
+    // Animations don't advance in a hidden tab, so a timer guarantees cleanup
     ghost.animate([frame(from), frame(to)], { duration: 170, easing: 'steps(7, end)' }).finished.finally(() => ghost.remove());
+    setTimeout(() => ghost.remove(), 400);
   }
 
   // ─── Taskbar ───────────────────────────────────────────────

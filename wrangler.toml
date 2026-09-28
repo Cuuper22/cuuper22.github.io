@@ -1,0 +1,12 @@
+# Cloudflare Pages project: cuuper22.pages.dev (direct upload).
+# `wrangler pages deploy` reads this for Functions bindings.
+name = "cuuper22"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-09-01"
+
+# Telemetry: cookieless, no IPs. Schema in migrations/.
+[[d1_databases]]
+binding = "DB"
+database_name = "cuperos"
+database_id = "58834a24-63d0-47cc-bb9c-b4090bd60591"
+migrations_dir = "migrations"

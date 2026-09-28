@@ -90,14 +90,28 @@ const month = (iso: string) => new Date(iso + 'T12:00:00').toLocaleDateString('e
 
       <footer class="qr-foot">
         <p>This page is the plain version of <a href="/">cuuper22.pages.dev</a>, a working retro desktop where the projects above run live, including an operating system that boots in your browser.</p>
+        <p>Visits are counted without cookies or IP addresses: a per-tab random id and a country code, stored in Cloudflare D1. Global Privacy Control turns it off.</p>
       </footer>
     </main>
   </div>
+  <script>
+    import { trackView } from '../scripts/telemetry';
+    let returning = false;
+    try { returning = localStorage.getItem('cuperos.visited') === '1'; localStorage.setItem('cuperos.visited', '1'); } catch { /* ignore */ }
+    trackView('read', returning);
+  </script>
 </Base>
 
 <style>
-  body { background: var(--c-desktop); }
-  .qr { min-height: 100dvh; padding: 0 16px 48px; }
+  body { background: var(--c-void); }
+  .qr {
+    min-height: 100dvh;
+    padding: 0 16px 56px;
+    background:
+      radial-gradient(60% 40% at 50% 0%, rgba(12, 106, 134, 0.22), transparent 70%),
+      radial-gradient(circle, rgba(200, 230, 255, 0.18) 0.7px, transparent 1.2px) 0 0 / 44px 44px,
+      var(--c-void);
+  }
   .qr-bar {
     position: sticky;
     top: 0;
@@ -105,76 +119,82 @@ const month = (iso: string) => new Date(iso + 'T12:00:00').toLocaleDateString('e
     display: flex;
     align-items: center;
     gap: 6px;
-    max-width: 820px;
+    max-width: 840px;
     margin: 0 auto;
     padding: 5px 6px;
-    font-family: var(--f-ui);
-    font-size: 13px;
+    font: 400 var(--t-11)/1 var(--f-sys);
+    box-shadow: var(--bevel-raised), var(--lift);
   }
-  .qr-home { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--c-black); text-decoration: none; padding: 0 4px; }
-  .qr-home:visited { color: var(--c-black); }
-  .qr-crumb::before { content: '›'; margin-right: 6px; color: var(--c-shadow); }
+  .qr-home { display: inline-flex; align-items: center; gap: 7px; color: var(--c-ink); text-decoration: none; padding: 0 4px; font-size: var(--t-13); }
+  .qr-home:visited { color: var(--c-ink); }
+  .qr-crumb { color: var(--c-ink-mute); letter-spacing: var(--track-caps); text-transform: uppercase; }
+  .qr-crumb::before { content: '/'; margin-right: 6px; color: var(--c-ink-faint); }
   .qr-spacer { flex: 1; }
 
   .qr-paper {
-    max-width: 820px;
-    margin: 12px auto 0;
-    padding: clamp(24px, 6vw, 64px) clamp(20px, 7vw, 76px) 48px;
+    max-width: 840px;
+    margin: 14px auto 0;
+    padding: clamp(28px, 6vw, 68px) clamp(20px, 7vw, 80px) 56px;
     background: var(--c-paper);
-    box-shadow: var(--bevel-sunken), 4px 4px 0 rgba(0, 0, 0, 0.18);
+    box-shadow: var(--bevel-sunken), var(--lift);
     font-family: var(--f-read);
-    color: var(--c-ink);
-    font-size: 16px;
-    line-height: 1.65;
+    color: var(--c-ink-soft);
+    font-size: var(--t-15);
+    line-height: 1.7;
   }
-  .qr-kicker { font: 400 12.5px/1 var(--f-ui); letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-ink-mute); }
-  .qr-intro h1 { font: 700 clamp(38px, 7vw, 56px)/1 var(--f-ui); letter-spacing: -0.5px; margin: 12px 0 14px; color: var(--c-black); }
-  .qr-lede { font-size: 18px; line-height: 1.55; max-width: 60ch; text-wrap: pretty; }
-  .qr-contact { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 15px; }
-  .qr-contact li { display: inline-flex; align-items: center; gap: 7px; }
+  .qr-kicker { font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: 0.2em; text-transform: uppercase; color: var(--c-acc); }
+  .qr-intro h1 { font: 400 clamp(33px, 7vw, 66px)/1 var(--f-sys); letter-spacing: -0.02em; margin: 16px 0 18px; color: var(--c-ink); }
+  .qr-lede { font-size: var(--t-18); line-height: 1.6; color: var(--c-ink); max-width: 60ch; text-wrap: pretty; }
+  .qr-contact { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 10px 24px; font: 400 var(--t-13)/1.3 var(--f-sys); }
+  .qr-contact li { display: inline-flex; align-items: center; gap: 8px; }
 
-  .qr-section { margin-top: 48px; }
+  .qr-section { margin-top: 56px; }
   .qr-section h2 {
-    font: 700 13px/1 var(--f-ui);
-    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font: 400 var(--t-11)/1 var(--f-sys);
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--c-navy);
-    padding-bottom: 8px;
-    margin-bottom: 18px;
-    box-shadow: inset 0 -1px var(--c-rule);
+    color: var(--c-acc);
+    margin-bottom: 22px;
   }
-  .qr-section > p + p { margin-top: 0.8em; }
-  .qr-proj + .qr-proj { margin-top: 30px; }
-  .qr-proj-h { display: flex; gap: 14px; align-items: flex-start; }
-  .qr-proj-h svg { margin-top: 3px; }
-  .qr-proj h3 { font: 700 21px/1.2 var(--f-ui); }
-  .qr-proj h3 a { color: var(--c-black); text-decoration: none; }
-  .qr-proj h3 a:hover { text-decoration: underline; }
-  .qr-one { font-weight: 600; font-size: 15.5px; line-height: 1.45; margin-top: 3px; text-wrap: pretty; }
-  .qr-sum { margin: 10px 0 0 46px; color: var(--c-ink-soft); font-size: 15px; text-wrap: pretty; }
-  .qr-links { margin: 8px 0 0 46px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 14px; }
-  .qr-tech { color: var(--c-ink-mute); font: 400 12.5px/1.8 var(--f-ui); width: 100%; }
+  .qr-section h2::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--c-acc-line), transparent); }
+  .qr-section > p + p { margin-top: 0.9em; }
+  .qr-proj { padding: 18px 0; box-shadow: inset 0 -1px var(--c-rule); }
+  .qr-proj:first-of-type { padding-top: 0; }
+  .qr-proj-h { display: flex; gap: 16px; align-items: flex-start; }
+  .qr-proj-h svg { margin-top: 2px; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.6)); }
+  .qr-proj h3 { font: 400 var(--t-22)/1.15 var(--f-sys); }
+  .qr-proj h3 a { color: var(--c-ink); text-decoration: none; }
+  .qr-proj h3 a:hover { color: var(--c-acc); }
+  .qr-one { font-weight: 500; font-size: var(--t-15); line-height: 1.5; color: var(--c-ink); margin-top: 6px; text-wrap: pretty; }
+  .qr-sum { margin: 12px 0 0 48px; font-size: var(--t-15); text-wrap: pretty; }
+  .qr-links { margin: 10px 0 0 48px; display: flex; flex-wrap: wrap; gap: 6px 18px; font: 400 var(--t-11)/1.6 var(--f-sys); }
+  .qr-tech { color: var(--c-ink-mute); width: 100%; }
 
-  .qr-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
-  .qr-list li { display: flex; gap: 12px; align-items: flex-start; }
-  .qr-list li svg { margin-top: 5px; }
-  .qr-li-t { font-weight: 600; }
+  .qr-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+  .qr-list li { display: flex; gap: 14px; align-items: flex-start; }
+  .qr-list li svg { margin-top: 4px; }
+  .qr-li-t { font: 400 var(--t-13)/1.4 var(--f-sys); }
   .qr-li-d { color: var(--c-ink-soft); }
-  .qr-li-m { display: block; font: 400 12.5px/1.6 var(--f-ui); color: var(--c-ink-mute); }
+  .qr-li-m { display: block; font: 400 var(--t-11)/1.7 var(--f-sys); color: var(--c-ink-mute); }
 
-  .qr-foot { margin-top: 52px; padding-top: 16px; box-shadow: inset 0 1px var(--c-rule); font-size: 14px; color: var(--c-ink-mute); }
+  .qr-foot { margin-top: 60px; padding-top: 18px; box-shadow: inset 0 1px var(--c-rule); font-size: var(--t-13); color: var(--c-ink-mute); }
 
   @media (max-width: 560px) {
     .qr-sum, .qr-links { margin-left: 0; }
     .qr-bar .btn:first-of-type { display: none; }
   }
   @media print {
-    body { background: #fff; }
+    body, .qr { background: #fff; color: #111; }
     .qr { padding: 0; }
     .qr-bar { display: none; }
-    .qr-paper { box-shadow: none; padding: 0; max-width: none; font-size: 11pt; }
-    .qr-proj { break-inside: avoid; }
+    .qr-paper { box-shadow: none; padding: 0; max-width: none; font-size: 10.5pt; background: #fff; color: #222; }
+    .qr-intro h1, .qr-proj h3 a, .qr-one, .qr-lede { color: #000; }
+    .qr-section h2, .qr-kicker { color: #000; }
+    .qr-proj { break-inside: avoid; box-shadow: none; }
     a { color: inherit; text-decoration: none; }
-    .qr-links a[href^="http"]::after { content: ' (' attr(href) ')'; font-size: 9pt; color: #555; }
+    .qr-links a[href^="http"]::after { content: ' (' attr(href) ')'; color: #555; }
   }
 </style>

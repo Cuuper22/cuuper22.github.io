@@ -1,6 +1,7 @@
 // MS-DOS Prompt. A tiny shell over the desktop: the "filesystem" is the site.
 import { wm } from './wm';
 import { sfx, setSound, soundEnabled } from './sound';
+import { track } from './telemetry';
 
 export interface ProjectRec { slug: string; title: string; file: string; oneLiner: string; updated: string; size: number; tier: string; win: string }
 
@@ -93,6 +94,8 @@ export function initDos(projects: ProjectRec[], today: string) {
     ['CLS', 'Clear the screen'],
     ['VER, DATE, TIME, MEM', 'System information'],
     ['SOUND ON|OFF', 'Toggle UI sounds'],
+    ['STATS', 'Open System Monitor (live visitors)'],
+    ['PRIVACY', 'What this site measures, exactly'],
     ['EXIT', 'Close this window'],
   ];
 
@@ -155,6 +158,16 @@ export function initDos(projects: ProjectRec[], today: string) {
       print(`Sound is ${on ? 'ON' : 'OFF'}.`);
     },
     exit() { wm.close('dos'); },
+    stats() { wm.open('monitor'); print('Starting SYSMON.EXE...'); },
+    privacy() {
+      print(`This site counts visits with Cloudflare D1. It keeps:
+  - a random id that lives only as long as this browser tab
+  - your country code, as Cloudflare sees it
+  - desktop / mobile / tablet
+  - the site that linked you here (host only)
+  - which windows you opened and which DOS commands you ran (names, never arguments)
+No cookies. No IP addresses. No fingerprinting. Global Privacy Control and Do Not Track switch it off.`);
+    },
     reboot() { location.href = '/?boot=1'; },
     win() { print("You're already in it."); },
     format(arg) {
@@ -196,7 +209,7 @@ export function initDos(projects: ProjectRec[], today: string) {
 
     for (const [re, fn] of ARNOLD) {
       const m = line.match(re);
-      if (m) { sfx.ding(); fn(m); print(''); return; }
+      if (m) { sfx.ding(); track('cmd', 'arnold'); fn(m); print(''); return; }
     }
     const [cmdRaw, ...rest] = line.split(/\s+/);
     let cmd = cmdRaw.toLowerCase();
@@ -204,6 +217,7 @@ export function initDos(projects: ProjectRec[], today: string) {
     if (cmd === 'cd..') { cmds.cd('..', line); print(''); return; }
     if (cmd === '?') cmd = 'help';
     const fn = Object.hasOwn(cmds, cmd) ? cmds[cmd] : undefined;
+    track('cmd', fn ? cmd : 'unknown');
     if (fn) fn(arg, line);
     else {
       // Typing a file name runs it, like DOS

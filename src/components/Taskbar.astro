@@ -13,6 +13,9 @@ import { pixelSvg } from '../lib/pixel';
   <span class="tb-sep" aria-hidden="true"></span>
   <div id="task-buttons" role="group" aria-label="Open windows"></div>
   <div class="tray">
+    <button class="tray-online" id="tray-online" type="button" hidden title="People online now. Open System Monitor.">
+      <i aria-hidden="true"></i><span>1</span><b class="sr-only"> online now</b>
+    </button>
     <button class="tray-btn" id="sound-btn" type="button" aria-pressed="false" title="Sound is off. Click to turn on.">
       <span class="i-off"><Fragment set:html={pixelSvg('speakerOff', 16)} /></span>
       <span class="i-on" hidden><Fragment set:html={pixelSvg('speaker', 16)} /></span>

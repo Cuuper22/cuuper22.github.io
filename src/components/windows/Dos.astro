@@ -21,43 +21,24 @@ Type HELP for commands. Try DIR, or START ERDOS.
   .dos {
     height: 100%;
     overflow: auto;
-    padding: 6px 10px 10px;
-    background: var(--c-dos-bg);
-    color: var(--c-dos-fg);
-    font: 400 20px/1.1 var(--f-dos);
+    padding: 8px 12px 12px;
+    background:
+      radial-gradient(120% 100% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.6) 100%),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px),
+      #03060c;
+    color: #bdeff5;
+    font: 400 var(--t-15)/1.45 var(--f-sys);
     box-shadow: var(--bevel-sunken);
+    text-shadow: 0 0 6px rgba(94, 242, 255, 0.35);
     cursor: text;
   }
   .dos-out { margin: 0; font: inherit; white-space: pre-wrap; word-break: break-word; }
-  .dos-out :global(.hi) { color: var(--c-dos-hi); }
-  .dos-out :global(.dim) { color: #7d7d7d; }
-  .dos-out :global(.dos-link) {
-    all: unset;
-    display: inline;
-    white-space: pre;
-    cursor: pointer;
-  }
-  .dos-out :global(.dos-link:hover), .dos-out :global(.dos-link:focus-visible) { background: var(--c-dos-fg); color: var(--c-dos-bg); }
+  .dos-out :global(.hi) { color: #fff; }
+  .dos-out :global(.dim) { color: #5d7a85; text-shadow: none; }
+  .dos-out :global(.dos-link) { all: unset; display: inline; white-space: pre; cursor: pointer; }
+  .dos-out :global(.dos-link:hover), .dos-out :global(.dos-link:focus-visible) { background: var(--c-acc); color: #03060c; text-shadow: none; }
   .dos-line { display: flex; align-items: baseline; }
-  .dos-line label { white-space: pre; }
-  .dos-line input {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    border: 0;
-    outline: none;
-    color: var(--c-dos-hi);
-    font: inherit;
-    caret-color: var(--c-dos-hi);
-    padding: 0;
-  }
-  /* Phosphor: a faint glow and scanlines, scoped to screens only */
-  .crt {
-    text-shadow: 0 0 1px rgba(255, 255, 255, 0.35), 0 0 6px rgba(192, 192, 192, 0.18);
-    background-image:
-      radial-gradient(120% 100% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.55) 100%),
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 3px);
-    background-attachment: scroll;
-  }
-  @media (max-width: 720px) { .dos { font-size: 18px; } .dos-line input { font-size: 18px; } }
+  .dos-line label { white-space: pre; color: var(--c-acc); }
+  .dos-line input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #fff; font: inherit; caret-color: var(--c-acc); padding: 0; }
+  @media (max-width: 720px) { .dos, .dos-line input { font-size: 16px; } }
 </style>

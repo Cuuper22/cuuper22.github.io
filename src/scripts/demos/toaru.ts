@@ -1,5 +1,6 @@
 // Boots the real ToaruOS-Arnold kernel in v86 (x86 → WebAssembly).
 import { wm } from '../wm';
+import { track } from '../telemetry';
 
 declare global { interface Window { V86?: any } }
 
@@ -85,6 +86,7 @@ export function mount(root: HTMLElement) {
   }
 
   function reveal() {
+    if (booting) track('os');
     if (!booting) return;
     booting = false;
     overlay.hidden = true;

@@ -6,6 +6,8 @@
   ],
   "exclude": [
     "dist",
-    "public"
+    "public",
+    "functions",
+    "edge"
   ]
 }

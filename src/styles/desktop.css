@@ -3,51 +3,108 @@
    ========================================================================== */
 
 html, body.os { height: 100%; overflow: hidden; overscroll-behavior: none; }
-body.os { touch-action: manipulation; }
+body.os { touch-action: manipulation; background: var(--c-void); }
 
 .desktop {
   position: fixed;
   inset: 0 0 var(--taskbar-h) 0;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 50% 38%, transparent 55%, rgba(0, 40, 40, 0.28) 100%),
-    var(--c-desktop);
   isolation: isolate;
+  background:
+    radial-gradient(70% 45% at 50% 100%, rgba(0, 128, 128, 0.34), transparent 70%),
+    radial-gradient(60% 60% at 80% 0%, rgba(40, 60, 140, 0.18), transparent 70%),
+    linear-gradient(180deg, var(--c-void) 0%, var(--c-desktop) 55%, #071322 100%);
 }
-/* Ordered-dither texture, strongest at the edges: reads as a CRT-era gradient, not a flat fill */
+
+/* Sky: a sparse dot-matrix star field, fading toward the horizon */
 .desktop::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: repeating-conic-gradient(rgba(0, 0, 0, 0.16) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
-  mask-image: radial-gradient(110% 85% at 50% 40%, transparent 50%, #000 100%);
-  -webkit-mask-image: radial-gradient(110% 85% at 50% 40%, transparent 50%, #000 100%);
+  inset: 0 0 42% 0;
+  background:
+    radial-gradient(circle, rgba(200, 230, 255, 0.55) 0.7px, transparent 1.2px) 0 0 / 44px 44px,
+    radial-gradient(circle, rgba(94, 242, 255, 0.35) 0.6px, transparent 1.1px) 22px 17px / 66px 66px;
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.35) 70%, transparent 100%);
   pointer-events: none;
-  z-index: -1;
+  z-index: -2;
 }
 
-/* Wallpaper mark, bottom-right, like an OEM logo */
+/* Floor: a phosphor grid in perspective, receding to the horizon */
+.grid-floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: -2px;
+  height: 46%;
+  z-index: -1;
+  pointer-events: none;
+  perspective: 420px;
+  perspective-origin: 50% 0%;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 40%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 40%);
+}
+.grid-floor::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -60% 0;
+  transform-origin: 50% 0%;
+  transform: rotateX(64deg);
+  background-image:
+    linear-gradient(rgba(94, 242, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 242, 255, 0.22) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: grid-drift 9s linear infinite;
+}
+.grid-floor::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 10%, rgba(94, 242, 255, 0.55) 50%, transparent 90%);
+  box-shadow: 0 0 24px 4px rgba(94, 242, 255, 0.18);
+}
+@keyframes grid-drift { to { background-position: 0 64px, 0 0; } }
+
+/* Faint scanlines over everything on the desktop */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: calc(var(--z-overlay) - 1);
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px);
+  mix-blend-mode: screen;
+}
+
+/* Wallpaper mark, OEM-logo style */
 .wallmark {
   position: absolute;
   right: clamp(20px, 4vw, 56px);
-  bottom: clamp(18px, 4vh, 44px);
+  top: clamp(18px, 5vh, 56px);
   text-align: right;
-  color: rgba(255, 255, 255, 0.16);
   pointer-events: none;
   user-select: none;
   z-index: -1;
 }
-.wallmark b { display: block; font: 700 clamp(44px, 7vw, 88px)/0.9 var(--f-ui); letter-spacing: 1px; text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.12); }
-.wallmark span { display: block; font: 400 15px/1 var(--f-ui); letter-spacing: 3px; margin-top: 8px; }
-.wallmark small { display: block; font: 400 12px/1.4 var(--f-ui); letter-spacing: 0.5px; margin-top: 14px; color: rgba(255, 255, 255, 0.34); }
+.wallmark b {
+  display: block;
+  font: 400 clamp(44px, 6.6vw, 88px)/0.9 var(--f-sys);
+  letter-spacing: -0.02em;
+  color: rgba(231, 236, 251, 0.1);
+  text-shadow: 0 0 40px rgba(94, 242, 255, 0.12);
+}
+.wallmark b i { font-style: normal; color: rgba(94, 242, 255, 0.28); }
+.wallmark span { display: block; font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: 0.3em; margin-top: 12px; color: rgba(177, 187, 216, 0.4); }
+.wallmark small { display: block; font: 400 var(--t-11)/1.5 var(--f-sys); letter-spacing: 0.04em; margin-top: 18px; color: rgba(94, 242, 255, 0.5); }
+.wallmark small kbd { color: var(--c-acc); background: transparent; box-shadow: inset 0 0 0 1px var(--c-acc-line); }
 
 /* ─── Desktop icons ─────────────────────────────────────────── */
 .desk-icons {
   position: absolute;
-  inset: 8px auto 8px 8px;
+  inset: 10px auto 10px 10px;
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(auto-fill, 78px);
+  grid-template-rows: repeat(auto-fill, 80px);
   grid-auto-columns: 94px;
   gap: 4px 2px;
   z-index: 1;
@@ -56,43 +113,46 @@ body.os { touch-action: manipulation; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   width: 94px;
-  padding: 4px 2px;
+  padding: 5px 2px;
   background: none;
   border: 0;
-  color: var(--c-white);
+  color: var(--c-ink);
   text-decoration: none;
 }
-.desk-icon .glyph { position: relative; width: 32px; height: 32px; }
+.desk-icon .glyph { position: relative; width: 32px; height: 32px; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.6)); }
 .desk-icon .label {
-  font: 400 12px/1.25 var(--f-ui);
+  font: 400 var(--t-11)/1.3 var(--f-sys);
   text-align: center;
-  padding: 1px 3px;
+  padding: 1px 4px;
   max-width: 92px;
   overflow-wrap: break-word;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
 }
+@media (hover: hover) { .desk-icon:hover .label { color: var(--c-acc); } }
 .desk-icon:focus-visible { outline: none; }
 .desk-icon:focus-visible .label,
-.desk-icon[aria-selected="true"] .label { background: var(--c-navy); outline: 1px dotted #ffff80; outline-offset: 0; }
+.desk-icon[aria-selected="true"] .label { background: rgba(94, 242, 255, 0.18); color: #fff; outline: 1px dotted var(--c-acc); text-shadow: none; }
 .desk-icon[aria-selected="true"] .glyph::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: repeating-conic-gradient(rgba(0, 0, 128, 0.62) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
-  mix-blend-mode: multiply;
+  background: repeating-conic-gradient(rgba(94, 242, 255, 0.45) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
+  mix-blend-mode: screen;
 }
 .desk-icon .badge {
   position: absolute;
-  right: -6px;
-  top: -4px;
-  font: 700 9px/1 var(--f-ui);
-  color: var(--c-black);
-  background: #ffff00;
-  padding: 2px 3px;
-  box-shadow: 1px 1px 0 var(--c-black);
-  letter-spacing: 0.3px;
+  right: -10px;
+  top: -6px;
+  font: 400 var(--t-11)/1 var(--f-sys);
+  color: #1b1000;
+  background: var(--c-amber);
+  padding: 2px 3px 1px;
+  box-shadow: 0 0 12px rgba(255, 181, 71, 0.5);
+  animation: pulse 2.4s ease-in-out infinite;
 }
+@keyframes pulse { 50% { box-shadow: 0 0 2px rgba(255, 181, 71, 0.2); } }
 
 /* ─── Taskbar ───────────────────────────────────────────────── */
 .taskbar {
@@ -101,141 +161,163 @@ body.os { touch-action: manipulation; }
   right: 0;
   bottom: 0;
   height: var(--taskbar-h);
-  padding: 4px 2px 2px;
-  padding-bottom: max(2px, env(safe-area-inset-bottom));
+  padding: 4px 3px 3px;
+  padding-bottom: max(3px, env(safe-area-inset-bottom));
   display: flex;
   align-items: stretch;
   gap: 3px;
-  background: var(--c-face);
-  box-shadow: inset 0 1px var(--c-light), inset 0 2px var(--c-white);
+  background: linear-gradient(180deg, #151b2b, #10151f);
+  box-shadow: inset 0 1px var(--c-acc-line), inset 0 2px var(--b-light-2), 0 -12px 30px -12px rgba(94, 242, 255, 0.12);
   z-index: var(--z-taskbar);
-  font-family: var(--f-ui);
+  font-family: var(--f-sys);
 }
 .start-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 0 7px 0 4px;
+  gap: 6px;
+  padding: 0 10px 0 5px;
   background: var(--c-face);
   border: 0;
   box-shadow: var(--bevel-raised);
-  font: 700 14px/1 var(--f-ui);
-  color: var(--c-black);
+  font: 400 var(--t-13)/1 var(--f-sys);
+  letter-spacing: 0.06em;
+  color: var(--c-ink);
   flex-shrink: 0;
 }
 .start-btn svg { width: 20px; height: 20px; }
-.start-btn[aria-expanded="true"] { box-shadow: var(--bevel-pressed); }
+@media (hover: hover) { .start-btn:hover { color: var(--c-acc); } }
+.start-btn[aria-expanded="true"] { box-shadow: var(--bevel-pressed); color: var(--c-acc); }
 .start-btn[aria-expanded="true"] > * { transform: translate(1px, 1px); }
 
-.tb-sep { width: 2px; margin: 1px 2px; box-shadow: inset 1px 0 var(--c-shadow), inset -1px 0 var(--c-white); flex-shrink: 0; }
+.tb-sep { width: 2px; margin: 2px 2px; box-shadow: inset 1px 0 var(--b-dark), inset -1px 0 var(--b-light-2); flex-shrink: 0; }
 
 .quick-read {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 9px 0 6px;
-  font: 600 12.5px/1 var(--f-ui);
-  color: var(--c-black);
+  gap: 6px;
+  padding: 0 10px 0 6px;
+  font: 400 var(--t-11)/1 var(--f-sys);
+  letter-spacing: 0.04em;
+  color: var(--c-ink);
   text-decoration: none;
   background: var(--c-face);
   box-shadow: var(--bevel-raised);
   flex-shrink: 0;
 }
-.quick-read:visited { color: var(--c-black); }
+.quick-read:visited { color: var(--c-ink); }
+@media (hover: hover) { .quick-read:hover { color: var(--c-acc); } }
 .quick-read:active { box-shadow: var(--bevel-pressed); }
 .quick-read svg { width: 16px; height: 16px; }
 
 #task-buttons { flex: 1; min-width: 0; display: flex; gap: 3px; overflow: hidden; }
 .task-btn {
-  flex: 0 1 164px;
+  flex: 0 1 172px;
   min-width: 36px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 7px;
+  gap: 6px;
+  padding: 0 8px;
   background: var(--c-face);
   border: 0;
   box-shadow: var(--bevel-raised);
-  font: 400 12.5px/1 var(--f-ui);
-  color: var(--c-black);
+  font: 400 var(--t-11)/1 var(--f-sys);
+  color: var(--c-ink-soft);
   overflow: hidden;
 }
 .task-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 .task-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .task-btn[aria-pressed="true"] {
-  box-shadow: var(--bevel-pressed);
-  background: repeating-conic-gradient(var(--c-face) 0 25%, var(--c-white) 0 50%) 0 0 / 2px 2px;
-  font-weight: 600;
+  box-shadow: var(--bevel-pressed), inset 0 -2px var(--c-acc);
+  background: repeating-conic-gradient(var(--c-face) 0 25%, #1c2439 0 50%) 0 0 / 2px 2px;
+  color: #fff;
 }
 
 .tray {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 0 8px 0 4px;
+  gap: 6px;
+  padding: 0 10px 0 6px;
   box-shadow: var(--bevel-thin-in);
   flex-shrink: 0;
-  font-size: 12.5px;
+  font-size: var(--t-11);
+  color: var(--c-ink-soft);
 }
+.tray-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+  padding: 0 7px;
+  background: rgba(95, 245, 166, 0.07);
+  border: 0;
+  box-shadow: inset 0 0 0 1px rgba(95, 245, 166, 0.25);
+  font: 400 var(--t-11)/1 var(--f-sys);
+  color: var(--c-ok);
+}
+.tray-online i { width: 6px; height: 6px; background: var(--c-ok); box-shadow: 0 0 8px var(--c-ok); animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 50% { opacity: 0.35; box-shadow: none; } }
+@media (hover: hover) { .tray-online:hover { background: rgba(95, 245, 166, 0.16); } }
 .tray-btn { display: grid; place-items: center; width: 20px; height: 20px; background: none; border: 0; padding: 0; }
 .tray-btn svg { width: 16px; height: 16px; }
-.clock { min-width: 58px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.clock { min-width: 64px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--c-ink); }
 
 /* ─── Start menu ────────────────────────────────────────────── */
 .start-menu {
   position: fixed;
-  left: 2px;
-  bottom: calc(var(--taskbar-h) - 2px);
+  left: 3px;
+  bottom: calc(var(--taskbar-h) - 1px);
   display: flex;
   padding: 3px;
   background: var(--c-face);
-  box-shadow: var(--bevel-window), 2px 2px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: var(--bevel-window), var(--halo), var(--lift);
   z-index: var(--z-menu);
-  font-family: var(--f-ui);
+  font-family: var(--f-sys);
 }
-.start-menu[hidden] { display: none; }
 .sm-banner {
-  width: 24px;
-  background: linear-gradient(0deg, var(--c-title-a), var(--c-title-b));
-  color: var(--c-white);
+  position: relative;
+  width: 26px;
+  background: linear-gradient(0deg, var(--c-title-a), var(--c-title-b) 70%, #19a3b8);
+  color: #fff;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
+  overflow: hidden;
 }
-.sm-banner span { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 17px/1 var(--f-ui); letter-spacing: 0.5px; white-space: nowrap; }
-.sm-banner span b { color: var(--c-face); font-weight: 400; }
+.sm-banner::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px); }
+.sm-banner span { writing-mode: vertical-rl; transform: rotate(180deg); font: 400 var(--t-22)/1 var(--f-sys); letter-spacing: 0.02em; white-space: nowrap; }
+.sm-banner span b { color: var(--c-acc); font-weight: 400; }
 
-.menu { list-style: none; min-width: 190px; padding: 0; }
+.menu { list-style: none; min-width: 200px; padding: 0; }
 .menu li { position: relative; }
 .menu-item {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 24px;
-  padding: 2px 20px 2px 6px;
+  min-height: 26px;
+  padding: 2px 22px 2px 6px;
   background: none;
   border: 0;
   text-align: left;
-  font: 400 13px/1.2 var(--f-ui);
-  color: var(--c-black);
+  font: 400 var(--t-13)/1.2 var(--f-sys);
+  color: var(--c-ink);
   text-decoration: none;
   white-space: nowrap;
 }
-.menu-item:visited { color: var(--c-black); }
-.menu-item.lg { min-height: 38px; padding-right: 26px; font-size: 14px; }
+.menu-item:visited { color: var(--c-ink); }
+.menu-item.lg { min-height: 40px; padding-right: 28px; }
 .menu-item.lg svg { width: 32px; height: 32px; }
 .menu-item svg { width: 16px; height: 16px; }
-.menu-item u { text-decoration: underline; text-underline-offset: 2px; }
-.menu-item .arrow { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); display: grid; }
+.menu-item u { text-decoration-color: var(--c-ink-mute); text-underline-offset: 3px; }
+.menu-item .arrow { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); display: grid; }
 .menu-item:hover, .menu-item:focus-visible, .menu-item[aria-expanded="true"] {
-  background: var(--c-navy);
-  color: var(--c-white);
+  background: linear-gradient(90deg, rgba(94, 242, 255, 0.22), rgba(94, 242, 255, 0.06));
+  color: #fff;
+  box-shadow: inset 2px 0 var(--c-acc);
   outline: none;
 }
-.menu-item .hint { margin-left: auto; padding-left: 16px; font-size: 11.5px; opacity: 0.75; }
-.menu-sep { height: 2px; margin: 3px 2px; box-shadow: inset 0 1px var(--c-shadow), inset 0 -1px var(--c-white); }
+.menu-sep { height: 2px; margin: 3px 2px; box-shadow: inset 0 1px var(--b-dark), inset 0 -1px var(--b-light-2); }
 
 .submenu {
   position: absolute;
@@ -243,48 +325,47 @@ body.os { touch-action: manipulation; }
   bottom: -3px;
   padding: 3px;
   background: var(--c-face);
-  box-shadow: var(--bevel-window), 2px 2px 0 rgba(0, 0, 0, 0.3);
-  min-width: 210px;
+  box-shadow: var(--bevel-window), var(--lift);
+  min-width: 220px;
   z-index: 1;
 }
-.submenu[hidden] { display: none; }
-.submenu.align-top { bottom: auto; top: -3px; }
 
 /* ─── Overlays ──────────────────────────────────────────────── */
 .zoom-ghost {
   position: fixed;
   pointer-events: none;
   z-index: var(--z-overlay);
-  border: 2px solid rgba(128, 128, 128, 0.9);
-  outline: 1px dotted rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--c-acc);
+  box-shadow: 0 0 16px rgba(94, 242, 255, 0.35), inset 0 0 16px rgba(94, 242, 255, 0.15);
 }
 
 .shutdown-screen {
   position: fixed;
   inset: 0;
   z-index: var(--z-boot);
-  background: var(--c-black);
+  background: var(--c-void);
   display: grid;
   place-items: center;
   text-align: center;
-  font: 400 clamp(22px, 3.2vw, 36px)/1.3 var(--f-ui);
-  color: #ff8c1a;
+  font: 400 clamp(22px, 3.3vw, 33px)/1.35 var(--f-sys);
+  color: var(--c-amber);
+  text-shadow: 0 0 18px rgba(255, 181, 71, 0.45);
   padding: 24px;
 }
-.shutdown-screen[hidden] { display: none; }
-.shutdown-screen small { display: block; margin-top: 28px; font-size: 14px; color: #8a8a8a; letter-spacing: 0.5px; }
+.shutdown-screen small { display: block; margin-top: 28px; font-size: var(--t-11); letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-mute); text-shadow: none; }
 
 /* ─── Touch / compact ───────────────────────────────────────── */
 @media (max-width: 720px), (max-height: 520px) {
-  :root { --taskbar-h: 44px; }
+  :root { --taskbar-h: 46px; }
   .desk-icons {
-    inset: 12px 8px auto 8px;
+    inset: 14px 8px auto 8px;
     grid-auto-flow: row;
-    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
     grid-template-rows: none;
-    grid-auto-rows: 84px;
+    grid-auto-rows: 86px;
     justify-items: center;
   }
+  .wallmark { top: auto; bottom: 40%; right: 16px; }
   .wallmark b { font-size: 44px; }
   .wallmark small { display: none; }
   .quick-read span.full { display: none; }
@@ -292,11 +373,15 @@ body.os { touch-action: manipulation; }
   .task-btn span { display: none; }
   .task-btn[aria-pressed="true"] { flex: 0 1 auto; max-width: 42vw; }
   .task-btn[aria-pressed="true"] span { display: inline; }
-  .menu-item { min-height: 36px; }
+  .menu-item { min-height: 38px; }
   .start-menu { max-height: calc(100dvh - var(--taskbar-h) - 8px); overflow-y: auto; }
   .submenu { position: static; box-shadow: none; padding: 0 0 0 20px; min-width: 0; background: none; }
+  .grid-floor { height: 38%; }
 }
 @media (pointer: coarse) {
-  .win-ctl { width: 26px; height: 22px; }
-  .win-titlebar { height: 28px; }
+  .win-ctl { width: 28px; height: 24px; }
+  .win-titlebar { height: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grid-floor::before, .desk-icon .badge { animation: none; }
 }

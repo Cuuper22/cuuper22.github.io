@@ -24,22 +24,22 @@
 </div>
 
 <style>
-  .toaru { padding: 14px 14px 10px; background: #bdb9ae; border-bottom: 1px solid #9c988d; }
+  .toaru { padding: 16px 16px 12px; background: radial-gradient(90% 80% at 50% 0%, #10182c, var(--c-paper) 70%); box-shadow: inset 0 -1px var(--c-rule); }
   .monitor { max-width: 680px; margin: 0 auto; }
   .bezel {
-    padding: 18px 20px 14px;
-    background: linear-gradient(180deg, #e9e5da, #d8d3c6);
-    box-shadow: inset 2px 2px #f7f4ec, inset -2px -2px #a8a396, 0 1px 0 #8f8b80;
+    padding: 16px 18px 12px;
+    background: linear-gradient(180deg, #232a3d, #171c2b);
+    box-shadow: inset 1px 1px #3a4668, inset -1px -1px #06080f, 0 30px 60px -20px rgba(0, 0, 0, 0.8), 0 0 60px -20px rgba(94, 242, 255, 0.25);
   }
   .v86-screen {
     position: relative;
     aspect-ratio: 4 / 3;
     background: #000;
-    box-shadow: inset 0 0 0 2px #34332f, 0 0 0 3px #8f8b80;
+    box-shadow: inset 0 0 0 2px #05070c, 0 0 0 1px #3a4668;
     overflow: hidden;
     outline: none;
   }
-  .v86-screen:focus-visible { box-shadow: inset 0 0 0 2px #34332f, 0 0 0 3px #000080; }
+  .v86-screen:focus-visible { box-shadow: inset 0 0 0 2px #05070c, 0 0 0 2px var(--c-acc); }
   .v86-screen :global(canvas) { display: block; width: 100% !important; height: 100% !important; }
   .v86-screen :global(.v86-text) { display: none !important; }
   .v86-screen::after {
@@ -48,7 +48,7 @@
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(130% 110% at 50% 50%, transparent 62%, rgba(0, 0, 0, 0.45) 100%),
+      radial-gradient(130% 110% at 50% 50%, transparent 62%, rgba(0, 0, 0, 0.5) 100%),
       repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0 1px, transparent 1px 2px);
   }
   .toaru-overlay {
@@ -57,23 +57,24 @@
     display: grid;
     place-content: center;
     justify-items: center;
-    gap: 12px;
+    gap: 14px;
     background: #000;
-    color: #55ff55;
-    font: 400 20px/1.2 var(--f-dos);
+    color: var(--c-acc);
+    font: 400 var(--t-13)/1.3 var(--f-sys);
+    text-shadow: 0 0 8px rgba(94, 242, 255, 0.5);
     text-align: center;
     padding: 16px;
     z-index: 1;
   }
-  .toaru-overlay[hidden] { display: none; }
-  .t-bar { width: min(260px, 70%); height: 14px; padding: 2px; box-shadow: inset 0 0 0 1px #55ff55; }
-  .t-bar span { display: block; height: 100%; width: 0; background: #55ff55; transition: width 120ms linear; }
-  .chin { display: flex; align-items: center; justify-content: space-between; padding: 6px 12px 7px; background: #d8d3c6; box-shadow: inset 2px 0 #f7f4ec, inset -2px -2px #a8a396; }
-  .brand { font: 400 11px/1 var(--f-ui); color: #6c685e; letter-spacing: 1px; }
-  .brand b { font-weight: 700; color: #4b4840; }
-  .led { width: 8px; height: 5px; background: #3a3a33; box-shadow: inset 0 0 0 1px #2a2a24; }
-  .led.on { background: #3dff5b; box-shadow: 0 0 6px #3dff5b; }
-  .led.busy { background: #ffb13d; box-shadow: 0 0 6px #ffb13d; }
-  .toaru-bar { display: flex; align-items: center; gap: 6px; max-width: 680px; margin: 8px auto 0; flex-wrap: wrap; }
-  .toaru-hint { font: 400 12px/1.35 var(--f-read); color: #3b3a36; flex: 1; min-width: 200px; }
+  .t-bar { width: min(260px, 70%); height: 12px; padding: 2px; box-shadow: inset 0 0 0 1px var(--c-acc-line); }
+  .t-bar span { display: block; height: 100%; width: 0; background: var(--c-acc); box-shadow: 0 0 10px var(--c-acc); transition: width 120ms linear; }
+  .chin { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 8px; background: #171c2b; box-shadow: inset 1px 0 #3a4668, inset -1px -1px #06080f; }
+  .brand { font: 400 var(--t-11)/1 var(--f-sys); color: var(--c-ink-mute); letter-spacing: 0.2em; text-transform: uppercase; }
+  .brand b { font-weight: 400; color: var(--c-ink-soft); }
+  .led { width: 10px; height: 4px; background: #262c3c; }
+  .led.on { background: var(--c-ok); box-shadow: 0 0 8px var(--c-ok); }
+  .led.busy { background: var(--c-amber); box-shadow: 0 0 8px var(--c-amber); animation: blink 0.5s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0.3; } }
+  .toaru-bar { display: flex; align-items: center; gap: 6px; max-width: 680px; margin: 10px auto 0; flex-wrap: wrap; }
+  .toaru-hint { font: 400 var(--t-11)/1.45 var(--f-sys); color: var(--c-ink-mute); flex: 1; min-width: 200px; }
 </style>

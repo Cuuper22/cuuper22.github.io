@@ -42,15 +42,17 @@ The page you asked for does not exist, or it has been terminated by the system a
     align-items: center;
     padding: 32px 20px;
     color: #fff;
-    font: 400 clamp(19px, 2.3vw, 24px)/1.25 var(--f-dos);
+    font: 400 var(--t-15)/1.6 var(--f-sys);
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 3px), radial-gradient(110% 90% at 50% 50%, #0000c8, #00006e);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.35);
   }
-  .bsod-h { background: #aaaaaa; color: #0000aa; padding: 0 10px; margin-bottom: 28px; }
+  .bsod-h { background: #c0c0c0; color: #0000aa; padding: 1px 10px 0; margin-bottom: 30px; text-shadow: none; }
   .bsod-t { max-width: 64ch; }
   .bsod-t p { white-space: pre-wrap; }
   .bsod-t p + p { margin-top: 1.2em; }
-  .cursor { display: inline-block; width: 0.55em; height: 1em; background: #fff; vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+  .cursor { display: inline-block; width: 0.6em; height: 1.05em; background: #fff; vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-  .bsod-actions { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; justify-content: center; }
-  .bsod-actions a { color: #0000aa; background: #aaaaaa; padding: 2px 12px; text-decoration: none; }
+  .bsod-actions { display: flex; gap: 14px; margin-top: 38px; flex-wrap: wrap; justify-content: center; }
+  .bsod-actions a { color: #0000aa; background: #c0c0c0; padding: 3px 12px 2px; text-decoration: none; text-shadow: none; }
   .bsod-actions a:hover, .bsod-actions a:focus-visible { background: #fff; outline: none; }
 </style>

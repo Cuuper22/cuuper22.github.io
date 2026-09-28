@@ -44,36 +44,37 @@ const rows: [string, number, string][] = [
 </div>
 
 <style>
-  .ivc { padding: 12px 14px; background: #efe9dc; border-bottom: 1px solid #d5ccb8; font-family: var(--f-ui); }
-  .iv-sheet { background: #fff; box-shadow: var(--bevel-sunken); padding: 2px; font-size: 13px; }
-  .iv-row { display: grid; grid-template-columns: 190px 76px 1fr; }
-  .iv-row > span { padding: 4px 8px; border-right: 1px solid #e3e3e3; border-bottom: 1px solid #e3e3e3; }
-  .iv-h > span { background: var(--c-face); box-shadow: var(--bevel-thin-out); border: 0; font-weight: 600; font-size: 12.5px; }
-  .iv-n { text-align: right; font: 400 13px/1.3 var(--f-mono); font-variant-numeric: tabular-nums; }
-  .iv-d { font: 400 12.5px/1.35 var(--f-read); color: #555; }
-  .iv-row.yes > span { background: #fff8c8; }
-  .iv-row.yes .iv-n { font-weight: 700; color: #000; }
-  .iv-row:not(.iv-h):not(.yes) .iv-n { color: #9a9a9a; }
-  .iv-bottom { display: grid; grid-template-columns: 1fr auto; gap: 14px; margin-top: 12px; align-items: start; }
-  .iv-k { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #6b6150; margin-bottom: 6px; }
-  .iv-signs { display: flex; align-items: center; gap: 4px; }
+  .ivc { padding: 14px 16px; background: var(--c-paper-2); box-shadow: inset 0 -1px var(--c-rule); }
+  .iv-sheet { background: var(--c-paper); box-shadow: var(--bevel-sunken); padding: 2px; }
+  .iv-row { display: grid; grid-template-columns: 200px 80px 1fr; }
+  .iv-row > span { padding: 6px 10px; box-shadow: inset -1px -1px var(--c-rule); font: 400 var(--t-13)/1.35 var(--f-read); color: var(--c-ink-soft); }
+  .iv-h > span { background: var(--c-face); box-shadow: var(--bevel-thin-out); font: 400 var(--t-11)/1.3 var(--f-sys); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--c-ink-mute); }
+  .iv-n { text-align: right; font: 400 var(--t-13)/1.35 var(--f-sys) !important; font-variant-numeric: tabular-nums; }
+  .iv-d { color: var(--c-ink-mute) !important; }
+  .iv-row.yes > span { background: rgba(255, 181, 71, 0.08); color: var(--c-ink); }
+  .iv-row.yes .iv-n { color: var(--c-amber); text-shadow: 0 0 10px rgba(255, 181, 71, 0.5); }
+  .iv-row:not(.iv-h):not(.yes) .iv-n { color: var(--c-ink-faint); }
+  .iv-bottom { display: grid; grid-template-columns: 1fr auto; gap: 16px; margin-top: 14px; align-items: start; }
+  .iv-k { font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--c-ink-mute); margin-bottom: 8px; }
+  .iv-signs { display: flex; align-items: center; gap: 5px; }
+  /* Steatite: the one warm material on the machine */
   .sg {
     display: grid;
     place-items: center;
-    min-width: 46px;
-    height: 46px;
+    min-width: 48px;
+    height: 48px;
     padding: 0 6px;
-    background: #e9e2d0;
-    color: #3b3222;
-    box-shadow: inset 2px 2px #fffaf0, inset -2px -2px #b8ab8e;
-    font: 700 16px/1 var(--f-ui);
+    background: linear-gradient(160deg, #e6dcc4, #c9b994);
+    color: #3b3020;
+    box-shadow: inset 2px 2px #f7efdc, inset -2px -2px #9c8b66, 0 6px 16px -6px rgba(0, 0, 0, 0.7);
+    font: 400 var(--t-13)/1 var(--f-sys);
   }
-  .sg.ctx { opacity: 0.6; }
-  .gap { color: #8a7f68; padding: 0 2px; }
-  .iv-note { font: 400 12.5px/1.45 var(--f-read); color: #4d4535; margin-top: 8px; max-width: 46ch; }
-  .iv-stats { font: 400 13px/1.6 var(--f-read); color: #3b3222; padding: 8px 12px; background: #fff; box-shadow: var(--bevel-sunken); min-width: 190px; }
-  .iv-stats b { font-family: var(--f-mono); font-weight: 700; display: inline-block; min-width: 1.8em; text-align: right; margin-right: 4px; }
-  .iv-q { font-size: 12px; color: #6b6150; margin-top: 4px; line-height: 1.4; max-width: 24ch; }
+  .sg.ctx { opacity: 0.45; }
+  .gap { color: var(--c-ink-mute); padding: 0 2px; }
+  .iv-note { font: 400 var(--t-13)/1.5 var(--f-read); color: var(--c-ink-soft); margin-top: 10px; max-width: 48ch; }
+  .iv-stats { font: 400 var(--t-13)/1.7 var(--f-read); color: var(--c-ink-soft); padding: 10px 14px; background: var(--c-paper); box-shadow: var(--bevel-sunken); min-width: 200px; }
+  .iv-stats b { font: 400 var(--t-13)/1 var(--f-sys); color: var(--c-ink); display: inline-block; min-width: 2em; text-align: right; margin-right: 6px; }
+  .iv-q { font: 400 var(--t-11)/1.45 var(--f-sys); color: var(--c-ink-mute); margin-top: 6px; max-width: 26ch; }
   @media (max-width: 720px) {
     .iv-row { grid-template-columns: 1fr 64px; }
     .iv-d { display: none; }

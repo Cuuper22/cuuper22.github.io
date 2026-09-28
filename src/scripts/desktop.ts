@@ -1,8 +1,11 @@
 import { wm, isCompact } from './wm';
 import { runBoot } from './boot';
 import { initDos, type ProjectRec } from './dos';
-import { sfx, setSound, soundEnabled } from './sound';
+import { sfx, setSound, soundEnabled, playAsset } from './sound';
 import { chooseStartupWindows, readContext, setWelcomeOptOut } from './startup';
+import { startWallpaper } from './wallpaper';
+import { track, trackView } from './telemetry';
+import { initMonitor } from './monitor';
 
 const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
 const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => [...root.querySelectorAll<T>(sel)];
@@ -12,6 +15,9 @@ const bySlugWin = new Map(data.projects.map(p => [p.win, p]));
 
 wm.init();
 const dos = initDos(data.projects, data.today);
+
+const wallpaper = document.getElementById('wallpaper') as HTMLCanvasElement | null;
+if (wallpaper) startWallpaper(wallpaper);
 
 // ─── Opening things ───────────────────────────────────────────────
 
@@ -29,7 +35,7 @@ document.addEventListener('click', e => {
   openFrom(el.dataset.open!, el.querySelector('svg') ?? el);
 });
 
-wm.addEventListener('open', e => { if ((e as CustomEvent).detail.first) sfx.open(); });
+wm.addEventListener('open', e => { const d = (e as CustomEvent).detail; if (d.first) { sfx.open(); track('open', d.id); } });
 wm.addEventListener('close', () => sfx.close());
 wm.addEventListener('minimize', () => sfx.minimize());
 
@@ -148,7 +154,7 @@ function paintSound(on: boolean) {
   $('.i-off', soundBtn)!.hidden = on;
 }
 paintSound(soundEnabled());
-soundBtn?.addEventListener('click', () => { const on = !soundEnabled(); setSound(on); paintSound(on); });
+soundBtn?.addEventListener('click', () => { const on = !soundEnabled(); setSound(on); paintSound(on); track('sound', on ? 'on' : 'off'); });
 document.addEventListener('os:sound', e => paintSound((e as CustomEvent).detail));
 
 // ─── Welcome tips ─────────────────────────────────────────────────
@@ -265,6 +271,7 @@ $('#shutdown-form')?.addEventListener('submit', e => {
     wm.openIds().forEach(id => wm.close(id));
     const scr = $('#safe-off');
     if (scr) { scr.hidden = false; scr.focus(); }
+    void playAsset('crtOff', { gain: 0.6 });
   } else if (choice === 'restart') {
     try { sessionStorage.removeItem('cuperos.booted'); } catch { /* ignore */ }
     location.href = '/?boot=1';
@@ -320,9 +327,13 @@ wm.addEventListener('open', async e => {
 
 // ─── Startup ──────────────────────────────────────────────────────
 
+if (document.documentElement.dataset.boot) track('boot');
+initMonitor(new Map([...document.querySelectorAll<HTMLElement>('[data-win]')].map(w => [w.id, w.dataset.title ?? w.id])));
+
 runBoot(() => {
   const saved = wm.readSession();
   const ctx = readContext({ hasWindow: id => wm.has(id), sessionAgeMs: saved ? Date.now() - saved.at : null, compact: isCompact() });
+  trackView(ctx.deepLink ?? 'desktop', ctx.returning);
   const plan = chooseStartupWindows(ctx);
   if (plan.restoreSession && saved) wm.restoreSession(saved);
   plan.open.filter(id => wm.has(id)).forEach(id => wm.open(id));

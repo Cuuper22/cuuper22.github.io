@@ -49,8 +49,45 @@ export const sfx = {
 
 export function soundEnabled() { return enabled; }
 
+// Recorded assets (generated with ElevenLabs), decoded once and played through WebAudio.
+// If a file is missing or fails to decode, the synthesized sound above stands in.
+const ASSETS = { chime: '/sfx/chime.mp3', online: '/sfx/online.mp3', crtOff: '/sfx/crt-off.mp3' } as const;
+const buffers = new Map<keyof typeof ASSETS, Promise<AudioBuffer | null>>();
+
+function load(name: keyof typeof ASSETS) {
+  const a = audio();
+  if (!a) return Promise.resolve(null);
+  if (!buffers.has(name)) {
+    buffers.set(name, fetch(ASSETS[name]).then(r => (r.ok ? r.arrayBuffer() : Promise.reject(r.status))).then(b => a.decodeAudioData(b)).catch(() => null));
+  }
+  return buffers.get(name)!;
+}
+
+export async function playAsset(name: keyof typeof ASSETS, { gain = 0.7, delay = 0, maxDur = 0 } = {}): Promise<boolean> {
+  const a = audio();
+  if (!a) return false;
+  const buf = await load(name);
+  if (!buf) return false;
+  const src = a.createBufferSource();
+  const g = a.createGain();
+  g.gain.value = gain;
+  src.buffer = buf;
+  src.connect(g).connect(a.destination);
+  const t0 = a.currentTime + delay;
+  src.start(t0);
+  if (maxDur) {
+    // Long generations get a tail fade instead of a hard cut
+    g.gain.setValueAtTime(gain, t0 + maxDur - 1.4);
+    g.gain.linearRampToValueAtTime(0.0001, t0 + maxDur);
+    src.stop(t0 + maxDur + 0.05);
+  }
+  return true;
+}
+
 export function setSound(on: boolean) {
   enabled = on;
   try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch { /* ignore */ }
-  if (on) sfx.chime();
+  if (!on) return;
+  void playAsset('chime', { gain: 0.55, maxDur: 4.2 }).then(ok => { if (!ok) sfx.chime(); });
+  void playAsset('online', { gain: 0.9, delay: 0.9 });
 }

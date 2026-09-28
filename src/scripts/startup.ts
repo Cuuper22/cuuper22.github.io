@@ -29,8 +29,20 @@ export interface StartupPlan {
  * and project windows as 'p-<slug>' (e.g. 'p-erdos', 'p-toaruos-arnold').
  */
 export function chooseStartupWindows(ctx: StartupContext): StartupPlan {
-  // TODO(human): decide the opening layout from ctx. See the Learn by Doing note in chat.
-  return { restoreSession: false, open: ctx.deepLink ? [ctx.deepLink] : ['welcome'] };
+  // A shared link is a promise: show exactly that, alone.
+  if (ctx.deepLink) return { restoreSession: false, open: [ctx.deepLink] };
+
+  // Phones: every window is full-screen, so one window is the whole first impression.
+  if (ctx.compact) return { restoreSession: false, open: [ctx.welcomeOptOut ? 'projects' : 'welcome'] };
+
+  // Returning visitors get their desk back exactly as they left it.
+  if (ctx.returning && ctx.hasSession) return { restoreSession: true, open: [] };
+
+  const open: string[] = [];
+  if (ctx.referrer === 'github') open.push('p-toaruos-arnold');   // engineers: lead with the running OS
+  else open.push('projects');                                   // recruiters, search, direct: the pins
+  if (!ctx.welcomeOptOut && !ctx.returning) open.push('welcome'); // first visit: orientation on top
+  return { restoreSession: false, open };
 }
 
 // ─── Context gathering (browser-only) ───────────────────────────────

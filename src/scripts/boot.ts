@@ -8,7 +8,7 @@ const LINES: Line[] = [
   [100, ''],
   [50, 'Main Processor : Curiosity-586 @ 233MHz'],
   [40, 'Memory Testing : <span id="post-mem">0</span>K'],
-  [380, ''],
+  [300, ''],
   [50, 'Detecting Primary Master   ... <span class="hi">TOARUOS.ELF</span>   212,576 bytes'],
   [80, 'Detecting Primary Slave    ... <span class="hi">ARNOLDC.JAR</span>   native x86 backend'],
   [80, 'Detecting Secondary Master ... <span class="hi">ERDOS.LEAN</span>    theorem statement locked'],
@@ -17,7 +17,7 @@ const LINES: Line[] = [
   [50, '<span class="ok">Verifying DMI Pool Data ........ Update Success</span>'],
   [70, 'Starting CúperOS...'],
 ];
-const SPLASH_MS = 650;
+const SPLASH_MS = 780;
 
 export function runBoot(onDone: () => void) {
   const root = document.documentElement;
@@ -36,7 +36,7 @@ export function runBoot(onDone: () => void) {
     boot.classList.add('is-leaving');
     delete root.dataset.boot;           // desktop becomes visible under the fade
     onDone();
-    setTimeout(() => boot.remove(), 260);
+    setTimeout(() => boot.remove(), 420);
     removeEventListener('keydown', skip, true);
     removeEventListener('pointerdown', skip, true);
   };
@@ -68,7 +68,7 @@ export function runBoot(onDone: () => void) {
   function countMemory() {
     const el = document.getElementById('post-mem');
     if (!el) return;
-    const start = performance.now(), total = 65536, dur = 360;
+    const start = performance.now(), total = 65536, dur = 290;
     const tick = (now: number) => {
       const k = Math.min(1, (now - start) / dur);
       el.textContent = String(Math.floor(total * k / 1024) * 1024);

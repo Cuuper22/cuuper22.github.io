@@ -89,14 +89,24 @@ const Demo = d.demo ? DEMOS[d.demo] : undefined;
 </Base>
 
 <style>
-  body { background: var(--c-desktop); }
-  .page { min-height: 100dvh; padding: clamp(0px, 3vw, 28px) clamp(0px, 3vw, 28px); display: flex; justify-content: center; }
-  .page-win { position: relative; width: 100%; max-width: 900px; min-height: calc(100dvh - 2 * clamp(0px, 3vw, 28px)); }
+  body { background: var(--c-void); }
+  .page {
+    min-height: 100dvh;
+    padding: clamp(0px, 3vw, 32px);
+    display: flex;
+    justify-content: center;
+    background:
+      radial-gradient(70% 45% at 50% 100%, rgba(0, 128, 128, 0.3), transparent 70%),
+      radial-gradient(circle, rgba(200, 230, 255, 0.16) 0.7px, transparent 1.2px) 0 0 / 44px 44px,
+      var(--c-void);
+  }
+  .page-win { position: relative; width: 100%; max-width: 920px; min-height: calc(100dvh - 2 * clamp(0px, 3vw, 32px)); }
   .page-win .win-ctl { text-decoration: none; }
   .page-win .win-body { overflow: visible; }
   .page-scroll { background: var(--c-paper); }
-  .page-prose { margin: 0 auto; padding-top: 26px; padding-bottom: 48px; }
+  .page-prose { margin: 0 auto; padding-top: 28px; padding-bottom: 56px; }
   .page-tags { display: flex; flex-wrap: wrap; gap: 5px; }
   .page-center { text-align: center; }
-  .win-status a { color: var(--c-black); }
+  .win-status a { color: var(--c-ink); text-decoration: none; }
+  .win-status a:hover { color: var(--c-acc); }
 </style>

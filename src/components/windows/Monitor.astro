@@ -1,0 +1,86 @@
+---
+import Window from '../Window.astro';
+---
+
+<Window id="monitor" title="System Monitor" icon="monitor" kind="app" w={700} h={560} x={330} y={60} label="System Monitor: live, anonymous visitor statistics">
+  <div class="mon" data-state="loading">
+    <header class="mon-head">
+      <span class="mon-live"><i></i>Live</span>
+      <span class="mon-title">Network activity · cuuper22.pages.dev</span>
+      <span class="mon-at" data-at>connecting…</span>
+    </header>
+
+    <section class="mon-tiles" aria-label="Visitors">
+      <div class="tile tile-hot"><p class="k">Online now</p><p class="v" data-online>–</p></div>
+      <div class="tile"><p class="k">Today</p><p class="v" data-today>–</p></div>
+      <div class="tile"><p class="k">All time</p><p class="v odo" data-total aria-live="polite">–</p></div>
+      <div class="tile"><p class="k">Countries</p><p class="v" data-countries>–</p></div>
+    </section>
+
+    <section class="mon-chart" aria-label="Visits in the last 24 hours">
+      <p class="k">Last 24 hours</p>
+      <canvas data-chart height="120"></canvas>
+    </section>
+
+    <div class="mon-cols">
+      <section aria-label="Where visitors are"><p class="k">Where</p><ul class="bars" data-where></ul></section>
+      <section aria-label="Most opened windows"><p class="k">Most opened · 30 days</p><ul class="bars" data-what></ul></section>
+    </div>
+
+    <section class="mon-foot">
+      <p class="mon-devices" data-devices></p>
+      <p class="mon-fun" data-fun></p>
+      <p class="mon-privacy">No cookies, no IP addresses, no fingerprinting. A random id lives only as long as your tab, and location is Cloudflare's country code. Global Privacy Control is honored. Counted with Cloudflare D1.</p>
+    </section>
+
+    <p class="mon-offline">Telemetry is offline here. It runs on cuuper22.pages.dev; local builds and privacy-protected browsers don't send or show it.</p>
+  </div>
+  <Fragment slot="status"><span class="fit" data-status-left>Idle</span><span data-status-right>Refreshes every 15 seconds while open</span></Fragment>
+</Window>
+
+<style>
+  .mon {
+    height: 100%;
+    overflow: auto;
+    padding: 12px 14px 14px;
+    background: radial-gradient(90% 60% at 50% 0%, #0d1830, var(--c-paper) 70%);
+    box-shadow: var(--bevel-sunken);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .k { font: 400 var(--t-11)/1 var(--f-sys); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--c-ink-mute); margin-bottom: 8px; }
+  .mon-head { display: flex; align-items: center; gap: 12px; font: 400 var(--t-11)/1 var(--f-sys); color: var(--c-ink-soft); }
+  .mon-live { display: inline-flex; align-items: center; gap: 6px; color: var(--c-ok); letter-spacing: var(--track-caps); text-transform: uppercase; }
+  .mon-live i { width: 7px; height: 7px; background: var(--c-ok); box-shadow: 0 0 8px var(--c-ok); animation: live 1.6s steps(2) infinite; }
+  @keyframes live { 50% { opacity: 0.25; } }
+  .mon-title { flex: 1; }
+  .mon-at { color: var(--c-ink-mute); }
+
+  .mon-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .tile { padding: 12px 12px 10px; background: var(--c-face); box-shadow: var(--bevel-raised); min-width: 0; }
+  .tile .v { font: 400 var(--t-33)/1 var(--f-sys); color: var(--c-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tile-hot { box-shadow: var(--bevel-raised), inset 0 -2px var(--c-acc); }
+  .tile-hot .v { color: var(--c-acc); text-shadow: 0 0 18px rgba(94, 242, 255, 0.55); }
+  .odo { display: flex; gap: 2px; }
+  .odo :global(span) { display: inline-grid; place-items: center; width: 0.72em; background: #05080f; box-shadow: var(--bevel-thin-in); font-size: 0.72em; padding: 3px 0 2px; color: var(--c-amber); text-shadow: 0 0 10px rgba(255, 181, 71, 0.5); }
+
+  .mon-chart canvas { display: block; width: 100%; height: 120px; background: #05080f; box-shadow: var(--bevel-sunken); }
+
+  .mon-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .bars { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .bars :global(li) { display: grid; grid-template-columns: minmax(0, 1fr) 90px 34px; align-items: center; gap: 8px; font: 400 var(--t-11)/1.3 var(--f-sys); color: var(--c-ink-soft); }
+  .bars :global(li > span:first-child) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bars :global(.bt) { height: 8px; background: #05080f; box-shadow: var(--bevel-thin-in); padding: 2px; }
+  .bars :global(.bt i) { display: block; height: 100%; background: linear-gradient(90deg, var(--c-title-b), var(--c-acc)); box-shadow: 0 0 6px rgba(94, 242, 255, 0.4); }
+  .bars :global(.n) { text-align: right; color: var(--c-ink); font-variant-numeric: tabular-nums; }
+  .bars :global(.none) { display: block; color: var(--c-ink-faint); }
+
+  .mon-foot { display: flex; flex-direction: column; gap: 6px; margin-top: auto; padding-top: 10px; box-shadow: inset 0 1px var(--c-rule); }
+  .mon-devices, .mon-fun { font: 400 var(--t-11)/1.5 var(--f-sys); color: var(--c-ink-soft); }
+  .mon-privacy { font: 400 var(--t-11)/1.5 var(--f-read); color: var(--c-ink-mute); max-width: 78ch; }
+  .mon-offline { display: none; font: 400 var(--t-13)/1.5 var(--f-read); color: var(--c-amber); padding: 10px 12px; background: rgba(255, 181, 71, 0.07); box-shadow: inset 2px 0 var(--c-amber); }
+  .mon[data-state="offline"] .mon-offline { display: block; }
+  .mon[data-state="loading"] .tile .v { color: var(--c-ink-faint); }
+  @media (max-width: 720px) { .mon-tiles { grid-template-columns: repeat(2, 1fr); } .mon-cols { grid-template-columns: 1fr; } }
+</style>
