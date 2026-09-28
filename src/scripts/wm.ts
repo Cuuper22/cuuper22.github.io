@@ -13,7 +13,8 @@ const TASKBAR_H = 36;
 const CASCADE = 26;
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-export const isCompact = () => matchMedia('(max-width: 720px), (max-height: 520px)').matches;
+// A 0x0 viewport (hidden or prerendered page) is unknown, not a phone
+export const isCompact = () => innerWidth > 0 && matchMedia('(max-width: 720px), (max-height: 520px)').matches;
 
 class WindowManager extends EventTarget {
   private wins = new Map<string, HTMLElement>();
