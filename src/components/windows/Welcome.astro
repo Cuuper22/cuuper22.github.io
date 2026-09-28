@@ -68,7 +68,8 @@ const tips = [
   .wl-check { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; font-size: 12.5px; user-select: none; }
   .wl-check input { width: 13px; height: 13px; accent-color: var(--c-navy); }
   @media (max-width: 720px) {
-    .welcome { grid-template-columns: 1fr; grid-template-rows: auto auto auto; overflow: auto; }
+    .welcome { grid-template-columns: 1fr; grid-template-rows: auto auto auto; align-content: start; height: auto; }
+    .wl-tip { min-height: 0; }
     .wl-actions { width: auto; flex-direction: row; flex-wrap: wrap; }
     .wl-actions .btn { width: auto; flex: 1 1 40%; }
     .wl-spacer { display: none; }

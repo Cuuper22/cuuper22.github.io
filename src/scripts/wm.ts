@@ -117,7 +117,10 @@ class WindowManager extends EventTarget {
   private apply(id: string) {
     const el = this.wins.get(id)!, s = this.state.get(id)!;
     const compact = isCompact();
-    el.classList.toggle('is-max', s.max || compact);
+    const dialog = el.dataset.kind === 'dialog';
+    // On phones, app windows fill the screen and dialogs become content-height sheets
+    el.classList.toggle('is-max', s.max || (compact && !dialog));
+    el.classList.toggle('is-sheet', compact && dialog);
     el.style.left = `${s.geo.x}px`;
     el.style.top = `${s.geo.y}px`;
     el.style.width = `${s.geo.w}px`;

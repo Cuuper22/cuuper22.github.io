@@ -290,6 +290,7 @@ body.os { touch-action: manipulation; }
   .quick-read span.full { display: none; }
   .task-btn { flex-basis: 44px; }
   .task-btn span { display: none; }
+  .task-btn[aria-pressed="true"] { flex: 0 1 auto; max-width: 42vw; }
   .task-btn[aria-pressed="true"] span { display: inline; }
   .menu-item { min-height: 36px; }
   .start-menu { max-height: calc(100dvh - var(--taskbar-h) - 8px); overflow-y: auto; }

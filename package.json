@@ -6,7 +6,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check",
+    "deploy": "astro build && npx wrangler@4 pages deploy dist --project-name cuuper22 --branch main",
+    "deploy:preview": "astro build && npx wrangler@4 pages deploy dist --project-name cuuper22 --branch preview"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -20,5 +23,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

@@ -56,7 +56,7 @@ function fmt(t: number) {
 function span(min: number) {
   if (min >= 7 * DAY) return '7d+ clear';
   const h = Math.floor(min / 60), m = min % 60;
-  return `${h ? `${h}h ` : ''}${m}m clear`;
+  return h && !m ? `${h}h clear` : `${h ? `${h}h ` : ''}${m}m clear`;
 }
 
 function evaluate(c: Curb, hours: number, vehFt: number) {

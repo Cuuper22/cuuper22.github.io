@@ -299,6 +299,17 @@ a:visited { color: var(--c-link-visited); }
   transform: none !important;
 }
 
+.win.is-sheet {
+  left: 6px !important;
+  right: 6px;
+  top: auto !important;
+  bottom: 6px;
+  width: auto !important;
+  height: auto !important;
+  max-height: calc(100% - 12px);
+}
+.win.is-sheet > .win-body { overflow: auto; }
+
 /* Scrollbars in the Win95 idiom (WebKit/Blink); Firefox gets thin native ones */
 .win ::-webkit-scrollbar { width: 16px; height: 16px; }
 .win ::-webkit-scrollbar-track { background: repeating-conic-gradient(var(--c-face) 0 25%, var(--c-white) 0 50%) 0 0 / 2px 2px; }

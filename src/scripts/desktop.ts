@@ -155,11 +155,10 @@ document.addEventListener('os:sound', e => paintSound((e as CustomEvent).detail)
 
 const tips = JSON.parse($('#tips-data')?.textContent ?? '[]') as string[];
 let tipIdx = 0;
-$('#tip-next')?.addEventListener('click', () => {
-  tipIdx = (tipIdx + 1) % tips.length;
-  const el = $('#tip-text');
-  if (el) el.innerHTML = tips[tipIdx];
-});
+const showTip = (i: number) => { tipIdx = i % tips.length; const el = $('#tip-text'); if (el) el.innerHTML = tips[tipIdx]; };
+$('#tip-next')?.addEventListener('click', () => showTip(tipIdx + 1));
+// "Just start typing" means nothing without a keyboard: lead with the OS instead
+if (matchMedia('(pointer: coarse)').matches && tips.length > 1) showTip(1);
 const welcomeAgain = $<HTMLInputElement>('#welcome-again');
 try { if (welcomeAgain) welcomeAgain.checked = localStorage.getItem('cuperos.welcome') !== 'off'; } catch { /* ignore */ }
 welcomeAgain?.addEventListener('change', () => setWelcomeOptOut(!welcomeAgain.checked));
