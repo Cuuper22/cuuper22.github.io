@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+import { cursorCss } from '../lib/pixel';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  bodyClass?: string;
+}
+
+const { title, description, ogImage = '/og/index.png', ogType = 'website', bodyClass } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = new URL(ogImage, Astro.site);
+const cursor = cursorCss();
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#008080" />
+  <meta name="author" content="Cúper (Yousef) Anas" />
+  <meta property="og:site_name" content="CúperOS" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={og} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:type" content={ogType} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={og} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="alternate" type="text/html" title="Quick read (text only)" href="/read/" />
+  <slot name="head" />
+</head>
+<body class={bodyClass} style={`--cursor-arrow: ${cursor}`}>
+  <slot />
+</body>
+</html>

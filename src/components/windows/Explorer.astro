@@ -1,0 +1,147 @@
+---
+import Window from '../Window.astro';
+import { pixelSvg } from '../../lib/pixel';
+import { winId, byTier, type Project } from '../../lib/projects';
+
+interface Props { projects: Project[]; }
+const { projects } = Astro.props;
+const tiers = byTier(projects);
+const groups = [
+  { key: 'headline', label: 'Pinned', note: 'The six I would show you first', items: tiers.headline },
+  { key: 'supporting', label: 'Also built', note: 'Real projects with real constraints', items: tiers.supporting },
+  { key: 'brief', label: 'Small things', note: 'Sketches, tools, and one honest failure', items: tiers.brief },
+];
+const fmt = (iso: string) => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+---
+
+<Window id="projects" title="Projects" icon="folderOpen" kind="app" w={860} h={560} x={150} y={36}>
+  <Fragment slot="toolbar">
+    <span class="ex-addr-label">Address</span>
+    <span class="field ex-addr"><Fragment set:html={pixelSvg('folderOpen', 16)} />C:\CUPER\PROJECTS</span>
+  </Fragment>
+
+  <div class="ex">
+    <aside class="ex-side" aria-live="polite">
+      <div class="ex-side-hero">
+        <Fragment set:html={pixelSvg('folderOpen', 32)} />
+        <h2>Projects</h2>
+      </div>
+      <div class="ex-side-body" id="ex-detail">
+        <p class="ex-hint">Select an item to see its description. Double-click to open it.</p>
+        <p class="ex-hint">{projects.length} projects. The first six are the ones pinned on my GitHub.</p>
+      </div>
+    </aside>
+
+    <div class="ex-files" role="listbox" aria-label="Projects" aria-orientation="horizontal" tabindex="-1">
+      {groups.map(g => (
+        <section class="ex-group" aria-label={g.label}>
+          <h3 class="ex-group-h"><span>{g.label}</span><small>{g.note}</small></h3>
+          <div class="ex-grid">
+            {g.items.map(p => (
+              <button
+                class="ex-item"
+                type="button"
+                role="option"
+                aria-selected="false"
+                data-item={winId(p.data.slug)}
+                data-title={p.data.title}
+                data-one={p.data.oneLiner}
+                data-tech={p.data.tech.join(' · ')}
+                data-updated={fmt(p.data.updated)}
+                data-file={p.data.file}
+              >
+                <span class="ex-icon"><Fragment set:html={pixelSvg(p.data.icon, 32)} /></span>
+                <span class="ex-name">{p.data.title}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+
+  <Fragment slot="status">
+    <span class="fit" id="ex-count">{projects.length} object(s)</span>
+    <span id="ex-status">Double-click an icon to open it.</span>
+  </Fragment>
+</Window>
+
+<style>
+  .ex-addr-label { font: 400 12px/1 var(--f-ui); padding: 0 4px; }
+  .ex-addr { flex: 1; display: flex; align-items: center; gap: 6px; font: 400 12.5px/1 var(--f-ui); padding: 3px 6px; min-width: 0; overflow: hidden; white-space: nowrap; }
+  .ex {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    height: 100%;
+    background: var(--c-white);
+    box-shadow: var(--bevel-sunken);
+    padding: 2px;
+    min-height: 0;
+  }
+  .ex-side {
+    overflow: auto;
+    background: linear-gradient(180deg, #ffffff 0%, #ffffff 60%, #eef3fb 100%);
+    border-right: 1px solid #e3e3e3;
+    font-family: var(--f-read);
+  }
+  .ex-side-hero {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 18px 14px 10px;
+    background: linear-gradient(90deg, #000080 0%, #1084d0 70%, #ffffff 100%);
+    color: #fff;
+  }
+  .ex-side-hero h2 { font: 700 20px/1 var(--f-ui); }
+  .ex-side-body { padding: 12px 14px 16px; font-size: 13px; line-height: 1.5; color: var(--c-ink); }
+  .ex-side-body :global(h3) { font: 700 15px/1.2 var(--f-ui); margin: 8px 0 6px; color: var(--c-black); }
+  .ex-side-body :global(.one) { color: var(--c-ink); margin-bottom: 10px; text-wrap: pretty; }
+  .ex-side-body :global(.row) { font: 400 12px/1.45 var(--f-ui); color: var(--c-ink-mute); margin-bottom: 4px; }
+  .ex-side-body :global(.row b) { color: var(--c-ink); font-weight: 600; }
+  .ex-side-body :global(.btn) { margin-top: 10px; }
+  .ex-hint { color: var(--c-ink-mute); margin-bottom: 8px; }
+  .ex-hint:first-child { margin-top: 2px; }
+
+  .ex-files { overflow: auto; padding: 8px 10px 14px; outline: none; }
+  .ex-group + .ex-group { margin-top: 14px; }
+  .ex-group-h {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 2px 2px 5px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #d8d8d8;
+    font: 700 14px/1 var(--f-ui);
+    color: var(--c-navy);
+  }
+  .ex-group-h small { font: 400 12px/1 var(--f-read); color: var(--c-ink-mute); }
+  .ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 4px 2px; }
+  .ex-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 2px 4px;
+    background: none;
+    border: 0;
+    color: var(--c-black);
+  }
+  .ex-icon { position: relative; display: block; }
+  .ex-name { font: 400 12px/1.25 var(--f-ui); text-align: center; padding: 1px 3px; max-width: 100%; overflow-wrap: anywhere; }
+  .ex-item[aria-selected="true"] .ex-name { background: var(--c-navy); color: #fff; outline: 1px dotted #ffff80; }
+  .ex-item[aria-selected="true"] .ex-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(rgba(0, 0, 128, 0.6) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
+    mix-blend-mode: multiply;
+  }
+  .ex-item:focus-visible { outline: none; }
+  .ex-item:focus-visible .ex-name { outline: 1px dotted var(--c-black); }
+  @media (hover: hover) { .ex-item:hover .ex-name { text-decoration: underline; text-underline-offset: 2px; } }
+
+  @media (max-width: 720px) {
+    .ex { grid-template-columns: 1fr; }
+    .ex-side { display: none; }
+  }
+</style>

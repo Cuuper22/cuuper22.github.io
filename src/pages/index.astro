@@ -1,245 +1,187 @@
 ---
-import Desktop from '../layouts/Desktop.astro';
-import { getCollection } from 'astro:content';
-import { iconFor, byOrder } from '../lib/projects';
+import Base from '../layouts/Base.astro';
+import Boot from '../components/Boot.astro';
+import Window from '../components/Window.astro';
+import DesktopIcon from '../components/DesktopIcon.astro';
+import Taskbar from '../components/Taskbar.astro';
+import StartMenu from '../components/StartMenu.astro';
+import Welcome from '../components/windows/Welcome.astro';
+import Explorer from '../components/windows/Explorer.astro';
+import Dos from '../components/windows/Dos.astro';
+import ProjectWindow from '../components/windows/ProjectWindow.astro';
+import { pixelSvg } from '../lib/pixel';
+import { getProjects, byTier, winId, fakeSize } from '../lib/projects';
+import '../styles/desktop.css';
 
-const allProjects = (await getCollection('projects')).sort(byOrder);
-const highlights = allProjects.filter(p => p.data.tier === 'highlight');
-const supporting = allProjects.filter(p => p.data.tier === 'supporting');
-const brief = allProjects.filter(p => p.data.tier === 'brief');
+const projects = await getProjects();
+const { headline } = byTier(projects);
+const today = new Date().toISOString().slice(0, 10);
 
-// Start menu lists the marquee + supporting cast, generated from the collection.
-const startMenuProjects = [...highlights, ...supporting];
-
-// Data island consumed by the Desktop layout script (command palette + terminal ls).
-const cmdData = allProjects.map(p => ({ slug: p.data.slug, title: p.data.title, icon: iconFor(p.data.slug) }));
-const cmdDataJson = JSON.stringify(cmdData).replace(/</g, '\\u003c');
+const osData = JSON.stringify({
+  today,
+  projects: projects.map(p => ({
+    slug: p.data.slug, title: p.data.title, file: p.data.file, oneLiner: p.data.oneLiner,
+    updated: p.data.updated, size: fakeSize(p), tier: p.data.tier, win: winId(p.data.slug),
+  })),
+}).replace(/</g, '\\u003c');
 ---
 
-<Desktop title="Cuper - Portfolio OS" description="I build things to understand how they work.">
-  <a href="#about" class="skip-link">Skip to content</a>
+<Base title="CúperOS · Cúper Anas" description="Cúper Anas builds systems that have to answer to reality: an OS in ArnoldC, a theorem prover that caught its AI cheating, a GPU stack modeled down to quarks." bodyClass="os">
+  <Boot />
 
-  <!-- Boot splash (CSS-only, auto-dismisses, hidden for reduced-motion) -->
-  <div class="boot-splash" aria-hidden="true">
-    <span class="boot-logo">CúperOS</span>
-    <span class="boot-sub">Starting Portfolio OS v22.5 ...</span>
-    <div class="boot-bar"></div>
-  </div>
+  <a class="sr-only" href="/read/">Skip the desktop: read everything on one page</a>
 
-  <div class="desktop">
-    <!-- Desktop Icons -->
-    <div class="desktop-icons">
-      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open About" data-window="about">
-        <div class="icon-image"><span class="px-icon px-doc" style="width:32px;height:32px;" aria-hidden="true"></span></div>
-        <div class="icon-label">About.txt</div>
-      </div>
-      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open Projects" data-window="projects">
-        <div class="icon-image"><span class="px-icon px-folder" style="width:32px;height:32px;" aria-hidden="true"></span></div>
-        <div class="icon-label">Projects</div>
-      </div>
-      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open the Arc" data-window="arc">
-        <div class="icon-image"><span class="px-icon px-clip" style="width:32px;height:32px;" aria-hidden="true"></span></div>
-        <div class="icon-label">Arc.txt</div>
-      </div>
-      <div class="desktop-icon" tabindex="0" role="button" aria-label="Open Contact" data-window="contact">
-        <div class="icon-image"><span class="px-icon px-mail" style="width:32px;height:32px;" aria-hidden="true"></span></div>
-        <div class="icon-label">Contact</div>
-      </div>
+  <main class="desktop" id="desktop" aria-label="Desktop">
+    <div class="wallmark" aria-hidden="true">
+      <b>CúperOS</b>
+      <span>VERSION 22.5</span>
+      <small>Just start typing to open the MS-DOS Prompt</small>
     </div>
 
-    <!-- CúperOS Logo -->
-    <div class="desktop-logo" aria-hidden="true">
-      <span class="logo-text">CúperOS</span>
-      <span class="logo-version">V22.5</span>
-    </div>
+    <nav class="desk-icons" aria-label="Desktop icons">
+      <DesktopIcon label="ToaruOS.exe" icon="shades" open={winId('toaruos-arnold')} badge="LIVE" hint="Boot a real OS I wrote, in your browser" />
+      <DesktopIcon label="Projects" icon="folder" open="projects" hint="Everything I've built" />
+      <DesktopIcon label="About.txt" icon="doc" open="about" />
+      <DesktopIcon label="MS-DOS Prompt" icon="dos" open="dos" hint="Or just start typing" />
+      <DesktopIcon label="Contact" icon="mail" open="contact" />
+      <DesktopIcon label="Arc.txt" icon="doc" open="arc" />
+      <DesktopIcon label="Recycle Bin" icon="recycle" open="recycle" />
+    </nav>
 
-    <!-- Pixel Art Decorations -->
-    <div class="desktop-deco deco-terminal" style="top:25%;left:72%;" title="bare metal" aria-hidden="true">
-      <svg width="28" height="22" viewBox="0 0 28 22" shape-rendering="crispEdges"><rect width="28" height="22" fill="#000" stroke="#808080"/><path d="M4 6l4 4-4 4" stroke="#0f0" stroke-width="2" fill="none"/><line x1="10" y1="14" x2="18" y2="14" stroke="#0f0" stroke-width="2"/></svg>
-    </div>
-    <div class="desktop-deco deco-sigma" style="top:55%;left:82%;" title="Erdos" aria-hidden="true">
-      <svg width="24" height="28" viewBox="0 0 24 28" shape-rendering="crispEdges"><path d="M20 2H4l8 12L4 26h16" stroke="#FFD800" stroke-width="3" fill="none"/></svg>
-    </div>
-    <div class="desktop-deco deco-sunglasses" style="top:35%;left:55%;" title="I'll be back" aria-hidden="true">
-      <svg width="36" height="16" viewBox="0 0 36 16" shape-rendering="crispEdges"><rect x="0" y="4" width="14" height="8" rx="0" fill="#1a1a1a" stroke="#333"/><rect x="22" y="4" width="14" height="8" rx="0" fill="#1a1a1a" stroke="#333"/><line x1="14" y1="8" x2="22" y2="8" stroke="#333" stroke-width="2"/><line x1="0" y1="6" x2="-3" y2="4" stroke="#333" stroke-width="2"/><line x1="36" y1="6" x2="39" y2="4" stroke="#333" stroke-width="2"/></svg>
-    </div>
-    <div class="desktop-deco deco-ankh" style="top:68%;left:65%;" title="Coptic" aria-hidden="true">
-      <svg width="20" height="28" viewBox="0 0 20 28" shape-rendering="crispEdges"><circle cx="10" cy="6" r="5" stroke="#C09050" stroke-width="2" fill="none"/><line x1="10" y1="11" x2="10" y2="26" stroke="#C09050" stroke-width="3"/><line x1="4" y1="18" x2="16" y2="18" stroke="#C09050" stroke-width="3"/></svg>
-    </div>
-    <div class="desktop-deco deco-hex" style="top:15%;left:88%;" title="0x" aria-hidden="true">
-      <span>0xFF</span>
-    </div>
+    <Welcome />
+    <Explorer projects={projects} />
+    <Dos />
 
-    <!-- About Window -->
-    <div class="window" id="about" role="dialog" aria-label="About.txt" tabindex="-1" style="top: 60px; left: 120px; width: 560px;">
-      <div class="title-bar">
-        <div class="title-text"><span class="title-icon"><span class="px-icon px-doc"></span></span> About.txt</div>
-        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
-      </div>
-      <div class="window-content">
-        <h2>I build things to understand how they work.</h2>
-
-        <p>I build things to understand how they work. I mean I will mass at a problem until I understand it at the level where there's nothing between me and the machine. I started with an operating system where every keyword is an Arnold Schwarzenegger quote and ended up catching AI agents cheating at mathematics. There's a logic to the progression if you squint. Mostly I just kept pulling on threads until something interesting fell out.</p>
-
+    <Window id="about" title="About.txt - Notepad" icon="doc" w={600} h={560} x={110} y={30}>
+      <article class="prose">
+        <p class="meta">ABOUT.TXT</p>
+        <h1>I build things to understand how they work.</h1>
+        <p class="lede">I'll hammer at a problem until I understand it at the level where there's nothing between me and the machine. I started with an operating system where every keyword is an Arnold Schwarzenegger quote and ended up catching AI agents cheating at mathematics. There's a logic to the progression if you squint. Mostly I just kept pulling on threads until something interesting fell out.</p>
         <p>A friend looked at my GitHub and said "bro, why aren't you posting this." I didn't have a good answer. So here it is. <span class="arabic-easter-egg" title="هانت - almost there, we're close">So yeah.</span></p>
 
-        <h3>Background</h3>
+        <h2>Right now</h2>
+        <p>AI agents, formal verification, product-shaped tools, systems-and-physics modeling, and the awkward but important question of when automation should refuse to act. The pattern I care about isn't "I used framework X." It's whether a project has a real constraint, a clear boundary, and enough engineering taste that someone else can pick it up without decoding my entire brain first.</p>
 
-        <p>I'm Yousef, but everyone calls me Cuper. Egyptian, Coptic Christian, currently in Orange County figuring out how to get back to the Bay.</p>
-
-        <p>Ranked 5th nationally in Egypt in high school. Studied CS and physics at Minerva, taught ML/AI to 250+ students, and kept building through every weird turn of the past few years. The work here is the cleaner signal: systems projects, agent tooling, product prototypes, and a stubborn preference for understanding the machinery instead of waving at it from a distance. <span class="arabic-easter-egg" title="هانت - almost there, we're close">Almost there.</span></p>
-
-        <p>Taught ML/AI to 250+ students at iD Tech across 20+ college campuses. Berkeley, Stanford, SFSU, and a bunch of others. Three consecutive summers. The thing about teaching neural networks to 18-year-olds is that you can't hide behind jargon. If you don't understand backprop at the intuition level, a room full of teenagers will let you know. That job taught me to explain things, which is a different skill than understanding things.</p>
-
-        <p>Before that, I fine-tuned LLMs for a mental health chatbot at Findhope. deployed across 20+ Indian colleges in Hindi, Telugu, and Urdu. Shipped to production in 3 months. That was the first time I realized LLMs could do something useful beyond generating blog posts. Also the first time I cleaned a dataset that made me want to cry, but that's NLP in low-resource languages for you.</p>
-
+        <h2>Background</h2>
+        <p>I'm Yousef, but everyone calls me Cúper. Egyptian, Coptic Christian, currently in Orange County figuring out how to get back to the Bay.</p>
+        <p>Ranked 5th nationally in Egypt in high school. Studied CS and physics at Minerva, and kept building through every weird turn of the past few years. The work here is the cleaner signal: systems projects, agent tooling, product prototypes, and a stubborn preference for understanding the machinery instead of waving at it from a distance. <span class="arabic-easter-egg" title="هانت - almost there, we're close">Almost there.</span></p>
+        <p>I taught ML and AI to 250+ students at iD Tech across 20+ college campuses: Berkeley, Stanford, SFSU, and a bunch of others, three summers in a row. The thing about teaching neural networks to 18-year-olds is that you can't hide behind jargon. If you don't understand backprop at the intuition level, a room full of teenagers will let you know. That job taught me to explain things, which is a different skill than understanding things.</p>
+        <p>Before that, I fine-tuned LLMs for a mental health chatbot at Findhope, deployed across 20+ Indian colleges in Hindi, Telugu, and Urdu. Shipped to production in 3 months. That was the first time I realized LLMs could do something useful beyond generating blog posts. Also the first time I cleaned a dataset that made me want to cry, but that's NLP in low-resource languages for you.</p>
         <p>I don't have a degree. I have a lot of projects in various states of completion and a few that actually work. I'm improving the ratio.</p>
-      </div>
-    </div>
+      </article>
+      <Fragment slot="status"><span class="fit">Ln 1, Col 1</span><span>Plain text</span></Fragment>
+    </Window>
 
-    <!-- Projects Window -->
-    <div class="window" id="projects" role="dialog" aria-label="Projects" tabindex="-1" style="top: 80px; left: 640px; width: 620px;">
-      <div class="title-bar">
-        <div class="title-text"><span class="title-icon"><span class="px-icon px-folder"></span></span> Projects</div>
-        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
-      </div>
-      <div class="window-content">
-        <div class="tier-label">The Highlights</div>
-        <div class="project-grid project-grid-highlights">
-          {highlights.map(p => (
-            <a href={`/projects/${p.data.slug}`} class="project-item highlight">
-              <div class="project-icon"><span class={`px-icon ${iconFor(p.data.slug)}`} style="width:40px;height:40px;"></span></div>
-              <div class="project-name">{p.data.title}</div>
-              <div class="project-oneliner">{p.data.oneLiner}</div>
-            </a>
-          ))}
-        </div>
-
-        <div class="tier-label">The Supporting Cast</div>
-        <div class="project-grid project-grid-supporting">
-          {supporting.map(p => (
-            <a href={`/projects/${p.data.slug}`} class="project-item">
-              <div class="project-icon"><span class={`px-icon ${iconFor(p.data.slug)}`} style="width:32px;height:32px;"></span></div>
-              <div class="project-name">{p.data.title}</div>
-            </a>
-          ))}
-        </div>
-
-        <div class="tier-label">Brief Mentions</div>
-        <div class="project-grid project-grid-brief">
-          {brief.map(p => (
-            <a href={`/projects/${p.data.slug}`} class="project-item">
-              <div class="project-icon"><span class={`px-icon ${iconFor(p.data.slug)}`} style="width:32px;height:32px;"></span></div>
-              <div class="project-name">{p.data.title}</div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <!-- Arc Window -->
-    <div class="window" id="arc" role="dialog" aria-label="Arc.txt" tabindex="-1" style="top: 140px; left: 180px; width: 520px;">
-      <div class="title-bar">
-        <div class="title-text"><span class="title-icon"><span class="px-icon px-clip"></span></span> Arc.txt</div>
-        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
-      </div>
-      <div class="window-content">
-        <h2>The Arc</h2>
-
-        <p>Bare metal (ToaruOS) &rarr; Compilers (ArnoldC-Native) &rarr; Formal reasoning (Erdos) &rarr; Systems physics (gpu_stack, PhysicsLab) &rarr; AI agents (jobhunter, ai-tax-cpa) &rarr; Developer tools (anti-slop-design, codex-canmore) &rarr; Failed startup (BennyCuTools) &rarr; Whatever's next.</p>
-
-        <p>I started at the bottom of the stack because I wanted to understand what a computer actually does at the hardware level. Then I needed a compiler for the OS, so I built that. Then I got into AI. started with theorem proving because I wanted to see if LLMs could do real math. They can, but they cheat. Then I started building tools because I kept needing tools that didn't exist. Then I tried to sell one and learned that building is the easy part.</p>
-
+    <Window id="arc" title="Arc.txt - Notepad" icon="doc" w={560} h={470} x={200} y={90}>
+      <article class="prose">
+        <p class="meta">ARC.TXT</p>
+        <h1>The arc</h1>
+        <ol class="arc-steps">
+          <li><b>Bare metal</b> <a href="/?open=toaruos-arnold" data-open="p-toaruos-arnold">ToaruOS-Arnold</a></li>
+          <li><b>Compilers</b> <a href="/?open=arnoldc-native" data-open="p-arnoldc-native">ArnoldC-Native</a></li>
+          <li><b>Formal reasoning</b> <a href="/?open=erdos" data-open="p-erdos">Erdos</a></li>
+          <li><b>Systems physics</b> <a href="/?open=gpu-stack" data-open="p-gpu-stack">gpu_stack</a>, <a href="/?open=physicslab" data-open="p-physicslab">PhysicsLab</a></li>
+          <li><b>Evidence discipline</b> <a href="/?open=ivc" data-open="p-ivc">IVC</a></li>
+          <li><b>Agent tooling</b> <a href="/?open=manim-director" data-open="p-manim-director">Manim Director</a>, <a href="/?open=codex-canmore" data-open="p-codex-canmore">codex-canmore</a></li>
+          <li><b>Product-shaped things</b> <a href="/?open=curbrun" data-open="p-curbrun">CurbRun</a>, <a href="/?open=waypoint-differentiation-lab" data-open="p-waypoint-differentiation-lab">Waypoint</a></li>
+          <li><b>A failed startup</b> <a href="/?open=bennycutools" data-open="p-bennycutools">BennyCuTools</a></li>
+          <li><b>Whatever's next</b></li>
+        </ol>
+        <p>I started at the bottom of the stack because I wanted to understand what a computer actually does at the hardware level. Then I needed a compiler for the OS, so I built that. Then I got into AI. I started with theorem proving because I wanted to see if LLMs could do real math. They can, but they cheat. Then I started building tools because I kept needing tools that didn't exist. Then I tried to sell one and learned that building is the easy part.</p>
         <p>It sounds strategic when I write it out. It wasn't. I just kept getting curious about the next thing and refusing to stop until I understood it. ADHD is a runtime error that occasionally produces features. <span class="arabic-easter-egg" title="على الله - it's in God's hands">It is what it is.</span></p>
-      </div>
-    </div>
+      </article>
+    </Window>
 
-    <!-- Contact Window -->
-    <div class="window" id="contact" role="dialog" aria-label="Contact" tabindex="-1" style="top: 200px; left: 240px; width: 420px;">
-      <div class="title-bar">
-        <div class="title-text"><span class="title-icon"><span class="px-icon px-mail"></span></span> Contact</div>
-        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
-      </div>
-      <div class="window-content">
-        <div class="contact-links">
-          <a href="mailto:cuuper225@gmail.com" class="contact-link">
-            <span class="contact-icon"><span class="px-icon px-mail" style="width:20px;height:20px;"></span></span>
-            <span>cuuper225@gmail.com</span>
-          </a>
-          <a href="https://github.com/Cuuper22" target="_blank" rel="noopener noreferrer" class="contact-link">
-            <span class="contact-icon"><span class="px-icon px-code" style="width:20px;height:20px;"></span></span>
-            <span>github.com/Cuuper22</span>
-          </a>
-          <a href="https://linkedin.com/in/yousefanas" target="_blank" rel="noopener noreferrer" class="contact-link">
-            <span class="contact-icon"><span class="px-icon px-briefcase" style="width:20px;height:20px;"></span></span>
-            <span>linkedin.com/in/yousefanas</span>
-          </a>
+    <Window id="contact" title="Contact" icon="mail" kind="dialog" w={420} h={300} x="center" y={120}>
+      <div class="contact">
+        <p class="contact-lede">The fastest way to reach me is email. I read everything.</p>
+        <ul class="contact-list">
+          <li><Fragment set:html={pixelSvg('mail', 16)} /><a href="mailto:cuuper225@gmail.com">cuuper225@gmail.com</a><button class="btn btn-sm" type="button" data-copy-text="cuuper225@gmail.com">Copy</button></li>
+          <li><Fragment set:html={pixelSvg('github', 16)} /><a href="https://github.com/Cuuper22" target="_blank" rel="noopener">github.com/Cuuper22</a></li>
+          <li><Fragment set:html={pixelSvg('link', 16)} /><a href="https://linkedin.com/in/yousefanas" target="_blank" rel="noopener">linkedin.com/in/yousefanas</a></li>
+        </ul>
+        <div class="contact-actions">
+          <a class="btn is-default" href="mailto:cuuper225@gmail.com?subject=Hi%20C%C3%BAper">Write an email</a>
+          <button class="btn" type="button" data-act="close">Close</button>
         </div>
       </div>
-    </div>
+    </Window>
 
-    <!-- Terminal Window (Konami code easter egg) -->
-    <div class="window terminal-window" id="terminal" role="dialog" aria-label="Terminal" tabindex="-1" style="top: 100px; left: 200px; width: 520px;">
-      <div class="title-bar">
-        <div class="title-text"><span class="title-icon"><span class="px-icon px-term"></span></span> Terminal.exe</div>
-        <div class="window-controls"><button class="window-btn close-btn" aria-label="Close">&times;</button></div>
+    <Window id="recycle" title="Recycle Bin" icon="recycle" kind="app" w={460} h={300} x={300} y={160}>
+      <div class="recycle sunken">
+        <Fragment set:html={pixelSvg('recycle', 32)} />
+        <p><b>This folder is empty.</b></p>
+        <p>Everything that was ever in here either shipped or taught me something. Mostly the second one.</p>
       </div>
-      <div class="window-content">
-        <div id="terminal-output" class="terminal-output">Portfolio OS [Version 1.0.0]
-(c) 2026 Cuper. All rights reserved.
+      <Fragment slot="status"><span class="fit">0 object(s)</span><span>0 bytes</span></Fragment>
+    </Window>
 
-Type 'help' for available commands.</div>
-        <div class="terminal-input-line">
-          <span class="terminal-prompt">cuper@portfolio:~$</span>
-          <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" spellcheck="false" />
+    <Window id="shutdown" title="Shut Down CúperOS" icon="shutdown" kind="dialog" w={400} h={250} x="center" y="center">
+      <form class="shutdown" id="shutdown-form">
+        <Fragment set:html={pixelSvg('shutdown', 32)} />
+        <fieldset>
+          <legend>Are you sure you want to:</legend>
+          <label><input type="radio" name="sd" value="off" checked /> <u>S</u>hut down the computer?</label>
+          <label><input type="radio" name="sd" value="restart" /> <u>R</u>estart the computer?</label>
+          <label><input type="radio" name="sd" value="dos" /> Restart in <u>M</u>S-DOS mode?</label>
+        </fieldset>
+        <div class="shutdown-actions">
+          <button class="btn is-default" type="submit">Yes</button>
+          <button class="btn" type="button" data-act="close">No</button>
         </div>
-      </div>
-    </div>
+      </form>
+    </Window>
+
+    {projects.map((p, i) => <ProjectWindow project={p} index={i} />)}
+  </main>
+
+  <StartMenu headline={headline} />
+  <Taskbar />
+
+  <div class="shutdown-screen" id="safe-off" tabindex="-1" hidden>
+    <p>It's now safe to turn off<br />your computer.<small>Click anywhere to start CúperOS again.</small></p>
   </div>
 
-  <!-- Start Menu -->
-  <div class="start-menu">
-    <div class="start-menu-header">Portfolio OS</div>
-    <div class="start-menu-items">
-      <button class="start-menu-item" data-window="about"><span class="px-icon px-doc"></span> About.txt</button>
-      <button class="start-menu-item" data-window="projects"><span class="px-icon px-folder"></span> Projects</button>
-      <button class="start-menu-item" data-window="arc"><span class="px-icon px-clip"></span> Arc.txt</button>
-      <button class="start-menu-item" data-window="contact"><span class="px-icon px-mail"></span> Contact</button>
-      <div class="start-menu-divider"></div>
-      {startMenuProjects.map(p => (
-        <a href={`/projects/${p.data.slug}`} class="start-menu-item"><span class={`px-icon ${iconFor(p.data.slug)}`}></span> {p.data.title}</a>
-      ))}
-    </div>
-  </div>
+  <script type="application/json" id="os-data" set:html={osData} />
+  <script>
+    import '../scripts/desktop';
+  </script>
+</Base>
 
-  <!-- Taskbar -->
-  <div class="taskbar">
-    <div class="taskbar-left">
-      <button class="start-button"><span class="px-icon px-start"></span><span>Start</span></button>
-      <div class="taskbar-windows"></div>
-    </div>
-    <div class="taskbar-clock" id="clock">12:00 PM</div>
-  </div>
+<style>
+  .arc-steps { list-style: none; padding: 0; margin: 1em 0 1.4em; counter-reset: arc; }
+  .arc-steps li { position: relative; padding: 3px 0 3px 30px; counter-increment: arc; }
+  .arc-steps li::before {
+    content: counter(arc);
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    font: 700 11px/1 var(--f-ui);
+    background: var(--c-face);
+    box-shadow: var(--bevel-thin-out);
+  }
+  .arc-steps li:last-child::before { content: '?'; }
+  .arc-steps b { font-weight: 600; margin-right: 6px; }
 
-  <!-- Command Palette -->
-  <div class="cmd-palette-overlay">
-    <div class="cmd-palette">
-      <div class="title-bar">
-        <div class="title-text"><span class="title-icon"><span class="px-icon px-search"></span></span> Command Palette</div>
-      </div>
-      <input type="text" id="cmd-input" class="cmd-palette-input" placeholder="Search projects, sections..." autocomplete="off" spellcheck="false" />
-      <div class="cmd-palette-results"></div>
-    </div>
-  </div>
+  .contact { display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 12px 14px 10px; font-family: var(--f-ui); }
+  .contact-lede { font: 400 13.5px/1.45 var(--f-read); }
+  .contact-list { list-style: none; padding: 8px 10px; margin: 0; background: #fff; box-shadow: var(--bevel-sunken); display: flex; flex-direction: column; gap: 8px; }
+  .contact-list li { display: flex; align-items: center; gap: 8px; font: 400 14px/1.3 var(--f-read); }
+  .contact-list li a { flex: 1; }
+  .contact-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: auto; }
 
-  <!-- Screensaver -->
-  <div class="screensaver" aria-hidden="true">
-    <div class="screensaver-text">I'LL BE BACK</div>
-  </div>
+  .recycle { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 20px; font: 400 13.5px/1.5 var(--f-read); color: var(--c-ink-soft); }
+  .recycle p { max-width: 36ch; }
+  .recycle b { color: var(--c-black); font-weight: 600; }
 
-  <!-- Kbd hint -->
-  <div class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>K</kbd> to search</div>
-
-  <!-- Project data island: consumed by the Desktop layout script (command palette + terminal ls) -->
-  <script type="application/json" id="cmd-data" is:inline set:html={cmdDataJson}></script>
-</Desktop>
+  .shutdown { display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; padding: 16px 16px 10px; height: 100%; font: 400 13px/1.4 var(--f-ui); }
+  .shutdown fieldset { border: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .shutdown legend { margin-bottom: 8px; }
+  .shutdown label { display: flex; align-items: center; gap: 6px; }
+  .shutdown input { accent-color: var(--c-navy); }
+  .shutdown-actions { grid-column: 1 / -1; display: flex; justify-content: center; gap: 8px; align-self: end; }
+</style>

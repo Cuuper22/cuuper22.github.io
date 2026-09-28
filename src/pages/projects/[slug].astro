@@ -1,27 +1,102 @@
 ---
-import { getCollection, render } from 'astro:content';
-import ProjectPage from '../../layouts/ProjectPage.astro';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { pixelSvg, glyphSvg } from '../../lib/pixel';
+import { getProjects, projectLinks, type Project } from '../../lib/projects';
+import ToaruDemo from '../../components/demos/ToaruDemo.astro';
+import ArnoldcDemo from '../../components/demos/ArnoldcDemo.astro';
+import ErdosDemo from '../../components/demos/ErdosDemo.astro';
+import GpuDemo from '../../components/demos/GpuDemo.astro';
+import IvcDemo from '../../components/demos/IvcDemo.astro';
+import CurbrunDemo from '../../components/demos/CurbrunDemo.astro';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map(project => ({
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
     params: { slug: project.data.slug },
-    props: { project },
+    props: { project, prev: projects[(i - 1 + projects.length) % projects.length], next: projects[(i + 1) % projects.length] },
   }));
 }
 
-const { project } = Astro.props;
-const { Content } = await render(project);
+interface Props { project: Project; prev: Project; next: Project }
+const { project: p, prev, next } = Astro.props;
+const { Content } = await render(p);
+const d = p.data;
+const links = projectLinks(p);
+const updated = new Date(d.updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+const DEMOS = { toaru: ToaruDemo, arnoldc: ArnoldcDemo, erdos: ErdosDemo, gpu: GpuDemo, ivc: IvcDemo, curbrun: CurbrunDemo };
+const Demo = d.demo ? DEMOS[d.demo] : undefined;
 ---
 
-<ProjectPage
-  title={project.data.title}
-  emoji={project.data.emoji}
-  tech={project.data.tech}
-  repo={project.data.repo}
-  site={project.data.site}
-  oneLiner={project.data.oneLiner}
-  slug={project.data.slug}
->
-  <Content />
-</ProjectPage>
+<Base title={`${d.title} · Cúper Anas`} description={d.oneLiner} ogImage={`/og/${d.slug}.png`} ogType="article">
+  <div class="page">
+    <section class="win is-focused page-win" aria-labelledby="page-title">
+      <header class="win-titlebar">
+        <span class="win-title"><Fragment set:html={pixelSvg(d.icon, 16)} /><span>{d.title}</span></span>
+        <span class="win-controls">
+          <a class="win-ctl" href={`/?open=${d.slug}`} aria-label="Open on the desktop" title="Open on the desktop"><Fragment set:html={glyphSvg('max')} /></a>
+          <a class="win-ctl" href="/" aria-label="Close and go to the desktop" title="Desktop" style="margin-left:2px"><Fragment set:html={glyphSvg('close')} /></a>
+        </span>
+      </header>
+      <nav class="win-toolbar" aria-label="Project links">
+        <a class="btn btn-sm" href={`/?open=${d.slug}`}><Fragment set:html={pixelSvg('computer', 16)} />Open on desktop</a>
+        <a class="btn btn-sm" href="/read/"><Fragment set:html={pixelSvg('quickread', 16)} />Quick read</a>
+        <span class="spacer"></span>
+        {links.map(l => (
+          <a class="btn btn-sm" href={l.url} target="_blank" rel="noopener"><Fragment set:html={pixelSvg(l.kind === 'repo' ? 'github' : 'globe', 16)} />{l.label}</a>
+        ))}
+      </nav>
+      <div class="win-body well">
+        <div class="page-scroll">
+          {Demo && <Demo />}
+          <article class="prose page-prose">
+            <p class="meta">{d.file} · Updated {updated}</p>
+            <h1 id="page-title">{d.title}</h1>
+            <p class="lede">{d.oneLiner}</p>
+            <p class="page-tags">{d.tech.map(t => <span class="tag">{t}</span>)}</p>
+            <Content />
+          </article>
+        </div>
+      </div>
+      <footer class="win-status">
+        <span class="fit"><a href={`/projects/${prev.data.slug}/`} rel="prev">‹ {prev.data.title}</a></span>
+        <span class="page-center">Cúper Anas · <a href="mailto:cuuper225@gmail.com">cuuper225@gmail.com</a></span>
+        <span class="fit"><a href={`/projects/${next.data.slug}/`} rel="next">{next.data.title} ›</a></span>
+      </footer>
+    </section>
+  </div>
+
+  <script>
+    const DEMOS: Record<string, () => Promise<{ mount: (el: HTMLElement) => void }>> = {
+      toaru: () => import('../../scripts/demos/toaru'),
+      arnoldc: () => import('../../scripts/demos/arnoldc'),
+      erdos: () => import('../../scripts/demos/erdos'),
+      gpu: () => import('../../scripts/demos/gpu'),
+      ivc: () => import('../../scripts/demos/ivc'),
+      curbrun: () => import('../../scripts/demos/curbrun'),
+    };
+    const root = document.querySelector<HTMLElement>('[data-demo]');
+    const load = root && DEMOS[root.dataset.demo!];
+    if (root && load) {
+      // The OS only boots on request here: a shared link shouldn't start a 2.8 MB download
+      if (root.dataset.demo === 'toaru') {
+        root.querySelector('[data-power-on]')?.addEventListener('click', async () => (await load()).mount(root), { once: true });
+      } else {
+        load().then(m => m.mount(root));
+      }
+    }
+  </script>
+</Base>
+
+<style>
+  body { background: var(--c-desktop); }
+  .page { min-height: 100dvh; padding: clamp(0px, 3vw, 28px) clamp(0px, 3vw, 28px); display: flex; justify-content: center; }
+  .page-win { position: relative; width: 100%; max-width: 900px; min-height: calc(100dvh - 2 * clamp(0px, 3vw, 28px)); }
+  .page-win .win-ctl { text-decoration: none; }
+  .page-win .win-body { overflow: visible; }
+  .page-scroll { background: var(--c-paper); }
+  .page-prose { margin: 0 auto; padding-top: 26px; padding-bottom: 48px; }
+  .page-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .page-center { text-align: center; }
+  .win-status a { color: var(--c-black); }
+</style>

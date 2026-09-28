@@ -1,0 +1,89 @@
+<div class="demo erdos" data-demo="erdos">
+  <div class="er-lock">
+    <span class="er-lock-k">locked</span>
+    <code>theorem one_plus_one : 1 + 1 = 2</code>
+    <span class="er-hash" title="SHA-256 of the whitespace-normalized statement, computed in your browser">sha256 <b data-lock-hash>…</b></span>
+  </div>
+
+  <ol class="er-stages" aria-label="Pipeline stages">
+    <li data-stage="gen"><span>A</span>Prover</li>
+    <li data-stage="lock"><span>B</span>Integrity</li>
+    <li data-stage="build"><span>C</span>lake build</li>
+    <li data-stage="critic"><span>D</span>Critic</li>
+  </ol>
+
+  <div class="er-grid">
+    <div class="er-panel">
+      <p class="er-cap">Attempt <b data-attempt>1</b> of 10 <span class="er-verdict" data-verdict></span></p>
+      <pre class="er-code" data-code></pre>
+      <p class="er-cand" data-cand-hash></p>
+    </div>
+    <div class="er-panel">
+      <p class="er-cap">What the Prover is told next</p>
+      <p class="er-feedback" data-feedback>Nothing yet.</p>
+      <p class="er-cap">events.jsonl</p>
+      <pre class="er-log" data-log aria-live="polite"></pre>
+    </div>
+  </div>
+
+  <div class="er-bar">
+    <button class="btn btn-sm" type="button" data-replay>Replay</button>
+    <button class="btn btn-sm" type="button" data-step>Step</button>
+    <span class="er-note">A reenactment built from the repo's test fixtures. The stages, statuses, and feedback rules are the real ones.</span>
+  </div>
+</div>
+
+<style>
+  .erdos { padding: 12px 14px; background: #f3f1ea; border-bottom: 1px solid #d7d3c7; font-family: var(--f-ui); }
+  .er-lock { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 6px 10px; background: #fff; box-shadow: var(--bevel-sunken); font-size: 12.5px; }
+  .er-lock-k { background: var(--c-navy); color: #fff; padding: 1px 6px; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .er-lock code { font: 400 12.5px/1.4 var(--f-mono); }
+  .er-hash { margin-left: auto; font: 400 12px/1 var(--f-mono); color: #555; }
+  .er-hash b { color: #000; font-weight: 600; }
+
+  .er-stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; list-style: none; padding: 0; counter-reset: s; }
+  .er-stages li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    background: var(--c-face);
+    box-shadow: var(--bevel-raised);
+    font-size: 12.5px;
+    transition: background 120ms;
+  }
+  .er-stages li span { display: grid; place-items: center; width: 17px; height: 17px; background: #fff; box-shadow: var(--bevel-thin-in); font-size: 11px; }
+  .er-stages li[data-s="run"] { background: #ffff80; }
+  .er-stages li[data-s="pass"] { background: #6fdc6f; }
+  .er-stages li[data-s="fail"] { background: #ff8a8a; }
+  .er-stages li[data-s="skip"] { color: #8a8a8a; }
+
+  .er-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 10px; }
+  .er-panel { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .er-cap { font-size: 12px; color: #333; display: flex; gap: 8px; align-items: center; }
+  .er-verdict { font: 400 11px/1 var(--f-mono); padding: 2px 5px; }
+  .er-verdict.fail { background: #c00000; color: #fff; }
+  .er-verdict.ok { background: #008000; color: #fff; }
+  .er-code, .er-log {
+    margin: 0;
+    padding: 8px 10px;
+    font: 400 12.5px/1.5 var(--f-mono);
+    box-shadow: var(--bevel-sunken);
+    overflow: auto;
+    white-space: pre;
+  }
+  .er-code { background: #fff; min-height: 84px; }
+  .er-code :global(mark) { background: #ffd2d2; color: #900; padding: 0 1px; }
+  .er-cand { font: 400 11.5px/1.3 var(--f-mono); color: #555; min-height: 1.3em; }
+  .er-cand :global(.bad) { color: #c00000; font-weight: 600; }
+  .er-cand :global(.good) { color: #007000; font-weight: 600; }
+  .er-feedback { background: #fff; box-shadow: var(--bevel-sunken); padding: 8px 10px; font: 400 12.5px/1.45 var(--f-read); min-height: 54px; }
+  .er-log { background: #0a0a0a; color: #b8b8b8; height: 112px; font-size: 11.5px; }
+  .er-log :global(.ev) { color: #7fdcff; }
+  .er-log :global(.bad) { color: #ff8080; }
+  .er-log :global(.good) { color: #7dff7d; }
+  .er-bar { display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .er-note { font: 400 12px/1.35 var(--f-read); color: #555; flex: 1; min-width: 220px; }
+  @media (max-width: 720px) { .er-grid { grid-template-columns: 1fr; } .er-stages { grid-template-columns: repeat(2, 1fr); } .er-hash { margin-left: 0; } }
+</style>

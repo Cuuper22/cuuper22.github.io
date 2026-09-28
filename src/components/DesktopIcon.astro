@@ -1,0 +1,28 @@
+---
+import { pixelSvg, type IconName } from '../lib/pixel';
+
+interface Props {
+  label: string;
+  icon: IconName;
+  /** Window id to open */
+  open?: string;
+  /** Or a URL to follow */
+  href?: string;
+  badge?: string;
+  hint?: string;
+}
+const { label, icon, open, href, badge, hint } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class="desk-icon"
+  href={href}
+  type={href ? undefined : 'button'}
+  data-open={open}
+  title={hint}
+  aria-selected="false"
+>
+  <span class="glyph"><Fragment set:html={pixelSvg(icon, 32)} />{badge && <span class="badge">{badge}</span>}</span>
+  <span class="label">{label}</span>
+</Tag>

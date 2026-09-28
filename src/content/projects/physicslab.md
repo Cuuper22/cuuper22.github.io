@@ -1,15 +1,20 @@
 ---
 title: "PhysicsLab"
 slug: "physicslab"
-emoji: "⚛️"
+icon: "phone"
+file: "PHYSLAB.APK"
 tier: "supporting"
-tech: ["Kotlin", "Jetpack Compose", "DSP", "Material 3"]
+order: 1
+tech: ["Kotlin", "Jetpack Compose", "DSP", "BLE", "Hilt"]
 repo: "https://github.com/Cuuper22/PhysicsLab"
-oneLiner: "Your phone as a real physics instrument. 35 experiments, custom 60fps graphing, actual DSP."
+oneLiner: "Your phone as a real physics instrument. 35 experiments, 9 sensors, FFT and filters written from scratch."
+updated: "2026-09-09"
 ---
 
-PhysicsLab treats a phone like a real physics instrument instead of a bag of disconnected sensor demos. 35 experiments across 6 categories, driven by 9 sensor inputs. accelerometer, magnetometer, gyroscope, microphone, barometer, light, proximity, GPS, and Bluetooth LE. Kotlin, Jetpack Compose, Material 3. Inspired by phyphox from RWTH Aachen, reimplemented from scratch.
+PhysicsLab treats a phone like a real physics instrument instead of a bag of disconnected sensor demos: 35 experiments across 6 categories, driven by 9 kinds of sensor (accelerometer, gyroscope, magnetometer, light, pressure, proximity, microphone, GPS, and Bluetooth LE). Kotlin, Jetpack Compose, Material 3. Inspired by phyphox from RWTH Aachen, reimplemented from scratch.
 
-The part worth inspecting is the engineering split. Sensors are not glued directly to screens. The app has separate modules for sensor capture, signal processing, graphing, persistence and export, and remote control. The DSP pipeline does real work: FFT, autocorrelation, digital filters, peak detection. The graphing is a custom Compose Canvas engine running at 60fps because the off-the-shelf chart libraries choke on live sensor streams. That is the difference between a demo and a platform.
+The part worth inspecting is the engineering split. Sensors are not glued directly to screens. Capture, signal processing, graphing, persistence and export, and remote control are separate modules. The DSP does real work: an FFT that allocates nothing after setup and runs on precomputed sin/cos tables, Butterworth biquad filters, autocorrelation, peak detection. The graphing is a custom Compose Canvas engine running at 60fps, because off-the-shelf chart libraries choke on live sensor streams. That's the difference between a demo and a platform, and 329 tests keep it honest.
 
-It also exports to CSV, TSV, and Excel, runs an embedded web server so you can drive an experiment from any browser on the same network, talks to Arduino over BLE, and loads phyphox-format XML experiment definitions. Doppler effect, sonar, pendulum periods, elastic collisions, elevator height from pressure. the physics you would set up on a lab bench, except the bench is already in everyone's pocket.
+It exports CSV, TSV, and Excel (the old binary format, written by hand, no Apache POI), runs an embedded web server so any browser on the network can drive an experiment, talks to phyphox-compatible hardware over BLE, and loads phyphox XML experiment definitions. Doppler effect, sonar, pendulum periods, elevator height from air pressure: the physics you would set up on a lab bench, except the bench is already in everyone's pocket.
+
+![Doppler effect experiment](https://raw.githubusercontent.com/Cuuper22/PhysicsLab/HEAD/demo/verified/QA_T17_doppler.png)

@@ -1,0 +1,61 @@
+---
+import { pixelSvg, glyphSvg, type IconName } from '../lib/pixel';
+
+interface Props {
+  id: string;
+  title: string;
+  icon: IconName;
+  /** Initial geometry in px. x/y may be 'center'. */
+  x?: number | 'center';
+  y?: number | 'center';
+  w: number;
+  h: number;
+  /** doc = white reading well, app = custom body, dialog = fixed-size, no max/min */
+  kind?: 'doc' | 'app' | 'dialog';
+  resizable?: boolean;
+  /** Extra class names on the root */
+  class?: string;
+  /** Accessible description of what the window holds */
+  label?: string;
+}
+
+const { id, title, icon, x = 'center', y = 'center', w, h, kind = 'doc', resizable = kind !== 'dialog', class: cls = '', label } = Astro.props;
+const hasToolbar = Astro.slots.has('toolbar');
+const hasStatus = Astro.slots.has('status');
+---
+
+<section
+  class:list={['win', `win-${kind}`, cls, { 'no-resize': !resizable }]}
+  id={id}
+  data-win
+  data-kind={kind}
+  data-x={x}
+  data-y={y}
+  data-w={w}
+  data-h={h}
+  data-title={title}
+  data-icon={icon}
+  role={kind === 'dialog' ? 'dialog' : 'region'}
+  aria-label={label ?? title}
+  tabindex="-1"
+  hidden
+>
+  <header class="win-titlebar" data-drag>
+    <span class="win-title"><Fragment set:html={pixelSvg(icon, 16)} /><span>{title}</span></span>
+    <span class="win-controls">
+      {kind !== 'dialog' && (
+        <>
+          <button class="win-ctl" type="button" data-act="min" aria-label={`Minimize ${title}`} tabindex="-1"><Fragment set:html={glyphSvg('min')} /></button>
+          <button class="win-ctl" type="button" data-act="max" aria-label={`Maximize ${title}`} tabindex="-1"><span class="g-max"><Fragment set:html={glyphSvg('max')} /></span><span class="g-restore"><Fragment set:html={glyphSvg('restore')} /></span></button>
+        </>
+      )}
+      <button class="win-ctl" type="button" data-act="close" aria-label={`Close ${title}`}><Fragment set:html={glyphSvg('close')} /></button>
+    </span>
+  </header>
+  {hasToolbar && <div class="win-toolbar"><slot name="toolbar" /></div>}
+  {kind === 'doc'
+    ? <div class="win-body well"><div class="scroll"><slot /></div></div>
+    : <div class="win-body"><slot /></div>}
+  {hasStatus && <footer class="win-status"><slot name="status" /></footer>}
+  {resizable && <span class="win-resize" data-resize aria-hidden="true"></span>}
+</section>

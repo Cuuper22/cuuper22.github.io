@@ -1,0 +1,301 @@
+/* ==========================================================================
+   Desktop shell: wallpaper, icons, taskbar, start menu, overlays
+   ========================================================================== */
+
+html, body.os { height: 100%; overflow: hidden; overscroll-behavior: none; }
+body.os { touch-action: manipulation; }
+
+.desktop {
+  position: fixed;
+  inset: 0 0 var(--taskbar-h) 0;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 38%, transparent 55%, rgba(0, 40, 40, 0.28) 100%),
+    var(--c-desktop);
+  isolation: isolate;
+}
+/* Ordered-dither texture, strongest at the edges: reads as a CRT-era gradient, not a flat fill */
+.desktop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(rgba(0, 0, 0, 0.16) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
+  mask-image: radial-gradient(110% 85% at 50% 40%, transparent 50%, #000 100%);
+  -webkit-mask-image: radial-gradient(110% 85% at 50% 40%, transparent 50%, #000 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Wallpaper mark, bottom-right, like an OEM logo */
+.wallmark {
+  position: absolute;
+  right: clamp(20px, 4vw, 56px);
+  bottom: clamp(18px, 4vh, 44px);
+  text-align: right;
+  color: rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+}
+.wallmark b { display: block; font: 700 clamp(44px, 7vw, 88px)/0.9 var(--f-ui); letter-spacing: 1px; text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.12); }
+.wallmark span { display: block; font: 400 15px/1 var(--f-ui); letter-spacing: 3px; margin-top: 8px; }
+.wallmark small { display: block; font: 400 12px/1.4 var(--f-ui); letter-spacing: 0.5px; margin-top: 14px; color: rgba(255, 255, 255, 0.34); }
+
+/* ─── Desktop icons ─────────────────────────────────────────── */
+.desk-icons {
+  position: absolute;
+  inset: 8px auto 8px 8px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(auto-fill, 78px);
+  grid-auto-columns: 94px;
+  gap: 4px 2px;
+  z-index: 1;
+}
+.desk-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 94px;
+  padding: 4px 2px;
+  background: none;
+  border: 0;
+  color: var(--c-white);
+  text-decoration: none;
+}
+.desk-icon .glyph { position: relative; width: 32px; height: 32px; }
+.desk-icon .label {
+  font: 400 12px/1.25 var(--f-ui);
+  text-align: center;
+  padding: 1px 3px;
+  max-width: 92px;
+  overflow-wrap: break-word;
+}
+.desk-icon:focus-visible { outline: none; }
+.desk-icon:focus-visible .label,
+.desk-icon[aria-selected="true"] .label { background: var(--c-navy); outline: 1px dotted #ffff80; outline-offset: 0; }
+.desk-icon[aria-selected="true"] .glyph::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(rgba(0, 0, 128, 0.62) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
+  mix-blend-mode: multiply;
+}
+.desk-icon .badge {
+  position: absolute;
+  right: -6px;
+  top: -4px;
+  font: 700 9px/1 var(--f-ui);
+  color: var(--c-black);
+  background: #ffff00;
+  padding: 2px 3px;
+  box-shadow: 1px 1px 0 var(--c-black);
+  letter-spacing: 0.3px;
+}
+
+/* ─── Taskbar ───────────────────────────────────────────────── */
+.taskbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--taskbar-h);
+  padding: 4px 2px 2px;
+  padding-bottom: max(2px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  background: var(--c-face);
+  box-shadow: inset 0 1px var(--c-light), inset 0 2px var(--c-white);
+  z-index: var(--z-taskbar);
+  font-family: var(--f-ui);
+}
+.start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px 0 4px;
+  background: var(--c-face);
+  border: 0;
+  box-shadow: var(--bevel-raised);
+  font: 700 14px/1 var(--f-ui);
+  color: var(--c-black);
+  flex-shrink: 0;
+}
+.start-btn svg { width: 20px; height: 20px; }
+.start-btn[aria-expanded="true"] { box-shadow: var(--bevel-pressed); }
+.start-btn[aria-expanded="true"] > * { transform: translate(1px, 1px); }
+
+.tb-sep { width: 2px; margin: 1px 2px; box-shadow: inset 1px 0 var(--c-shadow), inset -1px 0 var(--c-white); flex-shrink: 0; }
+
+.quick-read {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px 0 6px;
+  font: 600 12.5px/1 var(--f-ui);
+  color: var(--c-black);
+  text-decoration: none;
+  background: var(--c-face);
+  box-shadow: var(--bevel-raised);
+  flex-shrink: 0;
+}
+.quick-read:visited { color: var(--c-black); }
+.quick-read:active { box-shadow: var(--bevel-pressed); }
+.quick-read svg { width: 16px; height: 16px; }
+
+#task-buttons { flex: 1; min-width: 0; display: flex; gap: 3px; overflow: hidden; }
+.task-btn {
+  flex: 0 1 164px;
+  min-width: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 7px;
+  background: var(--c-face);
+  border: 0;
+  box-shadow: var(--bevel-raised);
+  font: 400 12.5px/1 var(--f-ui);
+  color: var(--c-black);
+  overflow: hidden;
+}
+.task-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.task-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.task-btn[aria-pressed="true"] {
+  box-shadow: var(--bevel-pressed);
+  background: repeating-conic-gradient(var(--c-face) 0 25%, var(--c-white) 0 50%) 0 0 / 2px 2px;
+  font-weight: 600;
+}
+
+.tray {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px 0 4px;
+  box-shadow: var(--bevel-thin-in);
+  flex-shrink: 0;
+  font-size: 12.5px;
+}
+.tray-btn { display: grid; place-items: center; width: 20px; height: 20px; background: none; border: 0; padding: 0; }
+.tray-btn svg { width: 16px; height: 16px; }
+.clock { min-width: 58px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ─── Start menu ────────────────────────────────────────────── */
+.start-menu {
+  position: fixed;
+  left: 2px;
+  bottom: calc(var(--taskbar-h) - 2px);
+  display: flex;
+  padding: 3px;
+  background: var(--c-face);
+  box-shadow: var(--bevel-window), 2px 2px 0 rgba(0, 0, 0, 0.3);
+  z-index: var(--z-menu);
+  font-family: var(--f-ui);
+}
+.start-menu[hidden] { display: none; }
+.sm-banner {
+  width: 24px;
+  background: linear-gradient(0deg, var(--c-title-a), var(--c-title-b));
+  color: var(--c-white);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+.sm-banner span { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 17px/1 var(--f-ui); letter-spacing: 0.5px; white-space: nowrap; }
+.sm-banner span b { color: var(--c-face); font-weight: 400; }
+
+.menu { list-style: none; min-width: 190px; padding: 0; }
+.menu li { position: relative; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 24px;
+  padding: 2px 20px 2px 6px;
+  background: none;
+  border: 0;
+  text-align: left;
+  font: 400 13px/1.2 var(--f-ui);
+  color: var(--c-black);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.menu-item:visited { color: var(--c-black); }
+.menu-item.lg { min-height: 38px; padding-right: 26px; font-size: 14px; }
+.menu-item.lg svg { width: 32px; height: 32px; }
+.menu-item svg { width: 16px; height: 16px; }
+.menu-item u { text-decoration: underline; text-underline-offset: 2px; }
+.menu-item .arrow { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); display: grid; }
+.menu-item:hover, .menu-item:focus-visible, .menu-item[aria-expanded="true"] {
+  background: var(--c-navy);
+  color: var(--c-white);
+  outline: none;
+}
+.menu-item .hint { margin-left: auto; padding-left: 16px; font-size: 11.5px; opacity: 0.75; }
+.menu-sep { height: 2px; margin: 3px 2px; box-shadow: inset 0 1px var(--c-shadow), inset 0 -1px var(--c-white); }
+
+.submenu {
+  position: absolute;
+  left: calc(100% - 3px);
+  bottom: -3px;
+  padding: 3px;
+  background: var(--c-face);
+  box-shadow: var(--bevel-window), 2px 2px 0 rgba(0, 0, 0, 0.3);
+  min-width: 210px;
+  z-index: 1;
+}
+.submenu[hidden] { display: none; }
+.submenu.align-top { bottom: auto; top: -3px; }
+
+/* ─── Overlays ──────────────────────────────────────────────── */
+.zoom-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--z-overlay);
+  border: 2px solid rgba(128, 128, 128, 0.9);
+  outline: 1px dotted rgba(255, 255, 255, 0.8);
+}
+
+.shutdown-screen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-boot);
+  background: var(--c-black);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font: 400 clamp(22px, 3.2vw, 36px)/1.3 var(--f-ui);
+  color: #ff8c1a;
+  padding: 24px;
+}
+.shutdown-screen[hidden] { display: none; }
+.shutdown-screen small { display: block; margin-top: 28px; font-size: 14px; color: #8a8a8a; letter-spacing: 0.5px; }
+
+/* ─── Touch / compact ───────────────────────────────────────── */
+@media (max-width: 720px), (max-height: 520px) {
+  :root { --taskbar-h: 44px; }
+  .desk-icons {
+    inset: 12px 8px auto 8px;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: 84px;
+    justify-items: center;
+  }
+  .wallmark b { font-size: 44px; }
+  .wallmark small { display: none; }
+  .quick-read span.full { display: none; }
+  .task-btn { flex-basis: 44px; }
+  .task-btn span { display: none; }
+  .task-btn[aria-pressed="true"] span { display: inline; }
+  .menu-item { min-height: 36px; }
+  .start-menu { max-height: calc(100dvh - var(--taskbar-h) - 8px); overflow-y: auto; }
+  .submenu { position: static; box-shadow: none; padding: 0 0 0 20px; min-width: 0; background: none; }
+}
+@media (pointer: coarse) {
+  .win-ctl { width: 26px; height: 22px; }
+  .win-titlebar { height: 28px; }
+}

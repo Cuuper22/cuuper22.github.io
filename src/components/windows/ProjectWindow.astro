@@ -1,0 +1,75 @@
+---
+import { render } from 'astro:content';
+import Window from '../Window.astro';
+import { pixelSvg } from '../../lib/pixel';
+import { winId, projectLinks, type Project } from '../../lib/projects';
+import ToaruDemo from '../demos/ToaruDemo.astro';
+import ArnoldcDemo from '../demos/ArnoldcDemo.astro';
+import ErdosDemo from '../demos/ErdosDemo.astro';
+import GpuDemo from '../demos/GpuDemo.astro';
+import IvcDemo from '../demos/IvcDemo.astro';
+import CurbrunDemo from '../demos/CurbrunDemo.astro';
+
+interface Props { project: Project; index: number; }
+const { project: p, index } = Astro.props;
+const { Content } = await render(p);
+const d = p.data;
+const links = projectLinks(p);
+const headline = d.tier === 'headline';
+const size = d.demo === 'toaru' ? { w: 820, h: 700 } : headline ? { w: 800, h: 640 } : { w: 660, h: 540 };
+const updated = new Date(d.updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+const tierLabel = { headline: 'Pinned', supporting: 'Also built', brief: 'Small thing' }[d.tier];
+const DEMOS = { toaru: ToaruDemo, arnoldc: ArnoldcDemo, erdos: ErdosDemo, gpu: GpuDemo, ivc: IvcDemo, curbrun: CurbrunDemo };
+const Demo = d.demo ? DEMOS[d.demo] : undefined;
+---
+
+<Window
+  id={winId(d.slug)}
+  title={d.title}
+  icon={d.icon}
+  kind="app"
+  w={size.w}
+  h={size.h}
+  x={180 + (index % 5) * 34}
+  y={24 + (index % 5) * 26}
+  label={`${d.title}: ${d.oneLiner}`}
+>
+  <Fragment slot="toolbar">
+    <button class="btn btn-sm" type="button" data-open="projects"><Fragment set:html={pixelSvg('folderOpen', 16)} />Projects</button>
+    <span class="tb-div" aria-hidden="true"></span>
+    {links.map(l => (
+      <a class="btn btn-sm" href={l.url} target="_blank" rel="noopener">
+        <Fragment set:html={pixelSvg(l.kind === 'repo' ? 'github' : 'globe', 16)} />{l.label}
+      </a>
+    ))}
+    <span class="spacer"></span>
+    <button class="btn btn-sm" type="button" data-copy-link={d.slug}><Fragment set:html={pixelSvg('link', 16)} />Copy link</button>
+    <a class="btn btn-sm" href={`/projects/${d.slug}/`} title="Open as a standalone page">Page</a>
+  </Fragment>
+
+  <div class="pw sunken">
+    <div class="pw-scroll">
+      {Demo && <Demo />}
+      <article class="prose pw-prose">
+        <p class="meta">{d.file} · {tierLabel} · Updated {updated}</p>
+        <h1>{d.title}</h1>
+        <p class="lede">{d.oneLiner}</p>
+        <p class="pw-tags">{d.tech.map(t => <span class="tag">{t}</span>)}</p>
+        <Content />
+      </article>
+    </div>
+  </div>
+
+  <Fragment slot="status">
+    <span class="fit">{d.tech.slice(0, 3).join(', ')}</span>
+    <span>{links[0] ? links[0].url.replace('https://', '') : 'No public repository'}</span>
+  </Fragment>
+</Window>
+
+<style>
+  .pw { height: 100%; padding: 2px; }
+  .pw-scroll { height: 100%; overflow: auto; overscroll-behavior: contain; background: var(--c-paper); }
+  .pw-prose { margin: 0 auto; padding-top: 22px; }
+  .pw-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tb-div { width: 2px; align-self: stretch; margin: 1px 2px; box-shadow: inset 1px 0 var(--c-shadow), inset -1px 0 var(--c-white); }
+</style>

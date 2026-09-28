@@ -1,0 +1,23 @@
+---
+import { pixelSvg } from '../lib/pixel';
+---
+
+<nav class="taskbar" id="taskbar" aria-label="Taskbar">
+  <button class="start-btn" id="start-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="start-menu">
+    <Fragment set:html={pixelSvg('start', 20)} /><span>Start</span>
+  </button>
+  <span class="tb-sep" aria-hidden="true"></span>
+  <a class="quick-read" href="/read/" title="Everything on one fast, plain page">
+    <Fragment set:html={pixelSvg('quickread', 16)} /><span>Quick<span class="full"> read</span></span>
+  </a>
+  <span class="tb-sep" aria-hidden="true"></span>
+  <div id="task-buttons" role="group" aria-label="Open windows"></div>
+  <div class="tray">
+    <button class="tray-btn" id="sound-btn" type="button" aria-pressed="false" title="Sound is off. Click to turn on.">
+      <span class="i-off"><Fragment set:html={pixelSvg('speakerOff', 16)} /></span>
+      <span class="i-on" hidden><Fragment set:html={pixelSvg('speaker', 16)} /></span>
+      <span class="sr-only">Sound</span>
+    </button>
+    <time class="clock" id="clock" aria-live="off">--:--</time>
+  </div>
+</nav>

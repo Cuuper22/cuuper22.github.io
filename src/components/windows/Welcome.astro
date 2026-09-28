@@ -1,0 +1,76 @@
+---
+import Window from '../Window.astro';
+import { pixelSvg } from '../../lib/pixel';
+
+const tips = [
+  'Just start typing. The <b>MS-DOS Prompt</b> opens on its own. Try <kbd>dir</kbd>, or <kbd>start erdos</kbd>.',
+  '<b>ToaruOS.exe</b> boots a real operating system I wrote, right here in your browser. Every keyword in its source is an Arnold Schwarzenegger quote.',
+  'In a hurry? <b>Quick read</b>, next to Start, puts everything on one plain page.',
+  'Windows drag, resize, and minimize to the taskbar. Double-click a title bar to maximize. <kbd>Esc</kbd> closes the front one.',
+  'Every project has its own link, like <code>/?open=erdos</code>. Share the one you care about.',
+  'Type <kbd>get to the chopper</kbd> into the DOS prompt. Or any other ArnoldC keyword you remember.',
+];
+---
+
+<Window id="welcome" title="Welcome" icon="help" kind="dialog" w={540} h={372} x="center" y="center">
+  <div class="welcome">
+    <div class="wl-main">
+      <h2 class="wl-title">Welcome to <span>Cúper</span><b>OS</b></h2>
+      <p class="wl-intro">
+        I'm Cúper. I build systems that have to answer to reality: an operating system in a joke language, a theorem prover that caught its own AI cheating, a model of the GPU stack that goes all the way down to quarks.
+      </p>
+      <div class="wl-tip sunken">
+        <div class="wl-tip-head">
+          <Fragment set:html={pixelSvg('help', 32)} />
+          <strong>Did you know...</strong>
+        </div>
+        <p class="wl-tip-text" id="tip-text" aria-live="polite" set:html={tips[0]} />
+      </div>
+    </div>
+    <div class="wl-actions">
+      <button class="btn is-default" type="button" data-open="projects">What's pinned</button>
+      <button class="btn" type="button" data-open="p-toaruos-arnold">Boot ToaruOS</button>
+      <a class="btn" href="/read/">Quick read</a>
+      <button class="btn" type="button" id="tip-next">Next tip</button>
+      <span class="wl-spacer"></span>
+      <button class="btn" type="button" data-act="close">Close</button>
+    </div>
+    <label class="wl-check">
+      <input type="checkbox" id="welcome-again" checked />
+      <span>Show this Welcome Screen next time</span>
+    </label>
+  </div>
+  <script type="application/json" id="tips-data" set:html={JSON.stringify(tips)} />
+</Window>
+
+<style>
+  .welcome {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto;
+    gap: 10px 14px;
+    height: 100%;
+    padding: 10px 10px 8px 12px;
+    font-family: var(--f-ui);
+  }
+  .wl-main { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+  .wl-title { font: 400 25px/1 var(--f-ui); color: var(--c-black); letter-spacing: -0.2px; }
+  .wl-title span { font-weight: 700; }
+  .wl-title b { font-weight: 700; color: var(--c-navy); }
+  .wl-intro { font: 400 13.5px/1.5 var(--f-read); color: var(--c-ink); text-wrap: pretty; }
+  .wl-tip { flex: 1; padding: 10px 12px; background: #ffffe1; min-height: 116px; }
+  .wl-tip-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 14px; }
+  .wl-tip-text { font: 400 13.5px/1.5 var(--f-read); color: var(--c-ink); }
+  .wl-tip-text :global(kbd), .wl-tip-text :global(code) { font: 400 12px/1 var(--f-mono); padding: 1px 4px; background: #fff; box-shadow: var(--bevel-thin-in); }
+  .wl-actions { display: flex; flex-direction: column; gap: 6px; width: 124px; }
+  .wl-actions .btn { width: 100%; }
+  .wl-spacer { flex: 1; }
+  .wl-check { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; font-size: 12.5px; user-select: none; }
+  .wl-check input { width: 13px; height: 13px; accent-color: var(--c-navy); }
+  @media (max-width: 720px) {
+    .welcome { grid-template-columns: 1fr; grid-template-rows: auto auto auto; overflow: auto; }
+    .wl-actions { width: auto; flex-direction: row; flex-wrap: wrap; }
+    .wl-actions .btn { width: auto; flex: 1 1 40%; }
+    .wl-spacer { display: none; }
+  }
+</style>

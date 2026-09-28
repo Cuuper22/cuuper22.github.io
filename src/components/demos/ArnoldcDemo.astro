@@ -1,0 +1,92 @@
+---
+const program = `IT'S SHOWTIME
+HEY CHRISTMAS TREE t
+YOU SET US UP 3
+STICK AROUND t
+TALK TO THE HAND t
+GET TO THE CHOPPER t
+HERE IS MY INVITATION t
+GET DOWN 1
+ENOUGH TALK
+CHILL
+EVERYBODY CHILL
+TALK TO THE HAND "liftoff"
+LET'S PARTY
+YOU HAVE BEEN TERMINATED`;
+
+const keywords: [string, string][] = [
+  ['I NEED YOUR MEMORY', 'malloc'],
+  ["YOU'RE LUGGAGE", 'free'],
+  ['EVERYBODY CHILL', 'cli (interrupts off)'],
+  ["LET'S PARTY", 'sti (interrupts on)'],
+  ['SLEEP NOW', 'hlt'],
+  ['TALK TO THE PORT', 'outb'],
+  ['SPEAK TO THE MACHINE', 'inline asm block'],
+  ['POINT YOUR GUN AT', 'pointer type'],
+  ['SHOW ME WHAT YOU GOT', 'dereference'],
+  ['THIS IS MY DISGUISE', 'union'],
+  ['THIS IS A TINY WARRIOR', 'u8'],
+  ['THIS COULD CHANGE ANYTIME', 'volatile'],
+  ['THERE IS NO ONE', 'NULL'],
+  ["YOU'RE NOT BIG ENOUGH", '<'],
+  ['GET OUT', 'break'],
+  ['LET OFF SOME STEAM BENNET', '> (from the original)'],
+];
+---
+
+<div class="demo arnoldc" data-demo="arnoldc">
+  <div class="ac-panes">
+    <label class="ac-pane">
+      <span class="ac-cap">countdown.arnoldc <em>(edit me)</em></span>
+      <textarea class="ac-src" spellcheck="false" autocapitalize="characters" data-src>{program}</textarea>
+    </label>
+    <div class="ac-pane">
+      <span class="ac-cap">arnoldc -asm → countdown.asm</span>
+      <pre class="ac-asm" data-asm aria-live="polite"></pre>
+    </div>
+  </div>
+  <div class="ac-run">
+    <span class="ac-cap">./countdown</span>
+    <pre class="ac-out" data-out></pre>
+  </div>
+  <details class="ac-keys">
+    <summary>Some of the ~90 keywords ArnoldC-Native adds</summary>
+    <table>
+      <tbody>
+        {keywords.map(([k, v]) => <tr><td><code>{k}</code></td><td>{v}</td></tr>)}
+      </tbody>
+    </table>
+  </details>
+</div>
+
+<style>
+  .arnoldc { padding: 14px; background: var(--c-face); border-bottom: 1px solid #a9a9a9; font-family: var(--f-ui); }
+  .ac-panes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ac-pane { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .ac-cap { font-size: 12px; color: #202020; }
+  .ac-cap em { font-style: normal; color: #5a5a5a; }
+  .ac-src, .ac-asm, .ac-out {
+    font: 400 12.5px/1.45 var(--f-mono);
+    box-shadow: var(--bevel-sunken);
+    border: 0;
+    padding: 8px 10px;
+    margin: 0;
+    height: 232px;
+    overflow: auto;
+    white-space: pre;
+    tab-size: 4;
+  }
+  .ac-src { background: #fff; color: #000; resize: none; text-transform: uppercase; }
+  .ac-asm { background: #000080; color: #fff; }
+  .ac-asm :global(.c) { color: #7fdcff; }
+  .ac-asm :global(.l) { color: #ffff55; }
+  .ac-asm :global(.e) { color: #ff8080; }
+  .ac-run { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .ac-out { height: auto; min-height: 56px; max-height: 110px; background: #0a0a0a; color: #c0c0c0; font-family: var(--f-dos); font-size: 18px; line-height: 1.1; }
+  .ac-keys { margin-top: 10px; font-size: 13px; }
+  .ac-keys summary { cursor: pointer; padding: 2px 0; }
+  .ac-keys table { margin-top: 6px; border-collapse: collapse; width: 100%; background: #fff; box-shadow: var(--bevel-sunken); }
+  .ac-keys td { padding: 3px 10px; font: 400 12.5px/1.4 var(--f-read); border-bottom: 1px solid #ececec; }
+  .ac-keys td code { font: 400 12px/1.4 var(--f-mono); }
+  @media (max-width: 720px) { .ac-panes { grid-template-columns: 1fr; } .ac-src, .ac-asm { height: 190px; } }
+</style>

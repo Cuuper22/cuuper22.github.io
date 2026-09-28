@@ -1,0 +1,70 @@
+---
+import { pixelSvg, glyphSvg } from '../lib/pixel';
+import { winId, type Project } from '../lib/projects';
+
+interface Props { headline: Project[]; }
+const { headline } = Astro.props;
+const arrow = glyphSvg('arrowR');
+---
+
+<div class="start-menu" id="start-menu" hidden>
+  <div class="sm-banner" aria-hidden="true"><span>Cúper<b>OS 22.5</b></span></div>
+  <ul class="menu" role="menu" aria-label="Start">
+    <li role="none">
+      <button class="menu-item lg" role="menuitem" type="button" aria-haspopup="menu" aria-expanded="false" data-sub="sm-programs">
+        <Fragment set:html={pixelSvg('folder', 32)} /><span><u>P</u>rograms</span><span class="arrow"><Fragment set:html={arrow} /></span>
+      </button>
+      <ul class="menu submenu" id="sm-programs" role="menu" aria-label="Programs" hidden>
+        {headline.map(p => (
+          <li role="none">
+            <button class="menu-item" role="menuitem" type="button" data-open={winId(p.data.slug)}>
+              <Fragment set:html={pixelSvg(p.data.icon, 16)} /><span>{p.data.title}</span>
+            </button>
+          </li>
+        ))}
+        <li role="none" class="menu-sep" aria-hidden="true"></li>
+        <li role="none">
+          <button class="menu-item" role="menuitem" type="button" data-open="projects">
+            <Fragment set:html={pixelSvg('folderOpen', 16)} /><span>All projects…</span>
+          </button>
+        </li>
+      </ul>
+    </li>
+    <li role="none">
+      <button class="menu-item lg" role="menuitem" type="button" aria-haspopup="menu" aria-expanded="false" data-sub="sm-docs">
+        <Fragment set:html={pixelSvg('doc', 32)} /><span><u>D</u>ocuments</span><span class="arrow"><Fragment set:html={arrow} /></span>
+      </button>
+      <ul class="menu submenu" id="sm-docs" role="menu" aria-label="Documents" hidden>
+        <li role="none"><button class="menu-item" role="menuitem" type="button" data-open="about"><Fragment set:html={pixelSvg('doc', 16)} /><span>About.txt</span></button></li>
+        <li role="none"><button class="menu-item" role="menuitem" type="button" data-open="arc"><Fragment set:html={pixelSvg('doc', 16)} /><span>Arc.txt</span></button></li>
+        <li role="none"><button class="menu-item" role="menuitem" type="button" data-open="contact"><Fragment set:html={pixelSvg('mail', 16)} /><span>Contact</span></button></li>
+      </ul>
+    </li>
+    <li role="none">
+      <button class="menu-item lg" role="menuitem" type="button" data-open="p-toaruos-arnold">
+        <Fragment set:html={pixelSvg('computer', 32)} /><span>Boot <u>T</u>oaruOS</span>
+      </button>
+    </li>
+    <li role="none">
+      <button class="menu-item lg" role="menuitem" type="button" data-open="dos">
+        <Fragment set:html={pixelSvg('dos', 32)} /><span>MS-D<u>O</u>S Prompt</span>
+      </button>
+    </li>
+    <li role="none">
+      <a class="menu-item lg" role="menuitem" href="/read/">
+        <Fragment set:html={pixelSvg('quickread', 32)} /><span><u>Q</u>uick read</span>
+      </a>
+    </li>
+    <li role="none">
+      <button class="menu-item lg" role="menuitem" type="button" data-open="welcome">
+        <Fragment set:html={pixelSvg('help', 32)} /><span><u>H</u>elp</span>
+      </button>
+    </li>
+    <li role="none" class="menu-sep" aria-hidden="true"></li>
+    <li role="none">
+      <button class="menu-item lg" role="menuitem" type="button" data-open="shutdown">
+        <Fragment set:html={pixelSvg('shutdown', 32)} /><span>Sh<u>u</u>t Down…</span>
+      </button>
+    </li>
+  </ul>
+</div>

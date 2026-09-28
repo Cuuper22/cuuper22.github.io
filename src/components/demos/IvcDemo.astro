@@ -1,0 +1,82 @@
+---
+// Counts from research/data/claim_ledger/claims.json at HEAD (checked 2026-09-28).
+const rows: [string, number, string][] = [
+  ['Translations', 0, 'A reading of a whole inscription.'],
+  ['Phonetic values', 0, 'A sound assigned to a sign.'],
+  ['Sign meanings', 0, 'A meaning assigned to a sign.'],
+  ['Language identification', 0, 'Which language family the script writes.'],
+  ['External anchors', 0, 'A bilingual, a name, anything tying the script to a known text.'],
+  ['Structural findings', 1, 'A regularity in how signs combine. Says nothing about meaning.'],
+];
+---
+
+<div class="demo ivc" data-demo="ivc">
+  <div class="iv-sheet" role="table" aria-label="Claim ledger: accepted claims by class">
+    <div class="iv-row iv-h" role="row">
+      <span role="columnheader">Claim class</span>
+      <span role="columnheader">Accepted</span>
+      <span role="columnheader">What it would mean</span>
+    </div>
+    {rows.map(([k, n, d]) => (
+      <div class:list={['iv-row', { yes: n > 0 }]} role="row" data-count={n}>
+        <span role="cell">{k}</span>
+        <span role="cell" class="iv-n">{n}</span>
+        <span role="cell" class="iv-d">{d}</span>
+      </div>
+    ))}
+  </div>
+
+  <div class="iv-bottom">
+    <div class="iv-finding">
+      <p class="iv-k">The one survivor</p>
+      <div class="iv-signs" aria-label="Sign 002, then the string 861, 533, 717">
+        <span class="sg ctx">002</span><span class="gap">…</span><span class="sg">861</span><span class="sg">533</span><span class="sg">717</span>
+      </div>
+      <p class="iv-note">Recurs on seals M-376 and M-391. Tested on 4,135 strict rows. A pattern, not a meaning.</p>
+    </div>
+    <div class="iv-stats">
+      <p><b>13</b> candidates proposed</p>
+      <p><b>11</b> retracted</p>
+      <p><b>2</b> not accepted</p>
+      <p class="iv-q">Quarantined branches kept for autopsy, never citable.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ivc { padding: 12px 14px; background: #efe9dc; border-bottom: 1px solid #d5ccb8; font-family: var(--f-ui); }
+  .iv-sheet { background: #fff; box-shadow: var(--bevel-sunken); padding: 2px; font-size: 13px; }
+  .iv-row { display: grid; grid-template-columns: 190px 76px 1fr; }
+  .iv-row > span { padding: 4px 8px; border-right: 1px solid #e3e3e3; border-bottom: 1px solid #e3e3e3; }
+  .iv-h > span { background: var(--c-face); box-shadow: var(--bevel-thin-out); border: 0; font-weight: 600; font-size: 12.5px; }
+  .iv-n { text-align: right; font: 400 13px/1.3 var(--f-mono); font-variant-numeric: tabular-nums; }
+  .iv-d { font: 400 12.5px/1.35 var(--f-read); color: #555; }
+  .iv-row.yes > span { background: #fff8c8; }
+  .iv-row.yes .iv-n { font-weight: 700; color: #000; }
+  .iv-row:not(.iv-h):not(.yes) .iv-n { color: #9a9a9a; }
+  .iv-bottom { display: grid; grid-template-columns: 1fr auto; gap: 14px; margin-top: 12px; align-items: start; }
+  .iv-k { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #6b6150; margin-bottom: 6px; }
+  .iv-signs { display: flex; align-items: center; gap: 4px; }
+  .sg {
+    display: grid;
+    place-items: center;
+    min-width: 46px;
+    height: 46px;
+    padding: 0 6px;
+    background: #e9e2d0;
+    color: #3b3222;
+    box-shadow: inset 2px 2px #fffaf0, inset -2px -2px #b8ab8e;
+    font: 700 16px/1 var(--f-ui);
+  }
+  .sg.ctx { opacity: 0.6; }
+  .gap { color: #8a7f68; padding: 0 2px; }
+  .iv-note { font: 400 12.5px/1.45 var(--f-read); color: #4d4535; margin-top: 8px; max-width: 46ch; }
+  .iv-stats { font: 400 13px/1.6 var(--f-read); color: #3b3222; padding: 8px 12px; background: #fff; box-shadow: var(--bevel-sunken); min-width: 190px; }
+  .iv-stats b { font-family: var(--f-mono); font-weight: 700; display: inline-block; min-width: 1.8em; text-align: right; margin-right: 4px; }
+  .iv-q { font-size: 12px; color: #6b6150; margin-top: 4px; line-height: 1.4; max-width: 24ch; }
+  @media (max-width: 720px) {
+    .iv-row { grid-template-columns: 1fr 64px; }
+    .iv-d { display: none; }
+    .iv-bottom { grid-template-columns: 1fr; }
+  }
+</style>

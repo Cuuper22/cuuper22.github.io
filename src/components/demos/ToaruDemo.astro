@@ -1,0 +1,79 @@
+<div class="demo toaru" data-demo="toaru">
+  <div class="monitor">
+    <div class="bezel">
+      <div class="v86-screen" id="toaru-screen" tabindex="0" data-capture-keys aria-label="ToaruOS-Arnold running in an emulator. Click to use the mouse; Esc releases it.">
+        <div class="v86-text"></div>
+        <canvas></canvas>
+        <div class="toaru-overlay" data-overlay>
+          <p class="t-line" data-status>Press Power to boot ToaruOS-Arnold.</p>
+          <div class="t-bar"><span data-bar></span></div>
+          <button class="btn" type="button" data-power-on>Power on</button>
+        </div>
+      </div>
+    </div>
+    <div class="chin">
+      <span class="brand">CúperVision <b>1024</b></span>
+      <span class="led" data-led></span>
+    </div>
+  </div>
+  <div class="toaru-bar">
+    <button class="btn btn-sm" type="button" data-cad disabled>Ctrl+Alt+Del</button>
+    <button class="btn btn-sm" type="button" data-power disabled>Power off</button>
+    <span class="toaru-hint" data-hint>2.8 MB download. Keyboard and mouse work; networking doesn't (v86 has no E1000).</span>
+  </div>
+</div>
+
+<style>
+  .toaru { padding: 14px 14px 10px; background: #bdb9ae; border-bottom: 1px solid #9c988d; }
+  .monitor { max-width: 680px; margin: 0 auto; }
+  .bezel {
+    padding: 18px 20px 14px;
+    background: linear-gradient(180deg, #e9e5da, #d8d3c6);
+    box-shadow: inset 2px 2px #f7f4ec, inset -2px -2px #a8a396, 0 1px 0 #8f8b80;
+  }
+  .v86-screen {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: #000;
+    box-shadow: inset 0 0 0 2px #34332f, 0 0 0 3px #8f8b80;
+    overflow: hidden;
+    outline: none;
+  }
+  .v86-screen:focus-visible { box-shadow: inset 0 0 0 2px #34332f, 0 0 0 3px #000080; }
+  .v86-screen :global(canvas) { display: block; width: 100% !important; height: 100% !important; }
+  .v86-screen :global(.v86-text) { display: none !important; }
+  .v86-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(130% 110% at 50% 50%, transparent 62%, rgba(0, 0, 0, 0.45) 100%),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0 1px, transparent 1px 2px);
+  }
+  .toaru-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 12px;
+    background: #000;
+    color: #55ff55;
+    font: 400 20px/1.2 var(--f-dos);
+    text-align: center;
+    padding: 16px;
+    z-index: 1;
+  }
+  .toaru-overlay[hidden] { display: none; }
+  .t-bar { width: min(260px, 70%); height: 14px; padding: 2px; box-shadow: inset 0 0 0 1px #55ff55; }
+  .t-bar span { display: block; height: 100%; width: 0; background: #55ff55; transition: width 120ms linear; }
+  .chin { display: flex; align-items: center; justify-content: space-between; padding: 6px 12px 7px; background: #d8d3c6; box-shadow: inset 2px 0 #f7f4ec, inset -2px -2px #a8a396; }
+  .brand { font: 400 11px/1 var(--f-ui); color: #6c685e; letter-spacing: 1px; }
+  .brand b { font-weight: 700; color: #4b4840; }
+  .led { width: 8px; height: 5px; background: #3a3a33; box-shadow: inset 0 0 0 1px #2a2a24; }
+  .led.on { background: #3dff5b; box-shadow: 0 0 6px #3dff5b; }
+  .led.busy { background: #ffb13d; box-shadow: 0 0 6px #ffb13d; }
+  .toaru-bar { display: flex; align-items: center; gap: 6px; max-width: 680px; margin: 8px auto 0; flex-wrap: wrap; }
+  .toaru-hint { font: 400 12px/1.35 var(--f-read); color: #3b3a36; flex: 1; min-width: 200px; }
+</style>

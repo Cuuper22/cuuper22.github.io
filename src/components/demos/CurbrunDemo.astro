@@ -1,0 +1,95 @@
+---
+// Rule-kind counts from the app's bundled SQLite DB (SFMTA Digital Curb), queried 2026-09-28.
+const kinds: [string, number][] = [
+  ['StreetCleaning', 8002], ['NoParking', 5001], ['ResidentialPermit', 4380],
+  ['FreeParking', 2120], ['PaidMeter', 1367], ['TimeLimit', 245], ['Loading', 153],
+];
+const max = kinds[0][1];
+---
+
+<div class="demo curbrun" data-demo="curbrun">
+  <div class="cr-phone" aria-label="CurbRun, simulated">
+    <div class="cr-screen">
+      <div class="cr-status"><span>6:10</span><span>▮▮▮ ◢ 82%</span></div>
+      <header class="cr-top">
+        <b>CurbRun</b>
+        <span>Mission, SF · Mon 6:10 PM</span>
+      </header>
+      <div class="cr-controls">
+        <div class="cr-chips" role="radiogroup" aria-label="How long">
+          {[1, 2, 4, 8].map(h => <button type="button" role="radio" aria-checked={h === 2 ? 'true' : 'false'} data-hours={h}>{h} hr</button>)}
+        </div>
+        <div class="cr-seg" role="radiogroup" aria-label="Vehicle">
+          {[['Compact', 14], ['Normal', 18], ['Large', 22]].map(([n, ft]) => <button type="button" role="radio" aria-checked={n === 'Normal' ? 'true' : 'false'} data-ft={ft}>{n}</button>)}
+        </div>
+      </div>
+      <ol class="cr-list" data-list aria-live="polite"></ol>
+      <details class="cr-blocked" data-blocked-wrap>
+        <summary data-blocked-sum>Not legal for this window</summary>
+        <ul data-blocked></ul>
+      </details>
+    </div>
+  </div>
+
+  <div class="cr-side">
+    <p class="cr-k">Rules in the bundled database</p>
+    <ul class="cr-bars">
+      {kinds.map(([k, n]) => (
+        <li><span class="cr-bl">{k}</span><span class="cr-bt"><span style={`width:${(n / max) * 100}%`}></span></span><span class="cr-bn">{n.toLocaleString('en-US')}</span></li>
+      ))}
+    </ul>
+    <p class="cr-foot">21,268 rules on 2,668 curb segments. The streets in the phone are illustrative; the engine logic (whole-window overlap, next-restriction clock, confidence labels, ranking) mirrors the app.</p>
+  </div>
+</div>
+
+<style>
+  .curbrun { display: grid; grid-template-columns: 300px 1fr; gap: 18px; padding: 14px; background: #e3e7ea; border-bottom: 1px solid #c5ccd1; font-family: var(--f-ui); }
+  .cr-phone { padding: 12px 10px 16px; background: #1b1d1f; border-radius: 22px; box-shadow: inset 0 0 0 2px #3a3d40, 3px 3px 0 rgba(0, 0, 0, 0.18); }
+  .cr-screen { background: #f7f8fa; height: 468px; overflow: auto; border-radius: 6px; font: 400 13px/1.35 var(--f-read); color: #15191c; }
+  .cr-status { display: flex; justify-content: space-between; padding: 4px 12px; font: 500 11px/1 var(--f-read); color: #333; }
+  .cr-top { padding: 6px 14px 8px; display: flex; flex-direction: column; gap: 1px; }
+  .cr-top b { font: 700 19px/1.1 var(--f-read); letter-spacing: -0.2px; }
+  .cr-top span { font-size: 12px; color: #5c6670; }
+  .cr-controls { padding: 0 12px 8px; display: flex; flex-direction: column; gap: 7px; }
+  .cr-chips, .cr-seg { display: flex; gap: 6px; }
+  .cr-chips button, .cr-seg button {
+    flex: 1;
+    padding: 5px 0;
+    border: 1px solid #c9d1d8;
+    background: #fff;
+    border-radius: 8px;
+    font: 500 12.5px/1 var(--f-read);
+    color: #2a3238;
+  }
+  .cr-chips button[aria-checked="true"], .cr-seg button[aria-checked="true"] { background: #16324a; border-color: #16324a; color: #fff; }
+  .cr-list { list-style: none; padding: 0 10px; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+  .cr-list :global(li) { background: #fff; border-radius: 10px; padding: 9px 11px; box-shadow: 0 1px 0 #dde3e8, 0 0 0 1px #e8ecef; }
+  .cr-list :global(.st) { display: flex; justify-content: space-between; gap: 6px; font-weight: 600; }
+  .cr-list :global(.st small) { font-weight: 400; color: #5c6670; white-space: nowrap; }
+  .cr-list :global(.clock) { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12.5px; }
+  .cr-list :global(.dot) { width: 8px; height: 8px; border-radius: 50%; background: #2fa84f; flex-shrink: 0; }
+  .cr-list :global(.dot.watch) { background: #e0a100; }
+  .cr-list :global(.dot.tight) { background: #d23b3b; }
+  .cr-list :global(.meta) { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .cr-list :global(.tier) { font-size: 11px; padding: 2px 7px; border-radius: 999px; background: #e6f4ea; color: #1d6b35; }
+  .cr-list :global(.tier.caution) { background: #fff4d6; color: #7a5600; }
+  .cr-list :global(.tier.competitive) { background: #fde7e7; color: #8a2424; }
+  .cr-list :global(.sp) { font-size: 11px; color: #5c6670; padding: 2px 0; }
+  .cr-list :global(.empty) { background: none; box-shadow: none; text-align: center; color: #5c6670; padding: 18px 8px; }
+  .cr-blocked { margin: 8px 10px 12px; font-size: 12px; color: #5c6670; }
+  .cr-blocked summary { cursor: pointer; padding: 4px 2px; }
+  .cr-blocked ul { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-direction: column; gap: 5px; }
+  .cr-blocked :global(li) { background: #f0f2f4; border-radius: 8px; padding: 7px 9px; }
+  .cr-blocked :global(li b) { color: #2a3238; font-weight: 600; }
+
+  .cr-side { align-self: center; min-width: 0; }
+  .cr-k { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #4f5b64; margin-bottom: 8px; }
+  .cr-bars { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+  .cr-bars li { display: grid; grid-template-columns: 124px 1fr 52px; align-items: center; gap: 8px; font-size: 12.5px; }
+  .cr-bl { font: 400 12px/1 var(--f-mono); color: #1f272d; }
+  .cr-bt { height: 12px; background: #fff; box-shadow: var(--bevel-sunken); padding: 2px; }
+  .cr-bt span { display: block; height: 100%; background: #16324a; }
+  .cr-bn { text-align: right; font: 400 12px/1 var(--f-mono); font-variant-numeric: tabular-nums; color: #1f272d; }
+  .cr-foot { margin-top: 12px; font: 400 12.5px/1.5 var(--f-read); color: #3b454d; max-width: 52ch; }
+  @media (max-width: 720px) { .curbrun { grid-template-columns: 1fr; } .cr-phone { max-width: 320px; margin: 0 auto; } }
+</style>
