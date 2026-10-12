@@ -51,6 +51,14 @@ Query it yourself: `npx wrangler d1 execute cuperos --remote --command "SELECT d
 - `src/scripts/startup.ts`: what opens when someone arrives (deep links, referrers, returning visitors).
 - `src/components/demos/` and `src/scripts/demos/`: the interactive panel for each pinned project.
 
+## Raising Polly at /polly/
+
+`public/polly/` is the prebuilt site from [Postrainwiki](https://github.com/Cuuper22/Postrainwiki) (*Raising Polly*, an interactive guide to LLM post-training), served at [cuuper22.pages.dev/polly/](https://cuuper22.pages.dev/polly/). It is fully static: relative asset paths and a hash router, so it works under this sub-path on both Cloudflare Pages and the GitHub Pages mirror. Do not edit it here. To refresh it, rebuild in Postrainwiki and copy `dist/` over:
+
+```bash
+rm -rf public/polly && cp -R ../Postrainwiki/dist public/polly
+```
+
 ## ToaruOS in the browser
 
 `public/toaru/toaruos-arnold-v86.elf` is the prebuilt kernel from [ToaruOS-Arnold](https://github.com/Cuuper22/ToaruOS-Arnold) with three loader-level patches so it boots under v86:
